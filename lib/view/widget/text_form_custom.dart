@@ -5,11 +5,11 @@ class TextFormCustom extends StatefulWidget {
       {super.key,
       required this.lableText,
       required this.errorMessage,
-      required this.textFieldValue,
+      //required this.textFieldValue,
       this.onSaved =defaultOnSaved});
   String lableText;
   String errorMessage;
-  String textFieldValue;
+  //String textFieldValue;
   final Function(String?) onSaved;
   static void defaultOnSaved(String? value) {
     print('Default onSaved called with value: $value');
@@ -23,7 +23,7 @@ class _TextFormCustomState extends State<TextFormCustom> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20,bottom: 10),
+      padding: const EdgeInsets.only(left: 20, right: 20,bottom: 20),
       child: TextFormField(
         decoration: InputDecoration(
           border: const OutlineInputBorder(),

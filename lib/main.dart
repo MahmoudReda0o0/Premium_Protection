@@ -1,3 +1,4 @@
+import 'package:excp_training/view/register/register.dart';
 import 'package:flutter/material.dart';
 
 import 'view/login/login.dart';

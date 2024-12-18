@@ -6,12 +6,12 @@ class TextFormPasswordCustom extends StatefulWidget {
       {super.key,
       required this.lableText,
       required this.errorMessage,
-      required this.textFieldValue,
+      //required this.textFieldValue,
       this.onSaved = defaultOnSaved,
       });
   String lableText;
   String errorMessage;
-  String textFieldValue;
+  //String textFieldValue;
   final Function(String?) onSaved;
 
   static void defaultOnSaved(String? value){
@@ -27,7 +27,7 @@ class _TextFormPasswordCustomState extends State<TextFormPasswordCustom> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: TextFormField(
         obscureText: !eyeIcon,
         decoration: InputDecoration(
