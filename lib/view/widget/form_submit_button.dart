@@ -8,7 +8,8 @@ class FormSubmitButtonCustom {
       {String snakBarMessage = 'form submitted successfully',
       required BuildContext context,
       required GlobalKey<FormState> formKey,
-      Function? onTap}) {
+      Function? onTap,
+      Function? onValidate}) {
     return SizedBox(
       width: 300,
       height: 50,
@@ -19,7 +20,11 @@ class FormSubmitButtonCustom {
           if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
             SnackBarCustom.showSnackBar(
-                message: snakBarMessage, context: context);
+              message: snakBarMessage,
+              context: context,
+            );
+            (onValidate ?? () {})();
+
             // Process the form data
           }
         },

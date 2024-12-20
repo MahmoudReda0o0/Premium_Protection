@@ -15,7 +15,7 @@ class RichTextCustom extends StatelessWidget {
       text: TextSpan(
         children: <TextSpan>[
            TextSpan(
-            text: fristText!,
+            text: fristText,
             style:const TextStyle(color: Constant.blackColor),
           ),
           TextSpan(

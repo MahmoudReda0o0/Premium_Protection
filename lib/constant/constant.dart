@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
+
+double mediaHeight = MediaQuery.of(navigatorKey.currentState!.context).size.height;
+double mediaWidth = MediaQuery.of(navigatorKey.currentState!.context).size.width;
+
 class Constant {
   static const Color primaryColor = Color(0xFF1A73E8), // Blue gradient color from logo
    secondaryColor = Color(0xFFE64A19), // Orange gradient color from logo
@@ -17,5 +23,6 @@ class Constant {
    purpleAccent = Color(0xFF8E24AA); // Purple accent from gradient
 
 
-static const String logo_tile ='assets/logo_title.png';
+static const String logo_tile ='assets/logo_title.png',
+working = 'assets/working.gif';
 }

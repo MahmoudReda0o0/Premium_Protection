@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 
 import '../../constant/constant.dart';
 import '../home_page/home_page.dart';
-import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
 import '../widget/rich_text_custom.dart';
 import '../widget/text_form_password_custom.dart';
@@ -28,9 +27,44 @@ class _RegisterState extends State<Register> {
       lastName = '',
       country = '',
       phoneNumber = '';
+  late TextEditingController conEmail;
+  late TextEditingController conPassword ;
+  late TextEditingController conConfirmPassword ;
+  late TextEditingController conFirstName ;
+  late TextEditingController conSecondName ;
+  late TextEditingController conLastName ;
+  late TextEditingController conCountry ;
+  late TextEditingController conPhoneNumber ;
+
+  @override
+  void initState() {
+    super.initState();
+    conEmail = TextEditingController();
+    conPassword = TextEditingController();
+    conConfirmPassword = TextEditingController();
+    conFirstName = TextEditingController();
+    conSecondName = TextEditingController();
+    conLastName = TextEditingController();
+    conCountry = TextEditingController();
+    conPhoneNumber = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    conEmail.dispose();
+    conPassword.dispose();
+    conConfirmPassword.dispose();
+    conFirstName.dispose();
+    conSecondName.dispose();
+    conLastName.dispose();
+    conCountry.dispose();
+    conPhoneNumber.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool _activeKeyBoard = MediaQuery.of(context).viewInsets.bottom != 0;
+    bool activeKeyBoard = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       backgroundColor: Constant.whiteColor,
       body: SingleChildScrollView(
@@ -57,44 +91,55 @@ class _RegisterState extends State<Register> {
               key: _formKey,
               child: Column(children: [
                 TextFormCustom(
+                  controller: conFirstName,
                   lableText: 'first Name',
                   errorMessage: 'please enter your first name',
                   onSaved: (value) => firstName = value!,
                 ),
                 TextFormCustom(
+                  controller: conSecondName,
                   lableText: 'Second Name',
                   errorMessage: 'please enter your second name',
                   onSaved: (value) => secondName = value!,
                 ),
                 TextFormCustom(
+                  controller: conLastName,
                   lableText: 'last Name',
                   errorMessage: 'please enter your last name',
                   onSaved: (value) => lastName = value!,
                 ),
                 TextFormCustom(
+                    controller: conPhoneNumber,
                     lableText: 'Phone Number',
                     errorMessage: 'please enter your phone number',
                     onSaved: (value) => phoneNumber = value!),
                 TextFormCustom(
+                    controller: conCountry,
                     lableText: 'Country',
                     errorMessage: 'please enter your Counter',
                     onSaved: (value) => country = value!),
                 TextFormCustom(
+                    controller: conEmail,
                     lableText: 'Email',
                     errorMessage: 'please enter your email',
                     onSaved: (value) => email = value!),
                 TextFormPasswordCustom(
+                    controller: conPassword,
                     lableText: 'Password',
                     errorMessage: 'please enter your password',
                     onSaved: (value) => password = value!),
                 TextFormPasswordCustom(
+                    controller: conConfirmPassword,
                     lableText: 'Confirm Password',
                     errorMessage: 'please enter your password',
                     onSaved: (value) => confirmPassword = value!),
                 FormSubmitButtonCustom.show(
                   onTap: () {
                     print('😅😍😒👍❤️👌😘😂😊💕😁🤣');
-                    Navigator.push(context, MaterialPageRoute(builder: (builder) => const HomePage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (builder) => const HomePage()));
                   },
                   formKey: _formKey,
                   snakBarMessage:
@@ -116,7 +161,7 @@ class _RegisterState extends State<Register> {
                 );
               },
             ),
-            _activeKeyBoard
+            activeKeyBoard
                 ? Container(
                     height: 150,
                     width: 200,
