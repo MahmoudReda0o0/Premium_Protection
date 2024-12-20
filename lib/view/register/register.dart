@@ -28,13 +28,13 @@ class _RegisterState extends State<Register> {
       country = '',
       phoneNumber = '';
   late TextEditingController conEmail;
-  late TextEditingController conPassword ;
-  late TextEditingController conConfirmPassword ;
-  late TextEditingController conFirstName ;
-  late TextEditingController conSecondName ;
-  late TextEditingController conLastName ;
-  late TextEditingController conCountry ;
-  late TextEditingController conPhoneNumber ;
+  late TextEditingController conPassword;
+  late TextEditingController conConfirmPassword;
+  late TextEditingController conFirstName;
+  late TextEditingController conSecondName;
+  late TextEditingController conLastName;
+  late TextEditingController conCountry;
+  late TextEditingController conPhoneNumber;
 
   @override
   void initState() {
@@ -133,7 +133,7 @@ class _RegisterState extends State<Register> {
                     lableText: 'Confirm Password',
                     errorMessage: 'please enter your password',
                     onSaved: (value) => confirmPassword = value!),
-                FormSubmitButtonCustom.show(
+                FormSubmitButtonCustom.build(
                   onTap: () {
                     print('😅😍😒👍❤️👌😘😂😊💕😁🤣');
                     Navigator.push(

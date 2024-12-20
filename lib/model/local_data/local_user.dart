@@ -7,3 +7,5 @@ class LocalUser {
   String email = 'mahmoudreda1321@gmail.com';
   String password = 'MegaXmoud#0o0';
 }
+
+

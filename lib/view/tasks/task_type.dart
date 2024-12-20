@@ -174,9 +174,9 @@ class _TaskTypeState extends State<TaskType> {
               context: context,
               builder: (BuildContext context) => SizedBox(
                     height: mediaHeight * 0.3,
+                    width: mediaWidth ,
                     child: Column(
                       children: [
-                        
                         ElevatedButton(
                             onPressed: () {
                               Navigator.pop(context);
