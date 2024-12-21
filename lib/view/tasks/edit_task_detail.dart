@@ -1,9 +1,7 @@
-
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-
 
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
@@ -13,7 +11,7 @@ import '../widget/form_submit_button.dart';
 class EditTaskDetail extends StatefulWidget {
   EditTaskDetail({super.key, required this.taskInfo});
 
-  TaskInfo taskInfo;
+  LocalTask taskInfo;
   @override
   State<EditTaskDetail> createState() => _EditTaskDetailState();
 }

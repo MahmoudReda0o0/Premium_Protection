@@ -1,9 +1,11 @@
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constant/constant.dart';
+import '../../view model/cubit/tasko_cubit.dart';
 import '../register/register.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/container_image.dart';
@@ -42,7 +44,7 @@ class _LoginState extends State<Login> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     sharedPrefValue = pref.getBool(sharedCheckBoxKey);
     setState(() {});
-    if (sharedPrefValue == true) {
+    if (sharedPrefValue != true) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -144,10 +146,14 @@ class _LoginState extends State<Login> {
                         sharedSetDate(sharedEmileKey, conEmail.text);
                         sharedSetDate(sharedPasswordKey, conPassword.text);
                       }
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+
+                      BlocProvider.of<TaskoCubit>(context).userLogin();
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const HomePage(),
+                      //   ),
+                      // );
                     },
                     formKey: _formKey,
                     snakBarMessage:

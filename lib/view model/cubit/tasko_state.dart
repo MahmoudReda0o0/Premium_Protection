@@ -10,7 +10,11 @@ sealed class TaskoState extends Equatable {
 
 final class TaskoInitial extends TaskoState {}
 
-final class LodingSrtate extends TaskoState {}
+final class LoadingState extends TaskoState {}
+
+final class LoadedState extends TaskoState {}
+
+final class HomeState extends TaskoState {}
 
 final class ErrorState extends TaskoState {}  
 

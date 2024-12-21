@@ -3,8 +3,6 @@ import 'package:excp_training/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-
-
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/button_custom.dart';
@@ -14,7 +12,7 @@ import 'edit_task_detail.dart';
 class ShowTaskDetail extends StatefulWidget {
   ShowTaskDetail({super.key, required this.taskInfo});
 
-  TaskInfo taskInfo;
+  LocalTask taskInfo;
   @override
   State<ShowTaskDetail> createState() => _ShowTaskDetailState();
 }
