@@ -6,7 +6,7 @@ import 'package:excp_training/view/widget/container_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../model/local_data/local_user.dart';
+
 import '../widget/SnackBarCustom.dart';
 import 'home_drawer.dart';
 
