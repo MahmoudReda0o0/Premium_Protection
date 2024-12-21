@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    sharedNavigate();
+    //sharedNavigate();
     conEmail = TextEditingController();
     conPassword = TextEditingController();
   }
@@ -137,7 +137,7 @@ class _LoginState extends State<Login> {
                   const Gap(20),
                   FormSubmitButtonCustom.build(
                     onValidate: () {
-                      SnackBarCustom.showSnackBar(
+                      SnackBarCustom.build(
                         message: 'checkBoxValue: $checkBoxValue',
                         context: context,
                       );
@@ -147,7 +147,10 @@ class _LoginState extends State<Login> {
                         sharedSetDate(sharedPasswordKey, conPassword.text);
                       }
 
-                      BlocProvider.of<TaskoCubit>(context).userLogin();
+                      BlocProvider.of<TaskoCubit>(context).userLogin(
+                        email: conEmail.text,
+                        password: conPassword.text,
+                      );
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(

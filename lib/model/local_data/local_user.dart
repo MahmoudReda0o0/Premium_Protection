@@ -16,7 +16,7 @@ class LocalUser {
       required this.email,
       required this.password});
 
-  LocalUser getLocalUserData() {
+  static LocalUser getLocalUserData() {
     return LocalUser(
       fristName: 'Mahmoud',
       secondName: 'Reda',
