@@ -15,11 +15,9 @@ class CubitLogicPage extends StatelessWidget {
         builder: (context, state) {
           if (state is TaskoInitial) {
             return const Login();
-          }
-          else if(state is HomeState){
-            return  HomePage();
-          }
-           else {
+          } else if (state is HomeState) {
+            return const HomePage();
+          } else {
             return const Center(child: CircularProgressIndicator());
           }
         },

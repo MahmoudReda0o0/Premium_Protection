@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'view model/cubit/tasko_cubit.dart';
 import 'view model/cubit_logic_page.dart';
-import 'view/login/login.dart';
 
 void main() {
   runApp(const MyApp());

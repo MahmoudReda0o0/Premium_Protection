@@ -98,7 +98,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                               buttonColor: Constant.pinkAccent,
                               onPressed: () {
                                 Navigator.pop(context);
-                                SnackBarCustom.showSnackBar(
+                                SnackBarCustom.build(
                                     message: 'Change Your Mind',
                                     context: context);
                               },
@@ -110,7 +110,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                                 widget.taskInfo.isNew = false;
                                 setState(() {});
                                 Navigator.pop(context);
-                                SnackBarCustom.showSnackBar(
+                                SnackBarCustom.build(
                                     message: 'Go Do Your Task Lazy Boy',
                                     context: context);
                               },

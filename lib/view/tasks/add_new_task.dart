@@ -92,10 +92,11 @@ class _AddNewTaskState extends State<AddNewTask> {
                             taskType: conTaskType.text,
                             taskDescription: conTaskDescription.text,
                             dateTime: conDateTime.text);
-                      }
-                     
-                      );
-                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                      });
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
                     })
               ],
             ),
@@ -127,7 +128,7 @@ class _AddNewTaskState extends State<AddNewTask> {
         date = '';
         time = '';
         conDateTime.text = '';
-        SnackBarCustom.showSnackBar(
+        SnackBarCustom.build(
             message: 'Enter date and time correctly', context: context);
       });
     }

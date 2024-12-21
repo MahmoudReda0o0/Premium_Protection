@@ -168,7 +168,7 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
         date = '';
         time = '';
         conDateTime.text = '';
-        SnackBarCustom.showSnackBar(
+        SnackBarCustom.build(
             message: 'Enter date and time correctly', context: context);
       });
     }

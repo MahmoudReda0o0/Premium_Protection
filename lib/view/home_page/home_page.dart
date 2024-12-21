@@ -6,7 +6,6 @@ import 'package:excp_training/view/widget/container_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-
 import '../widget/SnackBarCustom.dart';
 import 'home_drawer.dart';
 
@@ -36,7 +35,7 @@ class _HomePageState extends State<HomePage> {
             list.add('mahmoud');
           });
 
-          SnackBarCustom.showSnackBar(message: 'list[1]', context: context);
+          SnackBarCustom.build(message: 'list[1]', context: context);
         },
       ),
       appBar: AppBar(
