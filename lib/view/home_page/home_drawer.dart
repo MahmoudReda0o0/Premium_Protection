@@ -50,7 +50,7 @@ class HomeDrawer extends StatelessWidget {
               title: const Text('Settings'),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TaskType()));
+                    MaterialPageRoute(builder: (context) => const TaskType()));
               },
             ),
           ],

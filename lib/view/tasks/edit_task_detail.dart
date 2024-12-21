@@ -1,37 +1,42 @@
-import 'package:excp_training/view/home_page/home_page.dart';
+
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
 
-class AddNewTask extends StatefulWidget {
-  const AddNewTask({super.key});
+// ignore: must_be_immutable
+class EditTaskDetail extends StatefulWidget {
+  EditTaskDetail({super.key, required this.taskInfo});
 
+  TaskInfo taskInfo;
   @override
-  State<AddNewTask> createState() => _AddNewTaskState();
+  State<EditTaskDetail> createState() => _EditTaskDetailState();
 }
 
-class _AddNewTaskState extends State<AddNewTask> {
+class _EditTaskDetailState extends State<EditTaskDetail> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController conDateTime;
   late TextEditingController conTaskName;
   late TextEditingController conTaskType;
   late TextEditingController conTaskDescription;
-  String? date;
-  String? time;
-  String? taskName;
+  late bool isTaskNew;
+  String date = '';
+  String time = '';
 
   @override
   void initState() {
     super.initState();
-    conTaskName = TextEditingController();
-    conTaskType = TextEditingController();
-    conTaskDescription = TextEditingController();
-    conDateTime = TextEditingController();
+    conTaskName = TextEditingController(text: widget.taskInfo.taskName);
+    conTaskType = TextEditingController(text: widget.taskInfo.taskType);
+    conTaskDescription =
+        TextEditingController(text: widget.taskInfo.taskDescription);
+    conDateTime = TextEditingController(text: widget.taskInfo.dateTime);
+    isTaskNew = widget.taskInfo.isNew;
   }
 
   @override
@@ -48,7 +53,7 @@ class _AddNewTaskState extends State<AddNewTask> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Add New Task'),
+        title: const Text('Task Detail '),
       ),
       body: Column(
         children: [
@@ -59,9 +64,9 @@ class _AddNewTaskState extends State<AddNewTask> {
               children: [
                 TextFormCustom(
                   controller: conTaskName,
-                  lableText: 'Task',
+                  lableText: 'task name',
                   errorMessage: "Enter Task Name",
-                  onSaved: (value) => taskName = value!,
+                  // onSaved: (value) => taskName = value!,
                 ),
                 TextFormCustom(
                     controller: conTaskType,
@@ -81,22 +86,29 @@ class _AddNewTaskState extends State<AddNewTask> {
                     _selectDate();
                   },
                 ),
-                const SizedBox(height: 16),
+                const Gap(20),
+
+                // Container(
+                //   height: 50,
+                //   width: mediaWidth * 0.9,
+                //   child: Row(
+                //     children: [
+                //       taskIsDoneButton(
+                //         isNew: isTaskNew,
+                //         title: 'New Task',
+                //         activeColor: Constant.brightGreent,
+                //         secondColor: Constant.cardColor,
+                //       ),
+                //       Gap(8),
+                //       taskIsDoneButton(isNew: !isTaskNew,
+                //           title: 'Done Task',
+                //           activeColor: Constant.softBlue,
+                //           secondColor: Constant.cardColor),
+                //     ],
+                //   ),
+                // ),
                 FormSubmitButtonCustom.build(
-                    context: context,
-                    formKey: formKey,
-                    onValidate: () {
-                      setState(() {
-                        LocalTask.addNewTask(
-                            taskName: conTaskName.text,
-                            taskType: conTaskType.text,
-                            taskDescription: conTaskDescription.text,
-                            dateTime: conDateTime.text);
-                      }
-                     
-                      );
-                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
-                    })
+                    context: context, formKey: formKey, onTap: () {})
               ],
             ),
           ),
@@ -104,6 +116,37 @@ class _AddNewTaskState extends State<AddNewTask> {
       ),
     );
   }
+
+  // Widget taskIsDoneButton(
+  //     {required bool taskBoolValue,
+  //     required bool buttonBoolValue,
+  //     // required String title,
+  //     // required Color activeColor,
+  //     // required Color secondColor,
+  //     }) {
+  //   return Expanded(
+  //     child: ElevatedButton(
+  //       style: ButtonStyle(
+  //         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+  //           RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(15.0),
+  //             //side: const BorderSide(color: Colors.red),
+  //           ),
+  //         ),
+  //         backgroundColor:
+  //             WidgetStateProperty.all<Color>(isNew ? activeColor : secondColor),
+  //       ),
+  //       onPressed: () {
+  //         setState(() {
+  //           isTaskNew = !isNew;
+  //         });
+  //       },
+  //       child: Center(
+  //         child: Text(title, style: const TextStyle(color: Colors.white),),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   _selectDate() async {
     DateTime? pickedDate = await showDatePicker(

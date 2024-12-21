@@ -4,7 +4,7 @@ import '../../constant/constant.dart';
 import 'SnackBarCustom.dart';
 
 class FormSubmitButtonCustom {
-  static show(
+  static build(
       {String snakBarMessage = 'form submitted successfully',
       required BuildContext context,
       required GlobalKey<FormState> formKey,

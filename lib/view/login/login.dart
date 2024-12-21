@@ -133,7 +133,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const Gap(20),
-                  FormSubmitButtonCustom.show(
+                  FormSubmitButtonCustom.build(
                     onValidate: () {
                       SnackBarCustom.showSnackBar(
                         message: 'checkBoxValue: $checkBoxValue',
