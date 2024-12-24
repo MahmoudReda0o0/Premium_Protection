@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextFormCustom extends StatefulWidget {
   TextFormCustom(
@@ -9,10 +10,12 @@ class TextFormCustom extends StatefulWidget {
       this.readOnly = false,
       required this.controller,
       this.iconDate,
+      this.numberOnly = false,
       this.iconOnTap = defaultIconOnTap});
   String lableText;
   String errorMessage;
   bool readOnly;
+  bool numberOnly;
   TextEditingController controller;
   IconData? iconDate;
   final Function iconOnTap;
@@ -34,6 +37,10 @@ class _TextFormCustomState extends State<TextFormCustom> {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: TextFormField(
+        keyboardType: widget.numberOnly ? TextInputType.number : null,
+        inputFormatters: widget.numberOnly
+            ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+            : null,
         controller: widget.controller,
         readOnly: widget.readOnly,
         decoration: InputDecoration(

@@ -137,10 +137,10 @@ class _LoginState extends State<Login> {
                   const Gap(20),
                   FormSubmitButtonCustom.build(
                     onValidate: () {
-                      SnackBarCustom.build(
-                        message: 'checkBoxValue: $checkBoxValue',
-                        context: context,
-                      );
+                      // SnackBarCustom.build(
+                      //   message: 'checkBoxValue: $checkBoxValue',
+                      //   context: context,
+                      // );
                       if (checkBoxValue == true) {
                         sharedSetDate(sharedCheckBoxKey, checkBoxValue);
                         sharedSetDate(sharedEmileKey, conEmail.text);

@@ -1,4 +1,3 @@
-
 class LocalTask {
   String taskName;
   String taskType;
@@ -148,5 +147,19 @@ class LocalTask {
         dateTime: dateTime,
         taskType: taskType,
         taskDescription: taskDescription));
+  }
+
+  static editTaskComplete({required int index}) {
+    list[index].isNew = false;
+  }
+
+  static editTaskDetail(int index, LocalTask updatedTask) {
+    if (index >= 0 && index < list.length) {
+      bool isNew = list[index].isNew;
+      list[index] = updatedTask;
+      list[index].isNew = isNew;
+    } else {
+      print('Invalid index');
+    }
   }
 }

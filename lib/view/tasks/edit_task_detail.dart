@@ -1,5 +1,7 @@
+import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
@@ -9,9 +11,8 @@ import '../widget/form_submit_button.dart';
 
 // ignore: must_be_immutable
 class EditTaskDetail extends StatefulWidget {
-  EditTaskDetail({super.key, required this.taskInfo});
+  const EditTaskDetail({super.key});
 
-  LocalTask taskInfo;
   @override
   State<EditTaskDetail> createState() => _EditTaskDetailState();
 }
@@ -29,12 +30,24 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
   @override
   void initState() {
     super.initState();
-    conTaskName = TextEditingController(text: widget.taskInfo.taskName);
-    conTaskType = TextEditingController(text: widget.taskInfo.taskType);
-    conTaskDescription =
-        TextEditingController(text: widget.taskInfo.taskDescription);
-    conDateTime = TextEditingController(text: widget.taskInfo.dateTime);
-    isTaskNew = widget.taskInfo.isNew;
+    final cubitCurrentState = BlocProvider.of<TaskoCubit>(context).state;
+    if (cubitCurrentState is EditTaskDetailState) {
+      conTaskName =
+          TextEditingController(text: cubitCurrentState.localTaskItem.taskName);
+      conTaskType =
+          TextEditingController(text: cubitCurrentState.localTaskItem.taskType);
+      conTaskDescription = TextEditingController(
+          text: cubitCurrentState.localTaskItem.taskDescription);
+      conDateTime =
+          TextEditingController(text: cubitCurrentState.localTaskItem.dateTime);
+      isTaskNew = cubitCurrentState.localTaskItem.isNew;
+    } else {
+      conTaskName = TextEditingController(text: 'no data');
+      conTaskType = TextEditingController(text: 'no data');
+      conTaskDescription = TextEditingController(text: 'no data');
+      conDateTime = TextEditingController(text: 'no data');
+      isTaskNew = false;
+    }
   }
 
   @override
@@ -85,28 +98,21 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
                   },
                 ),
                 const Gap(20),
-
-                // Container(
-                //   height: 50,
-                //   width: mediaWidth * 0.9,
-                //   child: Row(
-                //     children: [
-                //       taskIsDoneButton(
-                //         isNew: isTaskNew,
-                //         title: 'New Task',
-                //         activeColor: Constant.brightGreent,
-                //         secondColor: Constant.cardColor,
-                //       ),
-                //       Gap(8),
-                //       taskIsDoneButton(isNew: !isTaskNew,
-                //           title: 'Done Task',
-                //           activeColor: Constant.softBlue,
-                //           secondColor: Constant.cardColor),
-                //     ],
-                //   ),
-                // ),
                 FormSubmitButtonCustom.build(
-                    context: context, formKey: formKey, onTap: () {})
+                    context: context,
+                    formKey: formKey,
+                    onValidate: () {
+                      BlocProvider.of<TaskoCubit>(context)
+                        ..submitEditTaskDetail(
+                          updatedTask: LocalTask(
+                              taskName: conTaskName.text,
+                              taskType: conTaskType.text,
+                              taskDescription: conTaskDescription.text,
+                              dateTime: conDateTime.text,
+                              isNew: false),
+                        )
+                        ..openShowTaskDetail();
+                    }),
               ],
             ),
           ),
@@ -114,37 +120,6 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
       ),
     );
   }
-
-  // Widget taskIsDoneButton(
-  //     {required bool taskBoolValue,
-  //     required bool buttonBoolValue,
-  //     // required String title,
-  //     // required Color activeColor,
-  //     // required Color secondColor,
-  //     }) {
-  //   return Expanded(
-  //     child: ElevatedButton(
-  //       style: ButtonStyle(
-  //         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-  //           RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(15.0),
-  //             //side: const BorderSide(color: Colors.red),
-  //           ),
-  //         ),
-  //         backgroundColor:
-  //             WidgetStateProperty.all<Color>(isNew ? activeColor : secondColor),
-  //       ),
-  //       onPressed: () {
-  //         setState(() {
-  //           isTaskNew = !isNew;
-  //         });
-  //       },
-  //       child: Center(
-  //         child: Text(title, style: const TextStyle(color: Colors.white),),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   _selectDate() async {
     DateTime? pickedDate = await showDatePicker(

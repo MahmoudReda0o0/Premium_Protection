@@ -1,7 +1,9 @@
 import 'package:excp_training/view/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:excp_training/constant/constant.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../view model/cubit/tasko_cubit.dart';
 import '../tasks/task_type.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -35,9 +37,9 @@ class HomeDrawer extends StatelessWidget {
                 Icons.home,
                 color: Constant.primaryColor,
               ),
-              title: const Text('Home'),
+              title: const Text('Profile'),
               onTap: () {
-                Navigator.pop(context);
+                BlocProvider.of<TaskoCubit>(context).openProfile();
               },
               onLongPress: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const Login())),
