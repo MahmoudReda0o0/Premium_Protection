@@ -116,9 +116,9 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                                     onPressed: () {
                                       state.localTaskItem.isNew = false;
                                       setState(() {});
+                                      // BlocProvider.of<TaskoCubit>(context)
+                                      //     .editTaskComplete();
                                       Navigator.pop(context);
-                                      BlocProvider.of<TaskoCubit>(context)
-                                          .editTaskComplete();
                                     },
                                     title: 'YES',
                                     width: 120),
