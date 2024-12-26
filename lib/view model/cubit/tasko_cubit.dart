@@ -20,7 +20,7 @@ class TaskoCubit extends Cubit<TaskoState> {
       print('😘😁👍localTask is aloredy here');
       return;
     } else {
-      localTask = LocalTask.list;
+      localTask = LocalTask.tasklist;
       print('👌💕❤️  initialize New LocalTask: ${localTask![2].taskName}');
     }
   }
