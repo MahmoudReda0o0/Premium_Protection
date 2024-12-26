@@ -19,10 +19,10 @@ class FormSubmitButtonCustom {
           FocusScope.of(context).unfocus();
           if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
-            SnackBarCustom.build(
-              message: snakBarMessage,
-              context: context,
-            );
+            // SnackBarCustom.build(
+            //   message: snakBarMessage,
+            //   context: context,
+            // );
             (onValidate ?? () {})();
 
             // Process the form data

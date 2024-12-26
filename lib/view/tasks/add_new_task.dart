@@ -1,6 +1,8 @@
+import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
@@ -86,17 +88,23 @@ class _AddNewTaskState extends State<AddNewTask> {
                     context: context,
                     formKey: formKey,
                     onValidate: () {
-                      setState(() {
-                        LocalTask.addNewTask(
-                            taskName: conTaskName.text,
-                            taskType: conTaskType.text,
-                            taskDescription: conTaskDescription.text,
-                            dateTime: conDateTime.text);
-                      });
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+                      BlocProvider.of<TaskoCubit>(context).addNewTask(
+                          taskName: conTaskName.text,
+                          taskType: conTaskType.text,
+                          taskDescription: conTaskDescription.text,
+                          dateTime: conDateTime.text);
+                      // setState(() {
+
+                      //   LocalTask.addNewTask(
+                      //       taskName: conTaskName.text,
+                      //       taskType: conTaskType.text,
+                      //       taskDescription: conTaskDescription.text,
+                      //       dateTime: conDateTime.text);
+                      // });
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const HomePage()));
                     })
               ],
             ),
