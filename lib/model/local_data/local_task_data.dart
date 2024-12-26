@@ -165,7 +165,10 @@ class LocalTask {
   }
 
   static editTaskComplete({required int index}) {
-    tasklist[index].isNew = false;
+
+    print('🎃🎁🎭 Local Task Data ${list[index].isNew}');
+//     tasklist[index].isNew = false;
+
   }
 
   static editTaskDetail(int index, LocalTask updatedTask) {

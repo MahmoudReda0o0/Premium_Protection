@@ -8,6 +8,7 @@ class LocalUser {
   String country;
   String email;
   String password;
+  static bool registerUser = false;
 
   LocalUser(
       {required this.fristName,
@@ -18,16 +19,22 @@ class LocalUser {
       required this.email,
       required this.password});
 
+  static registerNewUser({required LocalUser localUser}) {
+    registerUser = true;
+    return localUser;
+  }
+
   static LocalUser localUserItem = LocalUser(
-      fristName: 'Mahmoud',
-      secondName: 'Reda',
-      lastName: 'Hashem',
-      phoneNumber: '010218041473',
-      country: 'Mansoura',
-      // email: 'mahmoudreda1321@gmail.com',
-      email: 'm',
-      // password: 'megaXmoud#0o0',
-      password: '112233');
+    fristName: 'Mahmoud',
+    secondName: 'Reda',
+    lastName: 'Hashem',
+    phoneNumber: '010218041473',
+    country: 'Mansoura',
+    // email: 'mahmoudreda1321@gmail.com',
+    email: 'm',
+    // password: 'megaXmoud#0o0',
+    password: '112233',
+  );
 
   static LocalUser getLocalUserData() {
     return localUserItem;

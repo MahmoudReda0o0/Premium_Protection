@@ -38,6 +38,8 @@ final class HomeState extends TaskoState {
   HomeState({required this.localTask});
 }
 
+final class RegisterState extends TaskoState {}
+
 final class EditProfileState extends TaskoState {
   LocalUser localUser;
   EditProfileState({required this.localUser});

@@ -3,6 +3,7 @@ import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/profile/change_password.dart';
 import 'package:excp_training/view/profile/edit_profile.dart';
 import 'package:excp_training/view/profile/profile.dart';
+import 'package:excp_training/view/register/register.dart';
 import 'package:excp_training/view/tasks/add_new_task.dart';
 import 'package:excp_training/view/tasks/show_task_detail.dart';
 import 'package:excp_training/view/tasks/task_type.dart';
@@ -25,6 +26,12 @@ class CubitLogicPage extends StatelessWidget {
         builder: (context, state) {
           if (state is TaskoInitial) {
             return const Login();
+          } else if (state is RegisterState) {
+            return WillPopScope(
+                onWillPop: () {
+                  return BlocProvider.of<TaskoCubit>(context).openLogin();
+                },
+                child: const Register());
           } else if (state is HomeState) {
             return const HomePage();
           } else if (state is ProfileState) {

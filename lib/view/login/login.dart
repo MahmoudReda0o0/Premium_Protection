@@ -188,12 +188,7 @@ class _LoginState extends State<Login> {
                 fristText: 'Don\'t have an account ?',
                 secondText: '  Register Now',
                 action: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Register(),
-                    ),
-                  );
+                  BlocProvider.of<TaskoCubit>(context).openRegister();
                 }),
           ],
         ),

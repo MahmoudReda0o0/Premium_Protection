@@ -27,6 +27,7 @@ class TaskoCubit extends Cubit<TaskoState> {
 
   getLocalTaskIndex({required int index}) {
     localTaskIndex = index;
+    print('🎃👺👹 LocalTaskIndex :$index');
   }
 
   getLocalUserData() {
@@ -39,6 +40,7 @@ class TaskoCubit extends Cubit<TaskoState> {
     }
   }
 
+  /// =------------------------= Login =------------------------= ///
   userLogin({required String email, required String password}) async {
     emit(LoadingState());
     await getLocalUserData();
@@ -58,7 +60,38 @@ class TaskoCubit extends Cubit<TaskoState> {
     }
   }
 
-  /// cubit Task Detail =----------------------------------------------=
+  openLogin() {
+    emit(TaskoInitial());
+  }
+
+  /// =------------------------= Register =------------------------= ///
+
+  openRegister() {
+    emit(RegisterState());
+  }
+
+  /// =------------------------= Task Detail =------------------------= ///
+  openShowTaskDetail() async {
+    emit(LoadingState());
+    await Future.delayed(const Duration(seconds: 1));
+    getLocalTask();
+    emit(ShowTaskDetailState(localTaskItem: localTask![localTaskIndex!]));
+  }
+
+  openEditTaskDetail({required LocalTask localTask}) {
+    emit(EditTaskDetailState(localTaskItem: localTask));
+  }
+
+  submitEditTaskDetail({required LocalTask updatedTask}) {
+    LocalTask.editTaskDetail(localTaskIndex!, updatedTask);
+  }
+
+  editTaskComplete() {
+    LocalTask.editTaskComplete(index: localTaskIndex!);
+    // openShowTaskDetail();
+  }
+
+  /// =------------------------=Add New Task  =------------------------= ///
   addNewTask(
       {required String taskName,
       required String taskType,
@@ -75,30 +108,11 @@ class TaskoCubit extends Cubit<TaskoState> {
     emit(HomeState(localTask: localTask!));
   }
 
-  editTaskComplete() {
-    LocalTask.editTaskComplete(index: localTaskIndex!);
-    openShowTaskDetail();
-  }
-
-  openShowTaskDetail() async {
-    emit(LoadingState());
-    await Future.delayed(const Duration(seconds: 1));
-    getLocalTask();
-    emit(ShowTaskDetailState(localTaskItem: localTask![localTaskIndex!]));
-  }
-
-  openEditTaskDetail({required LocalTask localTask}) {
-    emit(EditTaskDetailState(localTaskItem: localTask));
-  }
-
-  submitEditTaskDetail({required LocalTask updatedTask}) {
-    LocalTask.editTaskDetail(localTaskIndex!, updatedTask);
-  }
-
   openAddNewTask() {
     emit(AddNewTaskState());
   }
 
+  /// =------------------------= Home Page =------------------------= ///
   openHome() async {
     emit(LoadedState());
     getLocalTask();
@@ -106,7 +120,7 @@ class TaskoCubit extends Cubit<TaskoState> {
     emit(HomeState(localTask: localTask!));
   }
 
-  /// Profile Cubit =---------------------------------------=
+  /// =------------------------= Profile =------------------------= ///
   openProfile() async {
     emit(LoadingState());
     getLocalUserData();
@@ -160,6 +174,8 @@ class TaskoCubit extends Cubit<TaskoState> {
       email: email,
     );
   }
+
+  /// =------------------------= Test Cubit =------------------------= ///
 
   testCubit() async {
     emit(LoadingState());
