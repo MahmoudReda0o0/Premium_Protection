@@ -49,3 +49,5 @@ final class ProfileState extends TaskoState {
   ProfileState({required this.localUser});
   LocalUser localUser;
 }
+
+final class TaskTypeState extends TaskoState {}

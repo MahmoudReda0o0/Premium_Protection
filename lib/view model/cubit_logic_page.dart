@@ -5,6 +5,7 @@ import 'package:excp_training/view/profile/edit_profile.dart';
 import 'package:excp_training/view/profile/profile.dart';
 import 'package:excp_training/view/tasks/add_new_task.dart';
 import 'package:excp_training/view/tasks/show_task_detail.dart';
+import 'package:excp_training/view/tasks/task_type.dart';
 import 'package:excp_training/view/widget/LoadingPage.dart';
 import 'package:excp_training/view/zzzTest_code/test1.dart';
 import 'package:excp_training/view/zzzTest_code/test2.dart';
@@ -32,7 +33,14 @@ class CubitLogicPage extends StatelessWidget {
                   return BlocProvider.of<TaskoCubit>(context).openHome();
                 },
                 child: const Profile());
-          } else if (state is ShowTaskDetailState) {
+          }else if (state is TaskTypeState) {
+            return WillPopScope(
+                onWillPop: () {
+                  return BlocProvider.of<TaskoCubit>(context).openHome();
+                },
+                child: const TaskType());
+          }  
+          else if (state is ShowTaskDetailState) {
             return WillPopScope(
                 onWillPop: () {
                   return BlocProvider.of<TaskoCubit>(context).openHome();
