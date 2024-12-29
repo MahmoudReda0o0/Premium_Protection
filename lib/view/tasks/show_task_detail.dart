@@ -1,20 +1,24 @@
 import 'package:excp_training/constant/constant.dart';
 
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/button_custom.dart';
 
+
+import '../widget/show_date_listTile.dart';
 import 'edit_task_detail.dart';
 
 class ShowTaskDetail extends StatefulWidget {
-  ShowTaskDetail({super.key, required this.taskInfo});
+  const ShowTaskDetail({super.key});
 
-  TaskInfo taskInfo;
+
   @override
   State<ShowTaskDetail> createState() => _ShowTaskDetailState();
 }
@@ -43,106 +47,139 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Show Task Detail '),
+
+        title: const Text('Show Task Detail ',style: TextStyle(color: Constant.grayDark,fontSize: 25,fontWeight: FontWeight.bold),),
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const Gap(20),
-          Container(
-            margin: const EdgeInsets.only(left: 8, right: 8),
-            padding: const EdgeInsets.only(bottom: 5, top: 10),
-            decoration: BoxDecoration(
-                color: Constant.darkGray,
-                borderRadius: BorderRadius.circular(8)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      body: BlocBuilder<TaskoCubit, TaskoState>(
+        builder: (context, state) {
+          if (state is ShowTaskDetailState) {
+            return Column(
               children: [
-                showTaskDetailListTile(
-                  listTileTitle: 'Task',
-                  text: widget.taskInfo.taskName,
-                ),
-                showTaskDetailListTile(
-                  listTileTitle: 'Type',
-                  text: widget.taskInfo.taskType,
-                ),
-                showTaskDetailListTile(
-                  listTileTitle: 'Des',
-                  text: widget.taskInfo.taskDescription,
-                ),
-                showTaskDetailListTile(
-                  listTileTitle: 'Date',
-                  text: widget.taskInfo.dateTime,
-                ),
-                isCompletedTask(),
-                const Gap(10),
-                // showTaskDetailListTile(listTileTitle: 'Time', text: widget.taskInfo.taskTime!),
-              ],
-            ),
-          ),
-          const Gap(30),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ButtonCustom.build(
-                    title: 'Finish Task',
-                    buttonColor: Constant.brightGreent,
-                    textColor: Constant.whiteColor,
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        alignment: Alignment.center,
-                        actionsOverflowAlignment: OverflowBarAlignment.center,
-                        content: const Text('Did you want finish this task?'),
-                        actions: [
-                          ButtonCustom.build(
-                              buttonColor: Constant.pinkAccent,
-                              onPressed: () {
-                                Navigator.pop(context);
-                                SnackBarCustom.showSnackBar(
-                                    message: 'Change Your Mind',
-                                    context: context);
-                              },
-                              title: 'NO',
-                              width: 120),
-                          ButtonCustom.build(
-                              buttonColor: Constant.brightGreent,
-                              onPressed: () {
-                                widget.taskInfo.isNew = false;
-                                setState(() {});
-                                Navigator.pop(context);
-                                SnackBarCustom.showSnackBar(
-                                    message: 'Go Do Your Task Lazy Boy',
-                                    context: context);
-                              },
-                              title: 'YES',
-                              width: 120),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 const Gap(20),
-                Expanded(
-                  child: ButtonCustom.build(
-                    title: 'Edit Task',
-                    buttonColor: Constant.orangeGradientLight,
-                    textColor: Constant.whiteColor,
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditTaskDetail(
-                          taskInfo: widget.taskInfo,
-                        ),
+                Container(
+                  margin: const EdgeInsets.only(left: 8, right: 8),
+                  padding: const EdgeInsets.only(bottom: 5, top: 10),
+                  decoration: BoxDecoration(
+                      color: Constant.grayWhite,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ShowDateListTile(
+                        listTileTitle: 'Task',
+                        text: state.localTaskItem.taskName,
                       ),
-                    ),
+                      ShowDateListTile(
+                        listTileTitle: 'Type',
+                        text: state.localTaskItem.taskType,
+                      ),
+                      ShowDateListTile(
+                        listTileTitle: 'Des',
+                        text: state.localTaskItem.taskDescription,
+                      ),
+                      ShowDateListTile(
+                        listTileTitle: 'Date',
+                        text: state.localTaskItem.dateTime,
+                      ),
+                      isCompletedTask(),
+                      const Gap(10),
+                      // showTaskDetailListTile(listTileTitle: 'Time', text: widget.taskInfo.taskTime!),
+                    ],
                   ),
                 ),
+                const Gap(30),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: state.localTaskItem.isNew
+                            ? ButtonCustom.build(
+                                title: 'Finish Task',
+                                buttonColor: Constant.green,
+                                textColor: Constant.white,
+                                onPressed: () {
+                                  //state.localTaskItem.isNew = false;
+                                  BlocProvider.of<TaskoCubit>(context)
+                                      .editTaskComplete();
+                                  setState(() {});
+                                })
+                            : ButtonCustom.build(
+                                title: 'redo Task',
+                                buttonColor: Constant.orangeWhite,
+                                textColor: Constant.white,
+                                onPressed: () {
+                                  //state.localTaskItem.isNew = false;
+                                  BlocProvider.of<TaskoCubit>(context)
+                                      .editTaskNotComplete();
+                                  setState(() {});
+                                }),
+                        // onPressed: () => showDialog(
+                        //   context: context,
+                        //   builder: (context) => AlertDialog(
+                        //     alignment: Alignment.center,
+                        //     actionsOverflowAlignment:
+                        //         OverflowBarAlignment.center,
+                        //     content:
+                        //         const Text('Did you want finish this task?'),
+                        //     actions: [
+                        //       ButtonCustom.build(
+                        //           buttonColor: Constant.pinkAccent,
+                        //           onPressed: () {
+                        //             Navigator.pop(context);
+                        //             SnackBarCustom.build(
+                        //                 message: 'Change Your Mind',
+                        //                 context: context);
+                        //           },
+                        //           title: 'NO',
+                        //           width: 120),
+                        //       ButtonCustom.build(
+                        //           buttonColor: Constant.brightGreent,
+                        //           onPressed: () {
+                        //             state.localTaskItem.isNew = false;
+                        //             setState(() {});
+                        //             // BlocProvider.of<TaskoCubit>(context)
+                        //             //     .editTaskComplete();
+                        //             Navigator.pop(context);
+                        //           },
+                        //           title: 'YES',
+                        //           width: 120),
+                        //     ],
+                        //   ),
+                        // ),
+                      ),
+                      const Gap(20),
+                      Expanded(
+                        child: ButtonCustom.build(
+                            title: 'Edit Task',
+                            buttonColor: Constant.buttonColor,
+                            textColor: Constant.white,
+                            onPressed: () {
+                              BlocProvider.of<TaskoCubit>(context)
+                                  .openEditTaskDetail(
+                                      localTask: state.localTaskItem);
+                            }
+                            //  Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => EditTaskDetail(
+                            //       taskInfo: state.localTaskItem,
+                            //     ),
+                            //   ),
+                            // ),
+                            ),
+                      ),
+                    ],
+                  ),
+                )
               ],
-            ),
-          )
-        ],
+            );
+          } else {
+            return const Center(child: Text('Error'));
+          }
+        },
+
       ),
     );
   }
@@ -152,49 +189,45 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
       height: 50,
       width: mediaWidth * 0.5,
       decoration: BoxDecoration(
-        color: Constant.whiteGray,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Center(
-        child: Text(
-          widget.taskInfo.isNew ? 'Not Completed' : 'Completed ',
-          style: TextStyle(
-            color: widget.taskInfo.isNew
-                ? Constant.pinkAccent
-                : Constant.brightGreent,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
 
-  Container showTaskDetailListTile(
-      {required String listTileTitle, required String text}) {
-    return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      decoration: BoxDecoration(
-        color: Constant.whiteGray,
+        color: Constant.grayWhite,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: ListTile(
-        title: Text(
-          text,
-          style: const TextStyle(
-            color: Constant.blackColor,
-            fontSize: 20,
-            //fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: Text(
-          '$listTileTitle : ',
-          style: const TextStyle(
-            color: Constant.darkGray,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      child: BlocBuilder<TaskoCubit, TaskoState>(
+        builder: (context, state) {
+          if (state is ShowTaskDetailState) {
+            return Center(
+              child: Container(
+                height: 50,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Constant.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: state.localTaskItem.isNew
+                          ? Constant.orangeWhite
+                          : Constant.green,
+                      width: 2),
+                ),
+                child: Text(
+                  state.localTaskItem.isNew ? 'Not Completed' : 'Completed ',
+                  style: TextStyle(
+                    color: state.localTaskItem.isNew
+                        ? Constant.orangeWhite
+                        : Constant.green,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return const Center(
+              child: Text('error'),
+            );
+          }
+        },
+
       ),
     );
   }

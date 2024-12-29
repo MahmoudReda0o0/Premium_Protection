@@ -19,10 +19,10 @@ class FormSubmitButtonCustom {
           FocusScope.of(context).unfocus();
           if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
-            SnackBarCustom.showSnackBar(
-              message: snakBarMessage,
-              context: context,
-            );
+            // SnackBarCustom.build(
+            //   message: snakBarMessage,
+            //   context: context,
+            // );
             (onValidate ?? () {})();
 
             // Process the form data
@@ -32,16 +32,16 @@ class FormSubmitButtonCustom {
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-              side: const BorderSide(color: Colors.red),
+              //side: const BorderSide(color: Colors.red),
             ),
           ),
           backgroundColor:
-              WidgetStateProperty.all<Color>(Constant.orangeGradientLight),
+              WidgetStateProperty.all<Color>(Constant.buttonColor),
         ),
         child: const Text(
           'Submit',
           style: TextStyle(
-            color: Constant.whiteColor,
+            color: Constant.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

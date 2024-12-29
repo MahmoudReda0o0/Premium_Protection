@@ -1,4 +1,7 @@
+import 'package:excp_training/constant/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 
 class TextFormCustom extends StatefulWidget {
   TextFormCustom(
@@ -9,12 +12,17 @@ class TextFormCustom extends StatefulWidget {
       this.readOnly = false,
       required this.controller,
       this.iconDate,
-      this.iconOnTap = defaultIconOnTap});
+      this.numberOnly = false,
+      this.iconOnTap = defaultIconOnTap,
+      this.suffixWidget
+      });
   String lableText;
   String errorMessage;
   bool readOnly;
+  bool numberOnly;
   TextEditingController controller;
   IconData? iconDate;
+  Widget? suffixWidget;
   final Function iconOnTap;
   final Function(String?) onSaved;
 
@@ -34,18 +42,40 @@ class _TextFormCustomState extends State<TextFormCustom> {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: TextFormField(
+        keyboardType: widget.numberOnly ? TextInputType.number : null,
+        inputFormatters: widget.numberOnly
+            ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+            : null,
         controller: widget.controller,
         readOnly: widget.readOnly,
         decoration: InputDecoration(
+          labelText: widget.lableText,
+          labelStyle: const TextStyle(color: Constant.grayDark),
+          suffix: widget.suffixWidget??null,
           suffixIcon: (widget.iconDate != null)
               ? IconButton(
                   onPressed: () {
                     widget.iconOnTap();
                   },
-                  icon: Icon(widget.iconDate))
+                  icon: Icon(widget.iconDate),
+                )
               : null,
-          border: const OutlineInputBorder(),
-          labelText: widget.lableText,
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(color: Constant.buttonColor),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(color: Constant.buttonColor),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(color: Constant.buttonColor),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(color: Constant.red),
+          ),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {

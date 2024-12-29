@@ -20,7 +20,9 @@ class ButtonCustom {
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-              //side: const BorderSide(color: Colors.red),
+
+              side: const BorderSide(color: Constant.buttonColor),
+
             ),
           ),
           backgroundColor: WidgetStateProperty.all<Color>(buttonColor),
@@ -31,11 +33,13 @@ class ButtonCustom {
         child: Center(
           child: Text(
             title,
-            style:  TextStyle(
-            color: Constant.whiteColor,
-            fontSize: tilteSize,
-            fontWeight: FontWeight.bold,
-          ),
+
+            style: TextStyle(
+              color: textColor,
+              fontSize: tilteSize,
+              fontWeight: FontWeight.bold,
+            ),
+
           ),
         ),
       ),

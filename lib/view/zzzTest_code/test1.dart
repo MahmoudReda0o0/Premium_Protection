@@ -1,93 +1,121 @@
-// import 'package:flutter/material.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
-// class LoginScreen extends StatefulWidget {
-//   @override
-//   _LoginScreenState createState() => _LoginScreenState();
-// }
+void main() {
+  runApp(MyApp());
+}
 
-// class _LoginScreenState extends State<LoginScreen> {
-//   final TextEditingController _usernameController = TextEditingController();
-//   final TextEditingController _passwordController = TextEditingController();
-//   bool _rememberMe = false;
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Dropdown Text Field'),
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: DropdownTextField(),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadUserPreferences();
-//   }
+class DropdownTextField extends StatefulWidget {
+  @override
+  _DropdownTextFieldState createState() => _DropdownTextFieldState();
+}
 
-//   Future<void> _loadUserPreferences() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     setState(() {
-//       _usernameController.text = prefs.getString('username') ?? '';
-//       _passwordController.text = prefs.getString('password') ?? '';
-//       _rememberMe = prefs.getBool('rememberMe') ?? false;
-//     });
-//   }
+class _DropdownTextFieldState extends State<DropdownTextField> {
+  final TextEditingController _controller = TextEditingController();
+  final List<String> _options = [
+    'Apple',
+    'Banana',
+    'Orange',
+    'Grape',
+    'Mango',
+    'Apple',
+    'Banana',
+    'Orange',
+    'Grape',
+    'Mango',
+    'Apple',
+    'Banana',
+    'Orange',
+    'Grape',
+    'Mango'
+  ];
+  String? _selectedValue;
+  bool _isDropdownVisible = false;
 
-//   Future<void> _saveUserPreferences() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     if (_rememberMe) {
-//       await prefs.setString('username', _usernameController.text);
-//       await prefs.setString('password', _passwordController.text);
-//       await prefs.setBool('rememberMe', true);
-//     } else {
-//       await prefs.remove('username');
-//       await prefs.remove('password');
-//       await prefs.setBool('rememberMe', false);
-//     }
-//   }
-
-//   void _login() {
-//     // Handle your login logic here
-//     _saveUserPreferences();
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       SnackBar(content: Text('Logged in successfully!')),
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Login'),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             TextField(
-//               controller: _usernameController,
-//               decoration: InputDecoration(labelText: 'Username'),
-//             ),
-//             TextField(
-//               controller: _passwordController,
-//               decoration: InputDecoration(labelText: 'Password'),
-//               obscureText: true,
-//             ),
-//             Row(
-//               children: [
-//                 Checkbox(
-//                   value: _rememberMe,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       _rememberMe = value!;
-//                     });
-//                   },
-//                 ),
-//                 Text('Remember Me'),
-//               ],
-//             ),
-//             SizedBox(height: 20),
-//             ElevatedButton(
-//               onPressed: _login,
-//               child: Text('Login'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Focus(
+          // Added Focus widget to handle focus changes
+          onFocusChange: (hasFocus) {
+            setState(() {
+              _isDropdownVisible = hasFocus;
+            });
+          },
+          child: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(
+              hintText: 'Select an option',
+              border: OutlineInputBorder(),
+              suffixIcon: Icon(Icons.arrow_drop_down), // Icon inside TextField
+            ),
+            onChanged: (value) {
+              setState(() {}); // Rebuild to filter dropdown
+            },
+            onTap: () {
+              setState(() {
+                _isDropdownVisible = true;
+              });
+            },
+          ),
+        ),
+        if (_isDropdownVisible) // Conditionally show dropdown
+          Card(
+            // Added a Card for better visual separation
+            elevation: 4,
+            child: Container(
+              constraints:
+                  const BoxConstraints(maxHeight: 200), // Limit dropdown height
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: _options
+                    .where((option) => option
+                        .toLowerCase()
+                        .contains(_controller.text.toLowerCase()))
+                    .length,
+                itemBuilder: (context, index) {
+                  final filteredOptions = _options
+                      .where((option) => option
+                          .toLowerCase()
+                          .contains(_controller.text.toLowerCase()))
+                      .toList();
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedValue = filteredOptions[index];
+                        _controller.text = _selectedValue!;
+                        _isDropdownVisible = false;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(filteredOptions[index]),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}

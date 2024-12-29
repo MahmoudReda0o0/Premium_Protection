@@ -16,7 +16,7 @@ class ContainerImageCustom extends StatelessWidget {
       width: width,
       //margin: margin,
       decoration: BoxDecoration(
-        color: Constant.whiteColor,
+        color: Constant.white,
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
           image: AssetImage(image),

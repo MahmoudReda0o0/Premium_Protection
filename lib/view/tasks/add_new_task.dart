@@ -1,6 +1,9 @@
+
+import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
@@ -50,57 +53,93 @@ class _AddNewTaskState extends State<AddNewTask> {
       appBar: AppBar(
         title: const Text('Add New Task'),
       ),
-      body: Column(
-        children: [
-          const Gap(20),
-          Form(
-            key: formKey,
-            child: Column(
-              children: [
-                TextFormCustom(
-                  controller: conTaskName,
-                  lableText: 'Task',
-                  errorMessage: "Enter Task Name",
-                  onSaved: (value) => taskName = value!,
-                ),
-                TextFormCustom(
-                    controller: conTaskType,
-                    lableText: 'Type',
-                    errorMessage: "Enter Task Type"),
-                TextFormCustom(
-                    controller: conTaskDescription,
-                    lableText: 'Description',
-                    errorMessage: "Enter Task Description"),
-                TextFormCustom(
-                  controller: conDateTime,
-                  lableText: ' Date and Time',
-                  errorMessage: 'Enter Date and Time',
-                  readOnly: true,
-                  iconDate: Icons.calendar_today,
-                  iconOnTap: () {
-                    _selectDate();
-                  },
-                ),
-                const SizedBox(height: 16),
-                FormSubmitButtonCustom.build(
-                    context: context,
-                    formKey: formKey,
-                    onValidate: () {
-                      setState(() {
-                        LocalTask.addNewTask(
+
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Gap(20),
+            Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  TextFormCustom(
+                    controller: conTaskName,
+                    lableText: 'Task',
+                    errorMessage: "Enter Task Name",
+                    onSaved: (value) => taskName = value!,
+                  ),
+                  BlocBuilder<TaskoCubit, TaskoState>(
+                      builder: (context, state) {
+                    if (state is AddNewTaskState) {
+                      return TextFormCustom(
+                        readOnly: true,
+                        controller: conTaskType,
+                        lableText: 'Type',
+                        errorMessage: "Enter Task Type",
+                        suffixWidget: PopupMenuButton(
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 35,
+                          onSelected: (String value) {
+                            setState(() {
+                              conTaskType.text = value;
+                            });
+                          },
+                          itemBuilder: (context) => List.generate(
+                            state.taskTypeList.length,
+                            (index) => PopupMenuItem(
+                              value: state.taskTypeList[index],
+                              child: Text(state.taskTypeList[index]),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {return Center(child: CircularProgressIndicator());}
+                  }),
+                  TextFormCustom(
+                      controller: conTaskDescription,
+                      lableText: 'Description',
+                      errorMessage: "Enter Task Description"),
+                  TextFormCustom(
+                    controller: conDateTime,
+                    lableText: ' Date and Time',
+                    errorMessage: 'Enter Date and Time',
+                    readOnly: true,
+                    iconDate: Icons.calendar_today,
+                    iconOnTap: () {
+                      _selectDate();
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  FormSubmitButtonCustom.build(
+                      context: context,
+                      formKey: formKey,
+                      onValidate: () {
+                        BlocProvider.of<TaskoCubit>(context).addNewTask(
+
                             taskName: conTaskName.text,
                             taskType: conTaskType.text,
                             taskDescription: conTaskDescription.text,
                             dateTime: conDateTime.text);
-                      }
-                     
-                      );
-                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
-                    })
-              ],
+
+                        // setState(() {
+
+                        //   LocalTask.addNewTask(
+                        //       taskName: conTaskName.text,
+                        //       taskType: conTaskType.text,
+                        //       taskDescription: conTaskDescription.text,
+                        //       dateTime: conDateTime.text);
+                        // });
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const HomePage()));
+                      })
+                ],
+              ),
+
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -127,7 +166,7 @@ class _AddNewTaskState extends State<AddNewTask> {
         date = '';
         time = '';
         conDateTime.text = '';
-        SnackBarCustom.showSnackBar(
+        SnackBarCustom.build(
             message: 'Enter date and time correctly', context: context);
       });
     }

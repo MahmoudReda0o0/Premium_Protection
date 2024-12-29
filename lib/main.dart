@@ -1,6 +1,9 @@
+import 'package:excp_training/constant/constant.dart';
 import 'package:flutter/material.dart';
-
-import 'view/login/login.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'view model/cubit/tasko_cubit.dart';
+import 'view model/cubit_logic_page.dart';
+import 'view/widget/themeData.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,12 +20,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      title: 'Tasko',
+      theme: ThemeDataCustom.build(),
+      home: BlocProvider<TaskoCubit>(
+        create: (context) => TaskoCubit(),
+        child: const CubitLogicPage(),
       ),
-      home:const Login()
     );
   }
 }
