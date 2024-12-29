@@ -2,8 +2,8 @@ flutter_native_splash:
   
   color: "#F6F6F6"
   #background_image: "assets/background.png"
-  #image: assets/native_splash/logo.png
-  #branding: assets/native_splash/tasko.png
+  image: assets/native_splash/logo_no_bg.png
+  branding: assets/native_splash/tasko.png
   #branding_mode: bottom
   # branding_bottom_padding: 24
   #color_dark: "#042a49"
