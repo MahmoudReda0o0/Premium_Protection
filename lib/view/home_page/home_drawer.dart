@@ -14,45 +14,43 @@ class HomeDrawer extends StatelessWidget {
     return Drawer(
       child: Container(
         color: Constant
-            .scaffoldBackgroundColor, // Use the constant for drawer background color
+            .white, // Use the constant for drawer background color
         child: ListView(
           children: [
             const UserAccountsDrawerHeader(
               accountName: Text('User Name'),
               accountEmail: Text('user@example.com'),
               currentAccountPicture: CircleAvatar(
-                backgroundColor: Constant.blueGradientLight,
+                backgroundColor: Constant.buttonColor,
                 child: Icon(
                   Icons.person,
-                  color: Constant.whiteColor,
+                  color: Constant.white,
                 ),
               ),
               decoration: BoxDecoration(
                 color: Constant
-                    .blueGradientLight, // Use the primary color from the constant class
+                    .buttonColor, // Use the primary color from the constant class
               ),
             ),
             ListTile(
               leading: const Icon(
                 Icons.home,
-                color: Constant.primaryColor,
+                color: Constant.grayDark,
               ),
-              title: const Text('Profile'),
+              title: const Text('Profile',style: TextStyle(color: Constant.grayDark,),),
               onTap: () {
                 BlocProvider.of<TaskoCubit>(context).openProfile();
               },
-              onLongPress: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Login())),
+              onLongPress: () => BlocProvider.of<TaskoCubit>(context).openLogin(),
             ),
             ListTile(
               leading: const Icon(
                 Icons.settings,
-                color: Constant.primaryColor,
-              ),
-              title: const Text('Settings'),
+                color: Constant.grayDark,
+              ), 
+              title: const Text('Task Type',style: TextStyle(color: Constant.grayDark,),),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const TaskType()));
+                BlocProvider.of<TaskoCubit>(context).openTaskType();
               },
             ),
           ],

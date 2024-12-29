@@ -1,5 +1,12 @@
 import 'package:excp_training/constant/constant.dart';
+import 'package:excp_training/view/widget/button_custom.dart';
+import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+
+import '../../view model/cubit/tasko_cubit.dart';
+import '../widget/show_date_listTile.dart';
 
 class TaskType extends StatefulWidget {
   const TaskType({super.key});
@@ -9,228 +16,160 @@ class TaskType extends StatefulWidget {
 }
 
 class _TaskTypeState extends State<TaskType> {
-  List<String> typeList = [
-    'Exercise',
-    'Meditate',
-    'Journal',
-    'Take vitamins',
-    'Submit reports',
-    "Respond to emails",
-  ];
-
-// Personal Tasks
-  List<String> personalTasks = [
-    "Exercise",
-    "Meditate",
-    "Journal",
-    "Drink 2L water",
-    "Take vitamins",
-    "Grocery shopping",
-    "Meal preparation",
-    "Laundry",
-    "Organize room/desk",
-    "Exercise",
-    "Meditate",
-    "Journal",
-    "Drink 2L water",
-    "Take vitamins",
-    "Grocery shopping",
-    "Meal preparation",
-    "Laundry",
-    "Organize room/desk",
-    "Exercise",
-    "Meditate",
-    "Journal",
-    "Drink 2L water",
-    "Take vitamins",
-    "Grocery shopping",
-    "Meal preparation",
-    "Laundry",
-    "Organize room/desk",
-  ];
-
-// Work-Related Tasks
-  List<String> workTasks = [
-    "Complete project milestones",
-    "Respond to emails",
-    "Attend meetings",
-    "Review documents",
-    "Submit reports",
-    "Brainstorm ideas",
-  ];
-
-// Educational Tasks
-  List<String> educationalTasks = [
-    "Review Chapter 5",
-    "Practice Math Problems",
-    "Complete assignments",
-    "Watch educational videos",
-    "Read a book/article",
-    "Prepare for exams",
-  ];
-
-// Social/Relationship Tasks
-  List<String> socialTasks = [
-    "Call a family member or friend",
-    "Attend a social event",
-    "Write a thank-you note",
-    "Plan a date or outing",
-    "Send birthday wishes",
-  ];
-
-// Hobby/Leisure Tasks
-  List<String> hobbyTasks = [
-    "Practice a musical instrument",
-    "Work on a personal project",
-    "Watch a movie/TV show",
-    "Play a video game",
-    "Read a novel",
-  ];
-
-// Household Tasks
-  List<String> householdTasks = [
-    "Vacuum living room",
-    "Clean bathroom",
-    "Pay bills",
-    "Repair something",
-    "Water plants",
-    "Take out the trash",
-  ];
-
-// Fitness Tasks
-  List<String> fitnessTasks = [
-    "Go for a run/walk",
-    "Attend a fitness class",
-    "Stretch or yoga",
-    "Track steps or calories",
-    "Weightlifting routine",
-  ];
-
-// Self-Care Tasks
-  List<String> selfCareTasks = [
-    "Schedule doctor appointments",
-    "Spa or relaxation time",
-    "Journaling or gratitude practice",
-    "Listen to a podcast",
-    "Spend time outdoors",
-  ];
-
-// Errands
-  List<String> errands = [
-    "Pick up dry cleaning",
-    "Visit the bank",
-    "Buy a gift",
-    "Car maintenance",
-    "Drop off packages",
-  ];
-
-// Goal-Oriented Tasks
-  List<String> goalTasks = [
-    "Set weekly/monthly goals",
-    "Track progress on a project",
-    "Plan a trip",
-    "Learn a new skill",
-    "Save money",
-  ];
-
-// Digital Tasks
-  List<String> digitalTasks = [
-    "Organize files/photos",
-    "Backup data",
-    "Update apps/software",
-    "Clear email inbox",
-    "Manage subscriptions",
-  ];
-
-// Recurring Tasks
-  List<String> recurringTasks = [
-    "Daily habits: Drink water",
-    "Daily habits: Take a walk",
-    "Weekly reviews",
-    "Monthly expenses check",
-    "Quarterly house maintenance",
-    "Annual medical check-up",
-  ];
-
-// Miscellaneous Tasks
-  List<String> miscellaneousTasks = [
-    "Donate unused items",
-    "Volunteer work",
-    "Random acts of kindness",
-    "Explore a new place",
-    "Reflect on achievements",
-  ];
+  TextEditingController conTaskType = TextEditingController();
+  bool addMode = false;
+  @override
+  void dispose() {
+    conTaskType.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Task Type'),
+        title: const Text(
+          'Task Type',
+          style: TextStyle(
+            color: Constant.grayDark,
+            fontWeight: FontWeight.bold,
+            fontSize: 25,
+          ),
+        ),
+        centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Constant.buttonColor,
+        child: const Icon(
+          Icons.add,
+          size: 50,
+          color: Constant.white,
+        ),
         onPressed: () {
-          
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) => SizedBox(
-                    height: mediaHeight * 0.3,
-                    width: mediaWidth ,
-                    child: Column(
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('take'))
-                      ],
-                    ),
-                  ));
+          setState(() {
+            conTaskType.clear();
+            addMode = !addMode;
+          });
+          // showModalBottomSheet(
+          //   context: context,
+          //   builder: (BuildContext context) => SizedBox(
+          //     height: mediaHeight * 0.3,
+          //     width: mediaWidth,
+          //     child: Column(
+          //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //       children: [
+          //         TextFormCustom(
+          //           lableText: 'New Task Type',
+          //           errorMessage: 'Enter Task Type',
+          //           controller: conTaskType,
+          //         ),
+          //         ElevatedButton(
+          //           onPressed: () {
+          //             BlocProvider.of<TaskoCubit>(context)
+          //                 .addNewTaskType(conTaskType.text);
+          //             Navigator.pop(context);
+          //           },
+          //           child: const Text('take'),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // );
         },
-        backgroundColor: Constant.primaryColor,
-        child: const Icon(Icons.add),
       ),
-      body: Container(
-          height: mediaHeight * 0.9,
-          width: mediaWidth * 0.9,
-          color: Constant.blueGradientLight,
-          child: Column(
-            children: [
-              const Text('Regular Type'),
-              Expanded(
-                child: Container(
-                  color: Constant.darkGrayColor,
-                  child: ListView.builder(
-                    itemCount: personalTasks.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          personalTasks[index],
-                          style: const TextStyle(color: Constant.blackColor),
-                        ),
-                      );
-                    },
+      body: BlocBuilder<TaskoCubit, TaskoState>(
+        builder: (context, state) {
+          if (state is TaskTypeState) {
+            return Container(
+              height: mediaHeight * 0.9,
+              width: mediaWidth,
+              color: Constant.grayWhite,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('Fixed Task Type'),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 15),
+                      color: Constant.grayWhite,
+                      child: ListView.builder(
+                        itemCount: state.fixedTaskType.length,
+                        itemBuilder: (context, index) {
+                          return ShowDateListTile(
+                            listTileTitle: '${index + 1} ',
+                            text: '${state.fixedTaskType[index]}',
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const Text('Personal Type'),
-              Expanded(
-                child: Container(
-                  color: Constant.dimGrayColor,
-                  child: ListView.builder(
-                    itemCount: digitalTasks.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          typeList[index],
-                          style: const TextStyle(color: Constant.blackColor),
-                        ),
-                      );
-                    },
+                  const Divider(
+                    color: Constant.grayDark,
                   ),
-                ),
+                  const Text('Added Task Type'),
+                  Expanded(
+                    child: addMode
+                        ? SizedBox(
+                            height: 100,
+                            width: mediaWidth,
+                            //color: Colors.amber,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextFormCustom(
+                                  lableText: 'New Task Type',
+                                  errorMessage: 'Enter Task Type',
+                                  controller: conTaskType,
+                                ),
+                                TextButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: WidgetStateProperty.all(
+                                        Constant.buttonColor),
+                                  ),
+                                  onPressed: () {
+                                    BlocProvider.of<TaskoCubit>(context)
+                                        .addNewTaskType(conTaskType.text);
+                                    setState(() {
+                                      addMode = false;
+                                    });
+                                  },
+                                  child: const Text(
+                                    'Submit',
+                                    style: TextStyle(
+                                        color: Constant.white,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            color: Constant.grayWhite,
+                            child: state.addedTaskType.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                    'No Added Task Type',
+                                  ))
+                                : ListView.builder(
+                                    itemCount: state.addedTaskType.length,
+                                    itemBuilder: (context, index) {
+                                      return ShowDateListTile(
+                                        listTileTitle: '${index + 1} ',
+                                        text: '${state.addedTaskType[index]}',
+                                      );
+                                    },
+                                  ),
+                          ),
+                  ),
+                ],
               ),
-            ],
-          )),
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+import '../../constant/constant.dart';
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
@@ -68,61 +69,64 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Task Detail '),
+        title: const Text('Profile', style: TextStyle(color: Constant.grayDark,fontSize: 30,fontWeight: FontWeight.bold)),
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const Gap(20),
-          Form(
-            key: formKey,
-            child: Column(
-              children: [
-                TextFormCustom(
-                  controller: conFristName,
-                  lableText: 'Frist Name',
-                  errorMessage: "Enter Your Frist Name",
-                ),
-                TextFormCustom(
-                    controller: conSecondName,
-                    lableText: 'Second Name',
-                    errorMessage: "Enter Your Second Name"),
-                TextFormCustom(
-                    controller: conLastName,
-                    lableText: 'Last Name',
-                    errorMessage: "Enter Your Last Name"),
-                TextFormCustom(
-                    controller: conEmail,
-                    lableText: 'Email',
-                    errorMessage: "Enter Your Correct Email"),
-                TextFormCustom(
-                    controller: conCountry,
-                    lableText: 'Country',
-                    errorMessage: "Enter Your Country"),
-                TextFormCustom(
-                    controller: conphoneNum,
-                    numberOnly: true,
-                    lableText: 'Phone Num',
-                    errorMessage: "Enter Your Phone Num"),
-                const Gap(20),
-                FormSubmitButtonCustom.build(
-                    context: context,
-                    formKey: formKey,
-                    onValidate: () {
-                      BlocProvider.of<TaskoCubit>(context)
-                        ..submitEditProfile(
-                          fristName: conFristName.text,
-                          secondName: conSecondName.text,
-                          lastName: conLastName.text,
-                          phoneNumber: conphoneNum.text,
-                          country: conCountry.text,
-                          email: conEmail.text,
-                        )
-                        ..openProfile();
-                    }),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Gap(20),
+            Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  TextFormCustom(
+                    controller: conFristName,
+                    lableText: 'Frist Name',
+                    errorMessage: "Enter Your Frist Name",
+                  ),
+                  TextFormCustom(
+                      controller: conSecondName,
+                      lableText: 'Second Name',
+                      errorMessage: "Enter Your Second Name"),
+                  TextFormCustom(
+                      controller: conLastName,
+                      lableText: 'Last Name',
+                      errorMessage: "Enter Your Last Name"),
+                  TextFormCustom(
+                      controller: conEmail,
+                      lableText: 'Email',
+                      errorMessage: "Enter Your Correct Email"),
+                  TextFormCustom(
+                      controller: conCountry,
+                      lableText: 'Country',
+                      errorMessage: "Enter Your Country"),
+                  TextFormCustom(
+                      controller: conphoneNum,
+                      numberOnly: true,
+                      lableText: 'Phone Num',
+                      errorMessage: "Enter Your Phone Num"),
+                  const Gap(20),
+                  FormSubmitButtonCustom.build(
+                      context: context,
+                      formKey: formKey,
+                      onValidate: () {
+                        BlocProvider.of<TaskoCubit>(context)
+                          ..submitEditProfile(
+                            fristName: conFristName.text,
+                            secondName: conSecondName.text,
+                            lastName: conLastName.text,
+                            phoneNumber: conphoneNum.text,
+                            country: conCountry.text,
+                            email: conEmail.text,
+                          )
+                          ..openProfile();
+                      }),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -29,7 +29,7 @@ class Profile extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 8, right: 8),
                 padding: const EdgeInsets.only(bottom: 5, top: 10),
                 decoration: BoxDecoration(
-                    color: Constant.darkGray,
+                    color: Constant.grayWhite,
                     borderRadius: BorderRadius.circular(8)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,7 +54,7 @@ class Profile extends StatelessWidget {
                   ],
                 ),
               ),
-              const Gap(30),
+              Gap(50),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
@@ -62,8 +62,8 @@ class Profile extends StatelessWidget {
                     Expanded(
                       child: ButtonCustom.build(
                           title: 'Edit Password ',
-                          buttonColor: Constant.brightGreent,
-                          textColor: Constant.whiteColor,
+                          tilteSize: 19,
+                          buttonColor: Constant.orangeWhite,
                           onPressed: () {
                             BlocProvider.of<TaskoCubit>(context)
                                 .openEditPassword();
@@ -73,8 +73,8 @@ class Profile extends StatelessWidget {
                     Expanded(
                       child: ButtonCustom.build(
                           title: 'Edit Profile',
-                          buttonColor: Constant.orangeGradientLight,
-                          textColor: Constant.whiteColor,
+                          //tilteSize: 10,
+                          buttonColor: Constant.buttonColor,
                           onPressed: () {
                             BlocProvider.of<TaskoCubit>(context)
                                 .openEditProfile(localUser: state.localUser);

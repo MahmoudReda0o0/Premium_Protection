@@ -21,7 +21,10 @@ final class SuccessState extends TaskoState {}
 
 final class LoadedState extends TaskoState {}
 
-final class AddNewTaskState extends TaskoState {}
+final class AddNewTaskState extends TaskoState {
+  List<String> taskTypeList = [];
+  AddNewTaskState({required this.taskTypeList});
+}
 
 final class ShowTaskDetailState extends TaskoState {
   ShowTaskDetailState({required this.localTaskItem});
@@ -30,7 +33,8 @@ final class ShowTaskDetailState extends TaskoState {
 
 final class EditTaskDetailState extends TaskoState {
   LocalTask localTaskItem;
-  EditTaskDetailState({required this.localTaskItem});
+  List<String> taskTypeList = [];
+  EditTaskDetailState({required this.localTaskItem,required this.taskTypeList});
 }
 
 final class HomeState extends TaskoState {
@@ -52,4 +56,8 @@ final class ProfileState extends TaskoState {
   LocalUser localUser;
 }
 
-final class TaskTypeState extends TaskoState {}
+final class TaskTypeState extends TaskoState {
+  List<String> fixedTaskType;
+  List<String> addedTaskType;
+  TaskTypeState({required this.fixedTaskType, required this.addedTaskType});
+}

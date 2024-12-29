@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
     bool activeKeyBoard = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constant.whiteColor,
+      backgroundColor: Constant.white,
       body: GestureDetector(
         onTap: () {
           print('tap on screen');
@@ -84,113 +84,123 @@ class _LoginState extends State<Login> {
           // WidgetsBinding.instance.addPostFrameCallback(
           //     (_) => _textEditingController.clear()); // clear content
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Gap(80),
-            if (!activeKeyBoard)
-              ContainerImageCustom(
-                image: Constant.logo_tile,
-                height: 250,
-                width: 250,
-              ),
-            const Gap(35),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormCustom(
-                    controller: conEmail,
-                    lableText: 'Enter Email',
-                    errorMessage: 'Please enter your Email',
-                    //textFieldValue: email,
-                    // onSaved: (value) => email = value!,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  child:const Text('Vesrsion 0.0.6',style: TextStyle(color: Constant.grayDark,fontWeight: FontWeight.bold),),
+                ),
+                const Gap(5),
+                Visibility(
+                  visible: !activeKeyBoard,
+                  child: ContainerImageCustom(
+                    image: Constant.logo_tile,
+                    height: 230,
+                    width: 230,
                   ),
-                  const Gap(10),
-                  TextFormPasswordCustom(
-                    controller: conPassword,
-                    lableText: 'Enter Password',
-                    errorMessage: 'Please enter correct Password',
-                    //textFieldValue: password,
-                    // onSaved: (value) => password = value!,
-                  ),
-                  const Gap(10),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: ListTile(
-                      leading: const Text(
-                        'Remember Me',
-                        style: TextStyle(
-                            color: Constant.blackColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
+                ),
+                const Gap(35),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormCustom(
+                        controller: conEmail,
+                        lableText: 'Enter Email',
+                        errorMessage: 'Please enter your Email',
+                        //textFieldValue: email,
+                        // onSaved: (value) => email = value!,
                       ),
-                      trailing: Checkbox(
-                          value: checkBoxValue,
-                          onChanged: (value) {
-                            setState(() {
-                              checkBoxValue = value!;
-                            });
-                          }),
+                      const Gap(10),
+                      TextFormPasswordCustom(
+                        controller: conPassword,
+                        lableText: 'Enter Password',
+                        errorMessage: 'Please enter correct Password',
+                        //textFieldValue: password,
+                        // onSaved: (value) => password = value!,
+                      ),
+                      const Gap(10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: ListTile(
+                          leading: const Text(
+                            'Remember Me',
+                            style: TextStyle(
+                                color: Constant.grayDark,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                          trailing: Checkbox(
+                              value: checkBoxValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  checkBoxValue = value!;
+                                });
+                              }),
+                        ),
+                      ),
+                      const Gap(20),
+                      FormSubmitButtonCustom.build(
+                        onValidate: () {
+                          // SnackBarCustom.build(
+                          //   message: 'checkBoxValue: $checkBoxValue',
+                          //   context: context,
+                          // );
+                          if (checkBoxValue == true) {
+                            sharedSetDate(sharedCheckBoxKey, checkBoxValue);
+                            sharedSetDate(sharedEmileKey, conEmail.text);
+                            sharedSetDate(sharedPasswordKey, conPassword.text);
+                          }
+
+                          BlocProvider.of<TaskoCubit>(context).userLogin(
+                            email: conEmail.text,
+                            password: conPassword.text,
+                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const HomePage(),
+                          //   ),
+                          // );
+                        },
+                        formKey: _formKey,
+                        snakBarMessage:
+                            'Email: ${conEmail.text}, Password: ${conPassword.text} ',
+                        context: context,
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(30),
+                TextButton(
+                  onPressed: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const HomePage(),
+                    //   ),
+                    // );
+                  },
+                  child: const Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Constant.buttonColor,
                     ),
                   ),
-                  const Gap(20),
-                  FormSubmitButtonCustom.build(
-                    onValidate: () {
-                      // SnackBarCustom.build(
-                      //   message: 'checkBoxValue: $checkBoxValue',
-                      //   context: context,
-                      // );
-                      if (checkBoxValue == true) {
-                        sharedSetDate(sharedCheckBoxKey, checkBoxValue);
-                        sharedSetDate(sharedEmileKey, conEmail.text);
-                        sharedSetDate(sharedPasswordKey, conPassword.text);
-                      }
-
-                      BlocProvider.of<TaskoCubit>(context).userLogin(
-                        email: conEmail.text,
-                        password: conPassword.text,
-                      );
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const HomePage(),
-                      //   ),
-                      // );
-                    },
-                    formKey: _formKey,
-                    snakBarMessage:
-                        'Email: ${conEmail.text}, Password: ${conPassword.text} ',
-                    context: context,
-                  ),
-                ],
-              ),
-            ),
-            const Gap(50),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomePage(),
-                  ),
-                );
-              },
-              child: const Text(
-                'Forgot Password?',
-                style: TextStyle(
-                  color: Constant.primaryColor,
                 ),
-              ),
+                const Gap(20),
+                RichTextCustom(
+                    fristText: 'Don\'t have an account ?',
+                    secondText: '  Register Now',
+                    action: () {
+                      BlocProvider.of<TaskoCubit>(context).openRegister();
+                    }),
+              ],
             ),
-            const Gap(20),
-            RichTextCustom(
-                fristText: 'Don\'t have an account ?',
-                secondText: '  Register Now',
-                action: () {
-                  BlocProvider.of<TaskoCubit>(context).openRegister();
-                }),
-          ],
+          ),
         ),
       ),
     );

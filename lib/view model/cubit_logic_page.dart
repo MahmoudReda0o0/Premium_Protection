@@ -40,6 +40,13 @@ class CubitLogicPage extends StatelessWidget {
                   return BlocProvider.of<TaskoCubit>(context).openHome();
                 },
                 child: const Profile());
+          }
+          else if (state is TaskTypeState) {
+            return WillPopScope(
+                onWillPop: () {
+                  return BlocProvider.of<TaskoCubit>(context).openHome();
+                },
+                child: const TaskType());
           }else if (state is TaskTypeState) {
             return WillPopScope(
                 onWillPop: () {

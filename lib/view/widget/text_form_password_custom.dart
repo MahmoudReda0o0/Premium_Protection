@@ -34,8 +34,8 @@ class _TextFormPasswordCustomState extends State<TextFormPasswordCustom> {
         controller: widget.controller,
         obscureText: !eyeIcon,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
           labelText: widget.lableText,
+          labelStyle: const TextStyle(color: Constant.grayDark),
           suffixIcon: IconButton(
             onPressed: () {
               setState(() {
@@ -46,12 +46,28 @@ class _TextFormPasswordCustomState extends State<TextFormPasswordCustom> {
             icon: eyeIcon
                 ? const Icon(
                     Icons.visibility,
-                    color: Constant.secondaryColor,
+                    color: Constant.buttonColor,
                   )
                 : const Icon(
                     Icons.visibility_off,
-                    color: Constant.purpleAccent,
+                    color: Constant.grayWhite,
                   ),
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(color: Constant.buttonColor),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(color: Constant.buttonColor),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(color: Constant.buttonColor),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderSide: BorderSide(color: Constant.red),
           ),
         ),
         validator: (value) {

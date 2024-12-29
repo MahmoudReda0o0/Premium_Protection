@@ -13,7 +13,7 @@ class LocalTask {
       required this.taskType,
       required this.taskDescription});
 
-  static List<String> taskTypeFixedList = [
+  static List<String> fixedTaskTypeList = [
     'Work',
     'Study',
     'Chores',
@@ -25,9 +25,15 @@ class LocalTask {
     'Hobbies',
     'Finance',
   ];
-  static List<String> taskTypeAddedList = [];
+  static List<String> addedTaskTypeList = [];
+  static List<String> allTaskTypeList= [...fixedTaskTypeList, ...addedTaskTypeList];
+  
 
- static List<LocalTask> tasklist = [
+  static addNewTaskType(String value) {
+    addedTaskTypeList.add(value);
+  }
+
+  static List<LocalTask> tasklist = [
     LocalTask(
         taskName: 'Complete Flutter tutorial',
         isNew: false,
@@ -164,11 +170,8 @@ class LocalTask {
         taskDescription: taskDescription));
   }
 
-  static editTaskComplete({required int index}) {
-
-    print('🎃🎁🎭 Local Task Data ${list[index].isNew}');
-//     tasklist[index].isNew = false;
-
+  static editTaskComplete({required int index ,required bool isNew}) {
+    tasklist[index].isNew = isNew;
   }
 
   static editTaskDetail(int index, LocalTask updatedTask) {
