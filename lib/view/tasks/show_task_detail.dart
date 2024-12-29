@@ -1,19 +1,23 @@
 import 'package:excp_training/constant/constant.dart';
+
 import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/button_custom.dart';
+
 
 import '../widget/show_date_listTile.dart';
 import 'edit_task_detail.dart';
 
 class ShowTaskDetail extends StatefulWidget {
   const ShowTaskDetail({super.key});
+
 
   @override
   State<ShowTaskDetail> createState() => _ShowTaskDetailState();
@@ -43,6 +47,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+
         title: const Text('Show Task Detail ',style: TextStyle(color: Constant.grayDark,fontSize: 25,fontWeight: FontWeight.bold),),
         centerTitle: true,
       ),
@@ -174,6 +179,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
             return const Center(child: Text('Error'));
           }
         },
+
       ),
     );
   }
@@ -183,6 +189,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
       height: 50,
       width: mediaWidth * 0.5,
       decoration: BoxDecoration(
+
         color: Constant.grayWhite,
         borderRadius: BorderRadius.circular(10),
       ),
@@ -220,6 +227,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
             );
           }
         },
+
       ),
     );
   }

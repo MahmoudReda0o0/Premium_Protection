@@ -1,3 +1,4 @@
+
 import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
@@ -5,13 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
 
 // ignore: must_be_immutable
 class EditTaskDetail extends StatefulWidget {
+
   const EditTaskDetail({super.key});
+
 
   @override
   State<EditTaskDetail> createState() => _EditTaskDetailState();
@@ -24,13 +28,16 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
   late TextEditingController conTaskType;
   late TextEditingController conTaskDescription;
   late bool isTaskNew;
+
   late List<String> taskTypeList;
+
   String date = '';
   String time = '';
 
   @override
   void initState() {
     super.initState();
+
     final cubitCurrentState = BlocProvider.of<TaskoCubit>(context).state;
     if (cubitCurrentState is EditTaskDetailState) {
       conTaskName =
@@ -51,6 +58,7 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
       isTaskNew = false;
       taskTypeList = [];
     }
+
   }
 
   @override
@@ -69,6 +77,7 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
       appBar: AppBar(
         title: const Text('Task Detail '),
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -144,6 +153,7 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
     );
   }
 
+
   _selectDate() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -166,7 +176,9 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
         date = '';
         time = '';
         conDateTime.text = '';
+
         SnackBarCustom.build(
+
             message: 'Enter date and time correctly', context: context);
       });
     }

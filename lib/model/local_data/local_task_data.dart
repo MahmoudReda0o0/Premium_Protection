@@ -1,11 +1,15 @@
+
 import 'dart:math';
 
 class LocalTask {
+
+
   String taskName;
   String taskType;
   String taskDescription;
   String dateTime;
   bool isNew;
+
   LocalTask(
       {required this.taskName,
       required this.isNew,
@@ -26,6 +30,7 @@ class LocalTask {
     'Finance',
   ];
   static List<String> addedTaskTypeList = [];
+  
   static List<String> allTaskTypeList= [...fixedTaskTypeList, ...addedTaskTypeList];
   
 
@@ -183,4 +188,5 @@ class LocalTask {
       print('Invalid index');
     }
   }
+
 }

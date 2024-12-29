@@ -50,7 +50,9 @@ class HomeDrawer extends StatelessWidget {
               ), 
               title: const Text('Task Type',style: TextStyle(color: Constant.grayDark,),),
               onTap: () {
+
                 BlocProvider.of<TaskoCubit>(context).openTaskType();
+
               },
             ),
           ],
