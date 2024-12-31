@@ -40,21 +40,19 @@ class CubitLogicPage extends StatelessWidget {
                   return BlocProvider.of<TaskoCubit>(context).openHome();
                 },
                 child: const Profile());
-          }
-          else if (state is TaskTypeState) {
+          } else if (state is TaskTypeState) {
             return WillPopScope(
                 onWillPop: () {
                   return BlocProvider.of<TaskoCubit>(context).openHome();
                 },
                 child: const TaskType());
-          }else if (state is TaskTypeState) {
+          } else if (state is TaskTypeState) {
             return WillPopScope(
                 onWillPop: () {
                   return BlocProvider.of<TaskoCubit>(context).openHome();
                 },
                 child: const TaskType());
-          }  
-          else if (state is ShowTaskDetailState) {
+          } else if (state is ShowTaskDetailState) {
             return WillPopScope(
                 onWillPop: () {
                   return BlocProvider.of<TaskoCubit>(context).openHome();
@@ -84,7 +82,7 @@ class CubitLogicPage extends StatelessWidget {
                 onWillPop: () {
                   return BlocProvider.of<TaskoCubit>(context).openProfile();
                 },
-                child: const EditPassword());
+                child: const ChangePassword());
           } else if (state is LoadingState) {
             return const LoadingPage();
           } else {

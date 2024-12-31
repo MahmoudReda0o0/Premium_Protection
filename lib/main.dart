@@ -5,6 +5,7 @@ import 'view model/cubit/tasko_cubit.dart';
 import 'view model/cubit_logic_page.dart';
 import 'view/widget/themeData.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeDataCustom.build(),
       home: BlocProvider<TaskoCubit>(
         create: (context) => TaskoCubit(),
-        child: const CubitLogicPage(),
+        child:  const CubitLogicPage(),
       ),
     );
   }

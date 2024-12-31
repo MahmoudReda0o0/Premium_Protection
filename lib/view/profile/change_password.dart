@@ -12,14 +12,14 @@ import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
 
 // ignore: must_be_immutable
-class EditPassword extends StatefulWidget {
-  const EditPassword({super.key});
+class ChangePassword extends StatefulWidget {
+  const ChangePassword({super.key});
 
   @override
-  State<EditPassword> createState() => _EditPasswordState();
+  State<ChangePassword> createState() => _ChangePasswordState();
 }
 
-class _EditPasswordState extends State<EditPassword> {
+class _ChangePasswordState extends State<ChangePassword> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController conOldPassword = TextEditingController();
   TextEditingController conNewPassword = TextEditingController();
