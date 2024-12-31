@@ -1,12 +1,15 @@
 import 'package:excp_training/constant/constant.dart';
 import 'package:excp_training/model/local_data/local_task_data.dart';
+
 import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
+
 import 'package:excp_training/view/tasks/add_new_task.dart';
 import 'package:excp_training/view/tasks/show_task_detail.dart';
 import 'package:excp_training/view/widget/container_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+
 
 import '../widget/SnackBarCustom.dart';
 import 'home_drawer.dart';
@@ -31,11 +34,13 @@ class _HomePageState extends State<HomePage> {
           color: Constant.white,
         ),
         onPressed: () {
+
           BlocProvider.of<TaskoCubit>(context).openAddNewTask();
           // Navigator.push(context,
           //     MaterialPageRoute(builder: (context) => const AddNewTask()));
 
           SnackBarCustom.build(message: 'list[1]', context: context);
+
         },
       ),
       appBar: AppBar(
@@ -43,6 +48,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       drawer: const HomeDrawer(),
+
       body: BlocBuilder<TaskoCubit, TaskoState>(builder: (context, state) {
         if (state is HomeState) {
           return Container(
@@ -177,6 +183,7 @@ class _HomePageState extends State<HomePage> {
           );
         }
       }),
+
     );
   }
 

@@ -8,6 +8,7 @@ double mediaWidth =
     MediaQuery.of(navigatorKey.currentState!.context).size.width;
 
 class Constant {
+
   static const Color grayDark = Color(0xFF353432),
       grayWhite = Color(0xFF90A09D),
       white = Color(0xFFEEEEEE),
@@ -36,6 +37,8 @@ class Constant {
   //     orangeGradientLight = Color(0xFFFF7043), // Lighter Orange from gradient
   //     pinkAccent = Color(0xFFC2185B), // Pinkish-red accent from logo
   //     purpleAccent = Color(0xFF8E24AA); // Purple accent from gradient
+
+
 
   static const String logo_tile = 'assets/logo_title.png',
       working = 'assets/working.gif';

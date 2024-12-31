@@ -1,3 +1,4 @@
+
 import 'package:excp_training/view/profile/change_password.dart';
 
 class LocalUser {
@@ -60,3 +61,4 @@ class LocalUser {
     localUserItem.country = country;
   }
 }
+

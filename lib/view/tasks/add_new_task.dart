@@ -1,3 +1,4 @@
+
 import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
@@ -52,6 +53,7 @@ class _AddNewTaskState extends State<AddNewTask> {
       appBar: AppBar(
         title: const Text('Add New Task'),
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -113,10 +115,12 @@ class _AddNewTaskState extends State<AddNewTask> {
                       formKey: formKey,
                       onValidate: () {
                         BlocProvider.of<TaskoCubit>(context).addNewTask(
+
                             taskName: conTaskName.text,
                             taskType: conTaskType.text,
                             taskDescription: conTaskDescription.text,
                             dateTime: conDateTime.text);
+
                         // setState(() {
 
                         //   LocalTask.addNewTask(
@@ -132,6 +136,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                       })
                 ],
               ),
+
             ),
           ],
         ),

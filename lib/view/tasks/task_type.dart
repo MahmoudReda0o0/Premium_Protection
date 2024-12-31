@@ -46,6 +46,7 @@ class _TaskTypeState extends State<TaskType> {
           color: Constant.white,
         ),
         onPressed: () {
+
           setState(() {
             conTaskType.clear();
             addMode = !addMode;
@@ -75,6 +76,7 @@ class _TaskTypeState extends State<TaskType> {
           //     ),
           //   ),
           // );
+
         },
       ),
       body: BlocBuilder<TaskoCubit, TaskoState>(
