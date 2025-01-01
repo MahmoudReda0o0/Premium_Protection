@@ -1,4 +1,4 @@
-import 'package:excp_training/constant/constant.dart';
+import 'package:excp_training/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -14,8 +14,7 @@ class TextFormCustom extends StatefulWidget {
       this.iconDate,
       this.numberOnly = false,
       this.iconOnTap = defaultIconOnTap,
-      this.suffixWidget
-      });
+      this.suffixWidget});
   String lableText;
   String errorMessage;
   bool readOnly;
@@ -50,8 +49,8 @@ class _TextFormCustomState extends State<TextFormCustom> {
         readOnly: widget.readOnly,
         decoration: InputDecoration(
           labelText: widget.lableText,
-          labelStyle: const TextStyle(color: Constant.grayDark),
-          suffix: widget.suffixWidget??null,
+          labelStyle: const TextStyle(color: AppColor.grayDark),
+          suffix: widget.suffixWidget ?? null,
           suffixIcon: (widget.iconDate != null)
               ? IconButton(
                   onPressed: () {
@@ -62,19 +61,19 @@ class _TextFormCustomState extends State<TextFormCustom> {
               : null,
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Constant.buttonColor),
+            borderSide: BorderSide(color: AppColor.buttonColor),
           ),
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Constant.buttonColor),
+            borderSide: BorderSide(color: AppColor.buttonColor),
           ),
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Constant.buttonColor),
+            borderSide: BorderSide(color: AppColor.buttonColor),
           ),
           errorBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Constant.red),
+            borderSide: BorderSide(color: AppColor.red),
           ),
         ),
         validator: (value) {

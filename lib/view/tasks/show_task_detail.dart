@@ -1,4 +1,4 @@
-import 'package:excp_training/constant/constant.dart';
+import 'package:excp_training/utils/app_color.dart';
 
 import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
 
@@ -6,18 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-
 import '../../model/local_data/local_task_data.dart';
+import '../../utils/constants.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/button_custom.dart';
-
 
 import '../widget/show_date_listTile.dart';
 import 'edit_task_detail.dart';
 
 class ShowTaskDetail extends StatefulWidget {
   const ShowTaskDetail({super.key});
-
 
   @override
   State<ShowTaskDetail> createState() => _ShowTaskDetailState();
@@ -47,8 +45,13 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-
-        title: const Text('Show Task Detail ',style: TextStyle(color: Constant.grayDark,fontSize: 25,fontWeight: FontWeight.bold),),
+        title: const Text(
+          'Show Task Detail ',
+          style: TextStyle(
+              color: AppColor.grayDark,
+              fontSize: 25,
+              fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: BlocBuilder<TaskoCubit, TaskoState>(
@@ -61,7 +64,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                   margin: const EdgeInsets.only(left: 8, right: 8),
                   padding: const EdgeInsets.only(bottom: 5, top: 10),
                   decoration: BoxDecoration(
-                      color: Constant.grayWhite,
+                      color: AppColor.grayWhite,
                       borderRadius: BorderRadius.circular(8)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,8 +100,8 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                         child: state.localTaskItem.isNew
                             ? ButtonCustom.build(
                                 title: 'Finish Task',
-                                buttonColor: Constant.green,
-                                textColor: Constant.white,
+                                buttonColor: AppColor.green,
+                                textColor: AppColor.white,
                                 onPressed: () {
                                   //state.localTaskItem.isNew = false;
                                   BlocProvider.of<TaskoCubit>(context)
@@ -107,8 +110,8 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                                 })
                             : ButtonCustom.build(
                                 title: 'redo Task',
-                                buttonColor: Constant.orangeWhite,
-                                textColor: Constant.white,
+                                buttonColor: AppColor.orangeWhite,
+                                textColor: AppColor.white,
                                 onPressed: () {
                                   //state.localTaskItem.isNew = false;
                                   BlocProvider.of<TaskoCubit>(context)
@@ -153,8 +156,8 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                       Expanded(
                         child: ButtonCustom.build(
                             title: 'Edit Task',
-                            buttonColor: Constant.buttonColor,
-                            textColor: Constant.white,
+                            buttonColor: AppColor.buttonColor,
+                            textColor: AppColor.white,
                             onPressed: () {
                               BlocProvider.of<TaskoCubit>(context)
                                   .openEditTaskDetail(
@@ -179,7 +182,6 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
             return const Center(child: Text('Error'));
           }
         },
-
       ),
     );
   }
@@ -189,8 +191,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
       height: 50,
       width: mediaWidth * 0.5,
       decoration: BoxDecoration(
-
-        color: Constant.grayWhite,
+        color: AppColor.grayWhite,
         borderRadius: BorderRadius.circular(10),
       ),
       child: BlocBuilder<TaskoCubit, TaskoState>(
@@ -201,20 +202,20 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                 height: 50,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Constant.white,
+                  color: AppColor.white,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                       color: state.localTaskItem.isNew
-                          ? Constant.orangeWhite
-                          : Constant.green,
+                          ? AppColor.orangeWhite
+                          : AppColor.green,
                       width: 2),
                 ),
                 child: Text(
                   state.localTaskItem.isNew ? 'Not Completed' : 'Completed ',
                   style: TextStyle(
                     color: state.localTaskItem.isNew
-                        ? Constant.orangeWhite
-                        : Constant.green,
+                        ? AppColor.orangeWhite
+                        : AppColor.green,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -227,7 +228,6 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
             );
           }
         },
-
       ),
     );
   }

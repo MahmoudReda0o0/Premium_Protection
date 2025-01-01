@@ -6,20 +6,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../constant/constant.dart';
+import '../../utils/app_color.dart';
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
 
 // ignore: must_be_immutable
-class ChangePassword extends StatefulWidget {
-  const ChangePassword({super.key});
+class EditPassword extends StatefulWidget {
+  const EditPassword({super.key});
 
   @override
-  State<ChangePassword> createState() => _ChangePasswordState();
+  State<EditPassword> createState() => _EditPasswordState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _EditPasswordState extends State<EditPassword> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController conOldPassword = TextEditingController();
   TextEditingController conNewPassword = TextEditingController();
@@ -46,7 +46,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         title: const Text(
           'Change Password',
           style: TextStyle(
-              color: Constant.grayDark,
+              color: AppColor.grayDark,
               fontWeight: FontWeight.bold,
               fontSize: 25),
         ),

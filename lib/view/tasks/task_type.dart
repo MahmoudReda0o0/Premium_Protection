@@ -1,10 +1,11 @@
-import 'package:excp_training/constant/constant.dart';
+import 'package:excp_training/utils/app_color.dart';
 import 'package:excp_training/view/widget/button_custom.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../../utils/constants.dart';
 import '../../view model/cubit/tasko_cubit.dart';
 import '../widget/show_date_listTile.dart';
 
@@ -31,7 +32,7 @@ class _TaskTypeState extends State<TaskType> {
         title: const Text(
           'Task Type',
           style: TextStyle(
-            color: Constant.grayDark,
+            color: AppColor.grayDark,
             fontWeight: FontWeight.bold,
             fontSize: 25,
           ),
@@ -39,14 +40,13 @@ class _TaskTypeState extends State<TaskType> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Constant.buttonColor,
+        backgroundColor: AppColor.buttonColor,
         child: const Icon(
           Icons.add,
           size: 50,
-          color: Constant.white,
+          color: AppColor.white,
         ),
         onPressed: () {
-
           setState(() {
             conTaskType.clear();
             addMode = !addMode;
@@ -76,7 +76,6 @@ class _TaskTypeState extends State<TaskType> {
           //     ),
           //   ),
           // );
-
         },
       ),
       body: BlocBuilder<TaskoCubit, TaskoState>(
@@ -85,7 +84,7 @@ class _TaskTypeState extends State<TaskType> {
             return Container(
               height: mediaHeight * 0.9,
               width: mediaWidth,
-              color: Constant.grayWhite,
+              color: AppColor.grayWhite,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -93,7 +92,7 @@ class _TaskTypeState extends State<TaskType> {
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.only(top: 15),
-                      color: Constant.grayWhite,
+                      color: AppColor.grayWhite,
                       child: ListView.builder(
                         itemCount: state.fixedTaskType.length,
                         itemBuilder: (context, index) {
@@ -106,7 +105,7 @@ class _TaskTypeState extends State<TaskType> {
                     ),
                   ),
                   const Divider(
-                    color: Constant.grayDark,
+                    color: AppColor.grayDark,
                   ),
                   const Text('Added Task Type'),
                   Expanded(
@@ -126,7 +125,7 @@ class _TaskTypeState extends State<TaskType> {
                                 TextButton(
                                   style: ButtonStyle(
                                     backgroundColor: WidgetStateProperty.all(
-                                        Constant.buttonColor),
+                                        AppColor.buttonColor),
                                   ),
                                   onPressed: () {
                                     BlocProvider.of<TaskoCubit>(context)
@@ -138,7 +137,7 @@ class _TaskTypeState extends State<TaskType> {
                                   child: const Text(
                                     'Submit',
                                     style: TextStyle(
-                                        color: Constant.white,
+                                        color: AppColor.white,
                                         fontSize: 30,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -147,7 +146,7 @@ class _TaskTypeState extends State<TaskType> {
                             ),
                           )
                         : Container(
-                            color: Constant.grayWhite,
+                            color: AppColor.grayWhite,
                             child: state.addedTaskType.isEmpty
                                 ? const Center(
                                     child: Text(

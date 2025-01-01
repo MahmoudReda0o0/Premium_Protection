@@ -1,16 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:excp_training/constant/constant.dart';
+import 'package:excp_training/utils/app_color.dart';
 import 'package:excp_training/main.dart';
+import 'package:excp_training/utils/route/app_route.dart';
 import 'package:excp_training/view/tasks/add_new_task.dart';
 import 'package:excp_training/view/widget/SnackBarCustom.dart';
+import 'package:flutter/material.dart';
 
 import '../../model/local_data/local_task_data.dart';
 import '../../model/local_data/local_user.dart';
 part 'tasko_state.dart';
 
 class TaskoCubit extends Cubit<TaskoState> {
-  TaskoCubit() : super(TaskoInitial());
+  TaskoCubit() : super(InitialState());
 
   LocalUser? localUser;
   List<LocalTask>? localTask;
@@ -44,28 +46,43 @@ class TaskoCubit extends Cubit<TaskoState> {
     }
   }
 
+  /// =------------------------= Test =------------------------= ///
+
+  // getTestData() async {
+  //   emit(LoadingState());
+  //   await Future.delayed(
+  //     const Duration(seconds: 1),
+  //   );
+  //   emit(
+  //     SuccessState(testName: 'testName sent Successfully'),
+  //   );
+  //   print('👺👺👺👺👺 State : $state');
+  // }
+
   /// =------------------------= Login =------------------------= ///
   userLogin({required String email, required String password}) async {
     emit(LoadingState());
     await getLocalUserData();
     await getLocalTask();
     await Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(seconds: 2),
     );
 
     if (localUser!.email == email && localUser!.password == password) {
-      emit(HomeState(localTask: localTask!));
+      // Navigator.pushNamed(
+      //   navigatorKey.currentState!.context,
+      //   AppRoute.homePage,
+      // );
+      emit(
+        SuccessState(localTask: localTask!),
+      );
     } else {
       SnackBarCustom.build(
         message: 'Email or Password Was Wrong ',
         context: navigatorKey.currentState!.context,
       );
-      emit(TaskoInitial());
+      emit(InitialState());
     }
-  }
-
-  openLogin() {
-    emit(TaskoInitial());
   }
 
   /// =------------------------= Register =---------------------------= ///
@@ -84,7 +101,8 @@ class TaskoCubit extends Cubit<TaskoState> {
 
   openEditTaskDetail({required LocalTask localTask}) {
     getTaskTypeList();
-    emit(EditTaskDetailState(localTaskItem: localTask,taskTypeList: allTaskType!));
+    emit(EditTaskDetailState(
+        localTaskItem: localTask, taskTypeList: allTaskType!));
   }
 
   submitEditTaskDetail({required LocalTask updatedTask}) {
@@ -115,7 +133,7 @@ class TaskoCubit extends Cubit<TaskoState> {
         taskDescription: taskDescription,
         dateTime: dateTime);
     getLocalTask();
-    emit(HomeState(localTask: localTask!));
+    //emit(HomeState(localTask: localTask!));
   }
 
   openAddNewTask() {
@@ -124,12 +142,12 @@ class TaskoCubit extends Cubit<TaskoState> {
   }
 
   /// =------------------------= Home Page =--------------------------= ///
-  openHome() async {
-    emit(LoadedState());
-    getLocalTask();
-    await Future.delayed(const Duration(seconds: 1));
-    emit(HomeState(localTask: localTask!));
-  }
+  // openHome() async {
+  //   emit(LoadingState());
+  //   getLocalTask();
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   emit(HomeState(localTask: localTask!));
+  // }
 
   /// =------------------------= Task Type =--------------------------= ///
 
@@ -138,7 +156,6 @@ class TaskoCubit extends Cubit<TaskoState> {
     addedTaskType = LocalTask.addedTaskTypeList;
     allTaskType = [...fixedTaskType!, ...addedTaskType!];
   }
-
 
   openTaskType() {
     getTaskTypeList();
@@ -184,13 +201,13 @@ class TaskoCubit extends Cubit<TaskoState> {
       } else {
         SnackBarCustom.build(
             message: 'Passwords do not match!',
-            messageColor: Constant.red,
+            messageColor: AppColor.red,
             context: navigatorKey.currentState!.context);
       }
     } else {
       SnackBarCustom.build(
           message: 'Incorrect Password',
-          messageColor: Constant.red,
+          messageColor: AppColor.red,
           context: navigatorKey.currentState!.context);
     }
   }

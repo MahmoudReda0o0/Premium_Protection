@@ -1,11 +1,13 @@
 import 'package:excp_training/view/home_page/home_page.dart';
+import 'package:excp_training/view/widget/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constant/constant.dart';
+import '../../utils/app_color.dart';
 import '../../view model/cubit/tasko_cubit.dart';
+import '../../utils/route/app_route.dart';
 import '../register/register.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/container_image.dart';
@@ -74,9 +76,27 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     bool activeKeyBoard = MediaQuery.of(context).viewInsets.bottom != 0;
+    return BlocBuilder<TaskoCubit, TaskoState>(
+      builder: (context, state) {
+        if (state is InitialState) {
+          return loginBuild(context, activeKeyBoard);
+        } else if (state is LoadingState) {
+          return const Center(
+            child: LoadingPage(),
+          );
+        } else {
+          return Center(
+            child: Text('Error State : $state'),
+          );
+        }
+      },
+    );
+  }
+
+  Scaffold loginBuild(BuildContext context, bool activeKeyBoard) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constant.white,
+      backgroundColor: AppColor.white,
       body: GestureDetector(
         onTap: () {
           print('tap on screen');
@@ -90,13 +110,17 @@ class _LoginState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  child:const Text('Vesrsion 0.0.6',style: TextStyle(color: Constant.grayDark,fontWeight: FontWeight.bold),),
+                  child: const Text(
+                    'Vesrsion 0.0.7',
+                    style: TextStyle(
+                        color: AppColor.grayDark, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const Gap(5),
                 Visibility(
                   visible: !activeKeyBoard,
                   child: ContainerImageCustom(
-                    image: Constant.logo_tile,
+                    image: AppColor.logo_tile,
                     height: 230,
                     width: 230,
                   ),
@@ -113,7 +137,6 @@ class _LoginState extends State<Login> {
                         //textFieldValue: email,
                         // onSaved: (value) => email = value!,
                       ),
-
                       const Gap(10),
                       TextFormPasswordCustom(
                         controller: conPassword,
@@ -129,7 +152,7 @@ class _LoginState extends State<Login> {
                           leading: const Text(
                             'Remember Me',
                             style: TextStyle(
-                                color: Constant.grayDark,
+                                color: AppColor.grayDark,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18),
                           ),
@@ -144,7 +167,7 @@ class _LoginState extends State<Login> {
                       ),
                       const Gap(20),
                       FormSubmitButtonCustom.build(
-                        onValidate: () {
+                        onValidate: () async {
                           // SnackBarCustom.build(
                           //   message: 'checkBoxValue: $checkBoxValue',
                           //   context: context,
@@ -154,11 +177,19 @@ class _LoginState extends State<Login> {
                             sharedSetDate(sharedEmileKey, conEmail.text);
                             sharedSetDate(sharedPasswordKey, conPassword.text);
                           }
-
-                          BlocProvider.of<TaskoCubit>(context).userLogin(
+                          await BlocProvider.of<TaskoCubit>(context).userLogin(
                             email: conEmail.text,
                             password: conPassword.text,
                           );
+                          var cubitState =
+                              BlocProvider.of<TaskoCubit>(context).state;
+                          if (cubitState is SuccessState) {
+                            Navigator.pushNamed(context, AppRoute.homePage);
+                          } else {
+                            SnackBarCustom.build(
+                                message: 'state: $cubitState ',
+                                context: context);
+                          }
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(
@@ -169,7 +200,6 @@ class _LoginState extends State<Login> {
                         formKey: _formKey,
                         snakBarMessage:
                             'Email: ${conEmail.text}, Password: ${conPassword.text} ',
-
                         context: context,
                       ),
                     ],
@@ -189,7 +219,7 @@ class _LoginState extends State<Login> {
                     'Forgot Password?',
                     style: TextStyle(
                       fontSize: 20,
-                      color: Constant.buttonColor,
+                      color: AppColor.buttonColor,
                     ),
                   ),
                 ),
@@ -198,7 +228,7 @@ class _LoginState extends State<Login> {
                     fristText: 'Don\'t have an account ?',
                     secondText: '  Register Now',
                     action: () {
-                      BlocProvider.of<TaskoCubit>(context).openRegister();
+                      Navigator.pushNamed(context, AppRoute.register);
                     }),
               ],
             ),
