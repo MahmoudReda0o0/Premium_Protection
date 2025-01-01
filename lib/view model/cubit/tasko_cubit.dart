@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:excp_training/constant/constant.dart';
 import 'package:excp_training/main.dart';
 import 'package:excp_training/view/tasks/add_new_task.dart';
 import 'package:excp_training/view/widget/SnackBarCustom.dart';
@@ -14,6 +15,9 @@ class TaskoCubit extends Cubit<TaskoState> {
   LocalUser? localUser;
   List<LocalTask>? localTask;
   int? localTaskIndex;
+  List<String>? fixedTaskType;
+  List<String>? addedTaskType;
+  List<String>? allTaskType;
 
   getLocalTask() {
     if (localTask != null) {
@@ -46,7 +50,7 @@ class TaskoCubit extends Cubit<TaskoState> {
     await getLocalUserData();
     await getLocalTask();
     await Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 1),
     );
 
     if (localUser!.email == email && localUser!.password == password) {
@@ -64,7 +68,7 @@ class TaskoCubit extends Cubit<TaskoState> {
     emit(TaskoInitial());
   }
 
-  /// =------------------------= Register =------------------------= ///
+  /// =------------------------= Register =---------------------------= ///
 
   openRegister() {
     emit(RegisterState());
@@ -79,7 +83,8 @@ class TaskoCubit extends Cubit<TaskoState> {
   }
 
   openEditTaskDetail({required LocalTask localTask}) {
-    emit(EditTaskDetailState(localTaskItem: localTask));
+    getTaskTypeList();
+    emit(EditTaskDetailState(localTaskItem: localTask,taskTypeList: allTaskType!));
   }
 
   submitEditTaskDetail({required LocalTask updatedTask}) {
@@ -87,7 +92,12 @@ class TaskoCubit extends Cubit<TaskoState> {
   }
 
   editTaskComplete() {
-    LocalTask.editTaskComplete(index: localTaskIndex!);
+    LocalTask.editTaskComplete(index: localTaskIndex!, isNew: false);
+    // openShowTaskDetail();
+  }
+
+  editTaskNotComplete() {
+    LocalTask.editTaskComplete(index: localTaskIndex!, isNew: true);
     // openShowTaskDetail();
   }
 
@@ -109,10 +119,11 @@ class TaskoCubit extends Cubit<TaskoState> {
   }
 
   openAddNewTask() {
-    emit(AddNewTaskState());
+    getTaskTypeList();
+    emit(AddNewTaskState(taskTypeList: allTaskType!));
   }
 
-  /// =------------------------= Home Page =------------------------= ///
+  /// =------------------------= Home Page =--------------------------= ///
   openHome() async {
     emit(LoadedState());
     getLocalTask();
@@ -120,11 +131,36 @@ class TaskoCubit extends Cubit<TaskoState> {
     emit(HomeState(localTask: localTask!));
   }
 
-  /// =------------------------= Profile =------------------------= ///
+  /// =------------------------= Task Type =--------------------------= ///
+
+  getTaskTypeList() {
+    fixedTaskType = LocalTask.fixedTaskTypeList;
+    addedTaskType = LocalTask.addedTaskTypeList;
+    allTaskType = [...fixedTaskType!, ...addedTaskType!];
+  }
+
+
+  openTaskType() {
+    getTaskTypeList();
+    print('👾👿😈${addedTaskType}');
+    emit(TaskTypeState(
+      fixedTaskType: fixedTaskType!,
+      addedTaskType: addedTaskType!,
+    ));
+  }
+
+  addNewTaskType(String newTaskType) {
+    emit(LoadingState());
+    LocalTask.addNewTaskType(newTaskType);
+    Future.delayed(const Duration(seconds: 1));
+    openTaskType();
+  }
+
+  /// =------------------------= Profile =----------------------------= ///
   openProfile() async {
     emit(LoadingState());
     getLocalUserData();
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     emit(ProfileState(localUser: localUser!));
   }
 
@@ -148,11 +184,13 @@ class TaskoCubit extends Cubit<TaskoState> {
       } else {
         SnackBarCustom.build(
             message: 'Passwords do not match!',
+            messageColor: Constant.red,
             context: navigatorKey.currentState!.context);
       }
     } else {
       SnackBarCustom.build(
           message: 'Incorrect Password',
+          messageColor: Constant.red,
           context: navigatorKey.currentState!.context);
     }
   }
@@ -179,7 +217,7 @@ class TaskoCubit extends Cubit<TaskoState> {
 
   testCubit() async {
     emit(LoadingState());
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     SnackBarCustom.build(
         message: 'State: $state', context: navigatorKey.currentState!.context);
     emit(Test2State());

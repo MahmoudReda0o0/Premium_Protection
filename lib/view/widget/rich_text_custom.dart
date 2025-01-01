@@ -16,13 +16,13 @@ class RichTextCustom extends StatelessWidget {
         children: <TextSpan>[
            TextSpan(
             text: fristText,
-            style:const TextStyle(color: Constant.blackColor),
+            style:const TextStyle(color: Constant.grayDark),
           ),
           TextSpan(
             recognizer: TapGestureRecognizer()..onTap = action,
             text: secondText,
             style: const TextStyle(
-                color: Constant.secondaryColor,
+                color: Constant.orangeDark,
                 fontSize: 16,
                 fontWeight: FontWeight.bold),
           ),
