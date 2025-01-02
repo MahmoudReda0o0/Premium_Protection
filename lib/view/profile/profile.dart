@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../constant/constant.dart';
+import '../../utils/app_color.dart';
 import '../../view model/cubit/tasko_cubit.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/button_custom.dart';
@@ -29,7 +29,7 @@ class Profile extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 8, right: 8),
                 padding: const EdgeInsets.only(bottom: 5, top: 10),
                 decoration: BoxDecoration(
-                    color: Constant.grayWhite,
+                    color: AppColor.grayWhite,
                     borderRadius: BorderRadius.circular(8)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,7 +63,7 @@ class Profile extends StatelessWidget {
                       child: ButtonCustom.build(
                           title: 'Edit Password ',
                           tilteSize: 19,
-                          buttonColor: Constant.orangeWhite,
+                          buttonColor: AppColor.orangeWhite,
                           onPressed: () {
                             BlocProvider.of<TaskoCubit>(context)
                                 .openEditPassword();
@@ -74,7 +74,7 @@ class Profile extends StatelessWidget {
                       child: ButtonCustom.build(
                           title: 'Edit Profile',
                           //tilteSize: 10,
-                          buttonColor: Constant.buttonColor,
+                          buttonColor: AppColor.buttonColor,
                           onPressed: () {
                             BlocProvider.of<TaskoCubit>(context)
                                 .openEditProfile(localUser: state.localUser);

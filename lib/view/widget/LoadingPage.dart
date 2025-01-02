@@ -1,3 +1,5 @@
+import 'package:excp_training/utils/app_color.dart';
+import 'package:excp_training/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class LoadingPage extends StatelessWidget {
@@ -5,8 +7,9 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return const Scaffold(
+      backgroundColor: AppColor.white,
+      body: Center(child: CircularProgressIndicator()),
     );
   }
 }

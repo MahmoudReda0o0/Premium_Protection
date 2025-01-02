@@ -11,15 +11,24 @@ final class Test1State extends TaskoState {}
 
 final class Test2State extends TaskoState {}
 
-final class TaskoInitial extends TaskoState {}
+final class InitialState extends TaskoState {}
 
 final class LoadingState extends TaskoState {}
 
 final class ErrorState extends TaskoState {}
 
-final class SuccessState extends TaskoState {}
+final class GetTaskDetailSuccessfully extends TaskoState {}
 
-final class LoadedState extends TaskoState {}
+final class GetTaskTypeSuccessfully extends TaskoState {}
+
+final class GetProfileSuccessfully extends TaskoState {}
+
+final class SuccessState extends TaskoState {
+  List<LocalTask> localTask;
+  SuccessState({required this.localTask});
+}
+
+//final class LoadedState extends TaskoState {}
 
 final class AddNewTaskState extends TaskoState {
   List<String> taskTypeList = [];
@@ -34,13 +43,14 @@ final class ShowTaskDetailState extends TaskoState {
 final class EditTaskDetailState extends TaskoState {
   LocalTask localTaskItem;
   List<String> taskTypeList = [];
-  EditTaskDetailState({required this.localTaskItem,required this.taskTypeList});
+  EditTaskDetailState(
+      {required this.localTaskItem, required this.taskTypeList});
 }
 
-final class HomeState extends TaskoState {
-  List<LocalTask> localTask;
-  HomeState({required this.localTask});
-}
+// final class HomeState extends TaskoState {
+//   List<LocalTask> localTask;
+//   HomeState({required this.localTask});
+// }
 
 final class RegisterState extends TaskoState {}
 

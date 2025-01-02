@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constant/constant.dart';
+import '../../utils/app_color.dart';
 import 'SnackBarCustom.dart';
 
 class FormSubmitButtonCustom {
@@ -35,13 +35,12 @@ class FormSubmitButtonCustom {
               //side: const BorderSide(color: Colors.red),
             ),
           ),
-          backgroundColor:
-              WidgetStateProperty.all<Color>(Constant.buttonColor),
+          backgroundColor: WidgetStateProperty.all<Color>(AppColor.buttonColor),
         ),
         child: const Text(
           'Submit',
           style: TextStyle(
-            color: Constant.white,
+            color: AppColor.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

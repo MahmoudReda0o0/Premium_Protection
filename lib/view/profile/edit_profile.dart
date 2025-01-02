@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../constant/constant.dart';
+import '../../utils/app_color.dart';
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
@@ -69,7 +69,11 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Profile', style: TextStyle(color: Constant.grayDark,fontSize: 30,fontWeight: FontWeight.bold)),
+        title: const Text('Profile',
+            style: TextStyle(
+                color: AppColor.grayDark,
+                fontSize: 30,
+                fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
