@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constant/constant.dart';
+import '../../utils/app_color.dart';
 import 'SnackBarCustom.dart';
 
 class FormSubmitButtonCustom {
@@ -9,10 +9,13 @@ class FormSubmitButtonCustom {
       required BuildContext context,
       required GlobalKey<FormState> formKey,
       Function? onTap,
-      Function? onValidate}) {
+      Function? onValidate,
+      double height =50,
+      double width = 300,
+      }) {
     return SizedBox(
-      width: 300,
-      height: 50,
+      width: width,
+      height: height,
       child: ElevatedButton(
         onPressed: () {
           (onTap ?? () {})();
@@ -35,13 +38,12 @@ class FormSubmitButtonCustom {
               //side: const BorderSide(color: Colors.red),
             ),
           ),
-          backgroundColor:
-              WidgetStateProperty.all<Color>(Constant.buttonColor),
+          backgroundColor: WidgetStateProperty.all<Color>(AppColor.buttonColor),
         ),
         child: const Text(
           'Submit',
           style: TextStyle(
-            color: Constant.white,
+            color: AppColor.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

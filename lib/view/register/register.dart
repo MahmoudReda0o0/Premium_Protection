@@ -1,3 +1,4 @@
+import 'package:excp_training/utils/route/app_route.dart';
 import 'package:excp_training/view/login/login.dart';
 import 'package:excp_training/view/widget/container_image.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
@@ -5,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../constant/constant.dart';
-import '../../view model/cubit/tasko_cubit.dart';
+import '../../utils/app_color.dart';
+import '../../view model/cubit/general_cubit/tasko_cubit.dart';
 import '../home_page/home_page.dart';
 import '../widget/form_submit_button.dart';
 import '../widget/rich_text_custom.dart';
@@ -68,7 +69,7 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     bool activeKeyBoard = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
-      backgroundColor: Constant.white,
+      backgroundColor: AppColor.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,7 +86,7 @@ class _RegisterState extends State<Register> {
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Constant.grayDark,
+                  color: AppColor.grayDark,
                   fontStyle: FontStyle.italic),
             ),
             const Gap(10),
@@ -138,7 +139,7 @@ class _RegisterState extends State<Register> {
                 FormSubmitButtonCustom.build(
                   onTap: () {
                     print('😅😍😒👍❤️👌😘😂😊💕😁🤣');
-                    BlocProvider.of<TaskoCubit>(context).openHome();
+                    Navigator.pushNamed(context, AppRoute.homePage);
                   },
                   formKey: _formKey,
                   snakBarMessage:
@@ -154,14 +155,11 @@ class _RegisterState extends State<Register> {
               fristText: ' have an account ?',
               secondText: '  Login',
               action: () {
-                BlocProvider.of<TaskoCubit>(context).openLogin();
+                Navigator.pushReplacementNamed(context, AppRoute.login);
               },
             ),
             activeKeyBoard
-                ? Container(
-                    height: 150,
-                    width: 200,
-                    color: Constant.white)
+                ? Container(height: 150, width: 200, color: AppColor.white)
                 : const Gap(50),
           ],
         ),

@@ -1,4 +1,4 @@
-import 'package:excp_training/constant/constant.dart';
+import 'package:excp_training/utils/app_color.dart';
 import 'package:flutter/material.dart';
 
 class TextFormPasswordCustom extends StatefulWidget {
@@ -35,7 +35,7 @@ class _TextFormPasswordCustomState extends State<TextFormPasswordCustom> {
         obscureText: !eyeIcon,
         decoration: InputDecoration(
           labelText: widget.lableText,
-          labelStyle: const TextStyle(color: Constant.grayDark),
+          labelStyle: const TextStyle(color: AppColor.grayDark),
           suffixIcon: IconButton(
             onPressed: () {
               setState(() {
@@ -46,28 +46,28 @@ class _TextFormPasswordCustomState extends State<TextFormPasswordCustom> {
             icon: eyeIcon
                 ? const Icon(
                     Icons.visibility,
-                    color: Constant.buttonColor,
+                    color: AppColor.buttonColor,
                   )
                 : const Icon(
                     Icons.visibility_off,
-                    color: Constant.grayWhite,
+                    color: AppColor.grayWhite,
                   ),
           ),
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Constant.buttonColor),
+            borderSide: BorderSide(color: AppColor.buttonColor),
           ),
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Constant.buttonColor),
+            borderSide: BorderSide(color: AppColor.buttonColor),
           ),
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Constant.buttonColor),
+            borderSide: BorderSide(color: AppColor.buttonColor),
           ),
           errorBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
-            borderSide: BorderSide(color: Constant.red),
+            borderSide: BorderSide(color: AppColor.red),
           ),
         ),
         validator: (value) {

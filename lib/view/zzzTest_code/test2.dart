@@ -1,46 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../model/local_data/local_task_data.dart';
+import '../../view model/cubit/general_cubit/tasko_cubit.dart';
 
-class Test2 extends StatefulWidget {
+class Test2 extends StatelessWidget {
   const Test2({super.key});
 
   @override
-  State<Test2> createState() => _Test2State();
-}
-
-class _Test2State extends State<Test2> {
-  //List<int> list = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  bool isDropDown = false;
-  String selected = '';
-  @override
   Widget build(BuildContext context) {
+    BuildContext cubitContext =
+        ModalRoute.of(context)?.settings.arguments as BuildContext;
     return Scaffold(
-        body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('Selected:$selected '),
-        PopupMenuButton(
-          onSelected: (value) {
-            setState(() {
-              selected = value;
-            });
-            print('💕💕💕$value');
+      body: BlocProvider.value(
+        value: BlocProvider.of<TaskoCubit>(cubitContext),
+        child: BlocBuilder<TaskoCubit, TaskoState>(
+          builder: (context, state) {
+            if (state is SuccessState) {
+              return Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Success!'),
+                ),
+              );
+            } else {
+              //TODO :
+              return Center(
+                child: Column(
+                  children: [
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('State: $state'),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
-          onOpened: () {
-            print('😁😁😁😁😁');
-          },
-          itemBuilder: (context) => List.generate(
-            LocalTask.fixedTaskTypeList.length,
-            (index) => PopupMenuItem(
-              value: LocalTask.fixedTaskTypeList[index],
-              child: Text(
-                LocalTask.fixedTaskTypeList[index],
-              ),
-            ),
-          ),
         ),
-      ],
-    ));
+      ),
+    );
   }
 }
