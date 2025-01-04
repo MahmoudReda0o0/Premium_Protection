@@ -39,6 +39,10 @@ class LocalTask {
     addedTaskTypeList.add(value);
   }
 
+  static deletaTaskType(String taskType) {
+    addedTaskTypeList.remove(taskType);
+  }
+
   static List<LocalTask> taskList = [
     LocalTask(
         id: 1,

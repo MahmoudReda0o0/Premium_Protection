@@ -10,16 +10,24 @@ import 'button_custom.dart';
 class DeleteShowDialog {
   static Future<dynamic> build({
     required BuildContext context,
-    required LocalTask selectedTask,
+    required Function onTapYes,
+    required String title,
+    String? content,
+    // required LocalTask selectedTask,
   }) {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
         alignment: Alignment.center,
         actionsOverflowAlignment: OverflowBarAlignment.center,
-        content: const Text(
-          'Do you want to delete this task !',
-          style: TextStyle(color: AppColor.grayDark, fontSize: 15),
+        //title: Text('slkdmnvlsdkm'),
+        title:  Text(
+          title,
+          style:const TextStyle(color: AppColor.grayDark, fontSize: 15),
+        ),
+        content:  Text(
+          content??'',
+          style:const TextStyle(color: AppColor.red, fontSize: 15),
         ),
         actions: [
           ButtonCustom.build(
@@ -32,10 +40,11 @@ class DeleteShowDialog {
           ButtonCustom.build(
               buttonColor: AppColor.green,
               onPressed: () {
-                BlocProvider.of<TaskItemCubit>(context).deleteTask(
-                  deletedTask: selectedTask,
-                );
-                BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+                onTapYes();
+                // BlocProvider.of<TaskItemCubit>(context).deleteTask(
+                //   deletedTask: selectedTask,
+                // );
+                // BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
                 Navigator.pop(context);
               },
               title: 'YES',

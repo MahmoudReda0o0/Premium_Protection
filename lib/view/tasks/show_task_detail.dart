@@ -79,9 +79,16 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                 color: AppColor.red,
                 size: 30,
               ),
-              onPressed: ()async {
+              onPressed: () async {
                 await DeleteShowDialog.build(
-                    context: context, selectedTask: state.selectedTask);
+                  title: ' Delete this task !',
+                    context: context,
+                    onTapYes: () {
+                      BlocProvider.of<TaskItemCubit>(context).deleteTask(
+                        deletedTask: state.selectedTask,
+                      );
+                      BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+                    });
                 Navigator.pushReplacementNamed(context, AppRoute.homePage);
               })
         ],
@@ -101,6 +108,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                 ShowDateListTile(
                   listTileTitle: 'Task',
                   text: state.selectedTask.taskName,
+                  
                 ),
                 ShowDateListTile(
                   listTileTitle: 'Type',

@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/main.dart';
 import 'package:excp_training/model/local_data/local_task_data.dart';
+import 'package:excp_training/view/widget/SnackBarCustom.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../general_cubit/tasko_cubit.dart';
@@ -35,11 +37,25 @@ class TaskItemCubit extends Cubit<TaskItemState> {
     emit(TaskItemSuccess(selectedTask: selectedTask!));
   }
 
+
+
+
+
   deleteTask({required LocalTask deletedTask}) {
     emit(TaskItemLoading());
-    LocalTask.deleteTask(deletedTask: deletedTask!);
-    emit(TaskItemSuccess(selectedTask: LocalTask.taskList.last));
+    if (deletedTask.isNew) {
+      SnackBarCustom.build(
+        message: 'Task Is Still New',
+        context: navigatorKey.currentContext!,
+      );
+    } else {
+      LocalTask.deleteTask(deletedTask: deletedTask);
+    }
+
+    //emit(TaskItemSuccess(selectedTask: LocalTask.taskList.last));
   }
+
+
 
   addNewTask(
       {required String taskName,

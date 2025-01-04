@@ -31,7 +31,7 @@ class TaskoCubit extends Cubit<TaskoState> {
     newLocalTask = [];
     completedLocalTask = [];
     await Future.delayed(const Duration(milliseconds: 50));
-     allLocalTask = List.from(LocalTask.taskList);
+    allLocalTask = List.from(LocalTask.taskList);
     for (var e in allLocalTask) {
       if (e.isNew == true) {
         newLocalTask.add(e);
@@ -49,24 +49,28 @@ class TaskoCubit extends Cubit<TaskoState> {
   }
 
   sortLocalTaskByTime() async {
-    emit(LoadingState());   
-    allLocalTask.sort((a, b) => b.dateTime.compareTo(a.dateTime));
-    newLocalTask = [];
-    completedLocalTask = [];
-    await Future.delayed(const Duration(microseconds: 50));
-    for (var e in allLocalTask) {
-      if (e.isNew == true) {
-        newLocalTask.add(e);
-      } else {
-        completedLocalTask.add(e);
+    if (allLocalTask.isEmpty) {
+      return;
+    } else {
+      emit(LoadingState());
+      allLocalTask.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+      newLocalTask = [];
+      completedLocalTask = [];
+      await Future.delayed(const Duration(microseconds: 50));
+      for (var e in allLocalTask) {
+        if (e.isNew == true) {
+          newLocalTask.add(e);
+        } else {
+          completedLocalTask.add(e);
+        }
+        emit(
+          SuccessState(
+            localAllTask: allLocalTask,
+            localNewTask: newLocalTask,
+            localCompletedTask: completedLocalTask,
+          ),
+        );
       }
-      emit(
-        SuccessState(
-          localAllTask: allLocalTask,
-          localNewTask: newLocalTask,
-          localCompletedTask: completedLocalTask,
-        ),
-      );
     }
   }
 

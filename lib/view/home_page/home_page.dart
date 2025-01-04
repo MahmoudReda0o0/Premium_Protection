@@ -1,6 +1,7 @@
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view/profile/change_password.dart';
 import 'package:excp_training/view/tasks/add_new_task.dart';
+import 'package:excp_training/view/tasks/task_type.dart';
 import 'package:excp_training/view/widget/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:gap/gap.dart';
 
 import '../../utils/app_color.dart';
 import '../../utils/route/app_route.dart';
+import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/container_image.dart';
 import 'home_drawer.dart';
@@ -28,6 +30,8 @@ class _HomePageState extends State<HomePage> {
   //   const AllTaskList(),
   // ];
   int selectedIndex = 0;
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +63,7 @@ class _HomePageState extends State<HomePage> {
             color: AppColor.white,
           ),
           onPressed: () {
+            BlocProvider.of<TaskTypeCubit>(context).getTaskTypeList();
             Navigator.pushNamed(context, AppRoute.addNewTask);
           },
         ),
@@ -67,9 +72,9 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              barItem(icon: Icons.list, title: 'All Tasks', index: 0),
-              barItem(icon: Icons.work, title: 'New Tasks', index: 1),
-              barItem(icon: Icons.done, title: 'Completed ', index: 2),
+              barItem(icon: Icons.work_history_outlined, title: 'New Tasks', index: 0),
+              barItem(icon: Icons.done, title: 'Completed', index: 1),
+              barItem(icon: Icons.list, title: 'All Tasks ', index: 2),
               Gap(10),
             ],
           ),
@@ -85,17 +90,25 @@ class _HomePageState extends State<HomePage> {
       onTap: () => setState(() {
         selectedIndex = index;
       }),
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color: AppColor.buttonColor,
-          ),
-          Text(
-            title,
-            style: TextStyle(color: AppColor.buttonColor),
-          ),
-        ],
+      child: Container(
+        
+        decoration: BoxDecoration(
+          color: selectedIndex == index ? AppColor.grayWhite : null,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: AppColor.buttonColor,
+            ),
+            Text(
+              title,
+              style: TextStyle(color: AppColor.buttonColor),
+            ),
+          ],
+        ),
       ),
     );
   }

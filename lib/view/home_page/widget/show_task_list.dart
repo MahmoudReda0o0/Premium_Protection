@@ -1,5 +1,6 @@
 import 'package:excp_training/utils/constants.dart';
 import 'package:excp_training/view%20model/cubit/task_item/task_item_cubit.dart';
+import 'package:excp_training/view%20model/cubit/task_type/task_type_cubit.dart';
 import 'package:excp_training/view/widget/LoadingPage.dart';
 import 'package:excp_training/view/widget/error_page.dart';
 import 'package:flutter/material.dart';
@@ -33,16 +34,17 @@ class _TaskListState extends State<TaskList> {
         List<LocalTask> taskList = [];
         switch (widget.index) {
           case 0:
-            taskList = state.localAllTask;
-            break;
-          case 1:
             taskList = state.localNewTask;
             break;
-          case 2:
+          case 1:
             taskList = state.localCompletedTask;
+            break;
+          case 2:
+            taskList = state.localAllTask;
             break;
         }
         return Container(
+          padding: const EdgeInsets.only(bottom: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           color: AppColor.white,
@@ -77,9 +79,16 @@ class _TaskListState extends State<TaskList> {
                               child: ListTile(
                                 onLongPress: () {
                                   DeleteShowDialog.build(
+                                    title: 'Do you want to delete this Task Type !',
                                       context: context,
-                                      selectedTask: taskList[index],
-                                      );
+                                      onTapYes: () {
+                                        BlocProvider.of<TaskItemCubit>(context)
+                                            .deleteTask(
+                                          deletedTask:  taskList[index],
+                                        );
+                                        BlocProvider.of<TaskoCubit>(context)
+                                            .getAllLocalTask();
+                                      });
                                   // deleteShowDialog(context, taskList, index);
                                 },
                                 onTap: () {
@@ -87,6 +96,8 @@ class _TaskListState extends State<TaskList> {
                                       .getLocalTask(
                                     selectedTask: taskList[index],
                                   );
+                                  BlocProvider.of<TaskTypeCubit>(context)
+                                      .getTaskTypeList();
                                   Navigator.pushNamed(
                                       context, AppRoute.taskDetail);
                                 },

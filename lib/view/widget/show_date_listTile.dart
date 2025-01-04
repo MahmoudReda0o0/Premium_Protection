@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../utils/app_color.dart';
 
 class ShowDateListTile extends StatelessWidget {
-  const ShowDateListTile({
+  ShowDateListTile({
     super.key,
     required this.listTileTitle,
     required this.text,
+    this.trailing,
   });
 
   final String listTileTitle;
   final String text;
+  Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,7 @@ class ShowDateListTile extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        trailing: trailing??const SizedBox.shrink(),
       ),
     );
   }

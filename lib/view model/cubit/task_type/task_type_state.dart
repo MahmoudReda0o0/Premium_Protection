@@ -16,8 +16,11 @@ final class TaskTypeError extends TaskTypeState {}
 final class TaskTypeSuccess extends TaskTypeState {
   List<String> fixedTaskTypeList;
   List<String> addedTaskTypeList;
+  List<String>  allTaskTypeList ;
   TaskTypeSuccess({
     required this.fixedTaskTypeList,
     required this.addedTaskTypeList,
+    required this.allTaskTypeList,
+    
   });
 }

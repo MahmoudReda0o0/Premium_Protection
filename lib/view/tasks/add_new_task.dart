@@ -9,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/local_data/local_task_data.dart';
+import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../widget/LoadingPage.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/error_page.dart';
@@ -51,17 +52,19 @@ class _AddNewTaskState extends State<AddNewTask> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskItemCubit, TaskItemState>(
-      builder: (context, state) {
-        if (state is TaskItemInitial || state is TaskItemSuccess) {
-          return _addNewTaskBuild(context);
-        } else if (state is TaskItemLoading) {
-          return const LoadingPage();
-        } else {
-          return ErrorPage(errorMessage: state.toString());
-        }
-      },
-    );
+
+    return _addNewTaskBuild(context);
+    // return BlocBuilder<TaskItemCubit, TaskItemState>(
+    //   builder: (context, state) {
+    //     if (state is TaskItemInitial || state is TaskItemSuccess) {
+    //       return _addNewTaskBuild(context);
+    //     } else if (state is TaskItemLoading) {
+    //       return const LoadingPage();
+    //     } else {
+    //       return ErrorPage(errorMessage: state.toString());
+    //     }
+    //   },
+    // );
   }
 
   Scaffold _addNewTaskBuild(BuildContext context) {
@@ -84,33 +87,33 @@ class _AddNewTaskState extends State<AddNewTask> {
                     errorMessage: "Enter Task Name",
                     onSaved: (value) => taskName = value!,
                   ),
-                  BlocBuilder<TaskoCubit, TaskoState>(
+                  BlocBuilder<TaskTypeCubit, TaskTypeState>(
                       builder: (context, state) {
-                    return Center();
-                    // if (state is AddNewTaskState) {
-                    //   return TextFormCustom(
-                    //     readOnly: true,
-                    //     controller: conTaskType,
-                    //     lableText: 'Type',
-                    //     errorMessage: "Enter Task Type",
-                    //     suffixWidget: PopupMenuButton(
-                    //       icon: const Icon(Icons.arrow_drop_down),
-                    //       iconSize: 35,
-                    //       onSelected: (String value) {
-                    //         setState(() {
-                    //           conTaskType.text = value;
-                    //         });
-                    //       },
-                    //       itemBuilder: (context) => List.generate(
-                    //         state.taskTypeList.length,
-                    //         (index) => PopupMenuItem(
-                    //           value: state.taskTypeList[index],
-                    //           child: Text(state.taskTypeList[index]),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   );
-                    // } else {return Center(child: CircularProgressIndicator());}
+                    if (state is TaskTypeSuccess) {
+                      return TextFormCustom(
+                        readOnly: true,
+                        controller: conTaskType,
+                        lableText: 'Type',
+                        errorMessage: "Enter Task Type",
+                        suffixWidget: PopupMenuButton(
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 35,
+                          onSelected: (String value) {
+                            setState(() {
+                              conTaskType.text = value;
+                            });
+                          },
+                          itemBuilder: (context) => List.generate(
+                            state.allTaskTypeList.length,
+                            (index) => PopupMenuItem(
+                              value: state.allTaskTypeList[index],
+                              child: Text(state.allTaskTypeList[index]),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                     else {return Center(child: CircularProgressIndicator());}
                   }),
                   TextFormCustom(
                       controller: conTaskDescription,
@@ -123,6 +126,10 @@ class _AddNewTaskState extends State<AddNewTask> {
                     readOnly: true,
                     iconDate: Icons.calendar_today,
                     iconOnTap: () {
+                      setState(() {
+                        
+                      });
+                       FocusScope.of(context).unfocus();
                       _selectDate();
                     },
                   ),

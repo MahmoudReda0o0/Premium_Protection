@@ -1,6 +1,7 @@
 import 'package:excp_training/utils/app_color.dart';
 import 'package:excp_training/view%20model/cubit/task_type/task_type_cubit.dart';
 import 'package:excp_training/view/widget/button_custom.dart';
+import 'package:excp_training/view/widget/delete_show_dialog.dart';
 import 'package:excp_training/view/widget/form_submit_button.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
@@ -70,43 +71,87 @@ class _TaskTypeState extends State<TaskType> {
             conTaskType.clear();
             addMode = !addMode;
           });
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) => SizedBox(
-              height: mediaHeight * 0.3,
-              width: mediaWidth,
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextFormCustom(
-                      lableText: 'New Task Type',
-                      errorMessage: 'Enter Task Type',
-                      controller: conTaskType,
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text('Add New Task Type'),
+                    content: Container(
+                      height: mediaHeight * 0.3,
+                      width: mediaHeight,
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            TextFormCustom(
+                              lableText: 'New Task Type',
+                              errorMessage: 'Enter Task Type',
+                              controller: conTaskType,
+                            ),
+                            FormSubmitButtonCustom.build(
+                              width: mediaWidth * 0.5,
+                              context: context,
+                              formKey: formKey,
+                              onValidate: () {
+                                BlocProvider.of<TaskTypeCubit>(context)
+                                    .addNewTaskType(conTaskType.text);
+                                Navigator.pop(context);
+                              },
+                            ),
+
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     if (conTaskType.text.isEmpty) return;
+                            //     BlocProvider.of<TaskTypeCubit>(context)
+                            //         .addNewTaskType(conTaskType.text);
+                            //     Navigator.pop(context);
+                            //   },
+                            //   child: const Text('take'),
+                            // ),
+                          ],
+                        ),
+                      ),
                     ),
-                    FormSubmitButtonCustom.build(
-                      context: context,
-                      formKey: formKey,
-                      onValidate: () {
-                         BlocProvider.of<TaskTypeCubit>(context)
-                            .addNewTaskType(conTaskType.text);
-                        Navigator.pop(context);
-                      },),
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     if (conTaskType.text.isEmpty) return;
-                    //     BlocProvider.of<TaskTypeCubit>(context)
-                    //         .addNewTaskType(conTaskType.text);
-                    //     Navigator.pop(context);
-                    //   },
-                    //   child: const Text('take'),
-                    // ),
-                  ],
-                ),
-              ),
-            ),
-          );
+                  ));
+          // showModalBottomSheet(
+          //   context: context,
+          //   builder: (BuildContext context) => SizedBox(
+          //     height: mediaHeight * 0.3,
+          //     width: mediaWidth,
+          //     child: Form(
+          //       key: formKey,
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //         children: [
+          //           TextFormCustom(
+          //             lableText: 'New Task Type',
+          //             errorMessage: 'Enter Task Type',
+          //             controller: conTaskType,
+          //           ),
+          //           FormSubmitButtonCustom.build(
+          //             context: context,
+          //             formKey: formKey,
+          //             onValidate: () {
+          //               BlocProvider.of<TaskTypeCubit>(context)
+          //                   .addNewTaskType(conTaskType.text);
+          //               Navigator.pop(context);
+          //             },
+          //           ),
+          //           Gap(keyBoardHeight),
+          //           // ElevatedButton(
+          //           //   onPressed: () {
+          //           //     if (conTaskType.text.isEmpty) return;
+          //           //     BlocProvider.of<TaskTypeCubit>(context)
+          //           //         .addNewTaskType(conTaskType.text);
+          //           //     Navigator.pop(context);
+          //           //   },
+          //           //   child: const Text('take'),
+          //           // ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // );
         },
       ),
       body: Container(
@@ -116,7 +161,7 @@ class _TaskTypeState extends State<TaskType> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('Fixed Task Type'),
+            const Text('fixed Task Type'),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.only(top: 15),
@@ -148,9 +193,35 @@ class _TaskTypeState extends State<TaskType> {
                         itemCount: state.addedTaskTypeList.length,
                         itemBuilder: (context, index) {
                           return ShowDateListTile(
+                            trailing: IconButton(
+                              onPressed: () async {
+                                await DeleteShowDialog.build(
+                                    title: 'Delete this Task Type!',
+                                    content:
+                                        'All Completed Task with this Type will be deleted',
+                                    context: context,
+                                    onTapYes: () {
+                                      BlocProvider.of<TaskTypeCubit>(context)
+                                          .deleteTasktype(
+                                        taskType:
+                                            state.addedTaskTypeList[index],
+                                        taskList:
+                                            BlocProvider.of<TaskoCubit>(context)
+                                                .allLocalTask,
+                                      );
+                                    });
+                                // BlocProvider.of<TaskTypeCubit>(context)
+                                //     .deleteTasktype(
+                                //         state.addedTaskTypeList[index]);
+                              },
+                              icon: const Icon(
+                                Icons.delete_forever_outlined,
+                                color: AppColor.red,
+                                size: 30,
+                              ),
+                            ),
                             listTileTitle: '${index + 1} ',
                             text: state.addedTaskTypeList[index],
-                            
                           );
                         },
                       ),
@@ -170,8 +241,8 @@ class _TaskTypeState extends State<TaskType> {
               //             ),
               //             TextButton(
               //               style: ButtonStyle(
-              //                 backgroundColor:
-              //                     WidgetStateProperty.all(AppColor.buttonColor),
+              //                 backgroundColor: WidgetStateProperty.all(
+              //                     AppColor.buttonColor),
               //               ),
               //               onPressed: () {
               //                 // BlocProvider.of<TaskoCubit>(context)
