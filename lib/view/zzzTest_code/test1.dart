@@ -1,5 +1,5 @@
 import 'package:excp_training/utils/route/app_route.dart';
-import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view/zzzTest_code/test2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

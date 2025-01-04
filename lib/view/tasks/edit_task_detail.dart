@@ -1,11 +1,10 @@
-
-import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/task_item/task_item_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-
 
 import '../../model/local_data/local_task_data.dart';
 import '../widget/SnackBarCustom.dart';
@@ -13,9 +12,7 @@ import '../widget/form_submit_button.dart';
 
 // ignore: must_be_immutable
 class EditTaskDetail extends StatefulWidget {
-
   const EditTaskDetail({super.key});
-
 
   @override
   State<EditTaskDetail> createState() => _EditTaskDetailState();
@@ -23,13 +20,15 @@ class EditTaskDetail extends StatefulWidget {
 
 class _EditTaskDetailState extends State<EditTaskDetail> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late int selectedTaskID;
+  late bool selectedTaskisNew;
   late TextEditingController conDateTime;
   late TextEditingController conTaskName;
   late TextEditingController conTaskType;
   late TextEditingController conTaskDescription;
   late bool isTaskNew;
 
-  late List<String> taskTypeList;
+  List<String> taskTypeList = [];
 
   String date = '';
   String time = '';
@@ -37,28 +36,17 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
   @override
   void initState() {
     super.initState();
-
-    final cubitCurrentState = BlocProvider.of<TaskoCubit>(context).state;
-    if (cubitCurrentState is EditTaskDetailState) {
-      conTaskName =
-          TextEditingController(text: cubitCurrentState.localTaskItem.taskName);
-      conTaskType =
-          TextEditingController(text: cubitCurrentState.localTaskItem.taskType);
-      conTaskDescription = TextEditingController(
-          text: cubitCurrentState.localTaskItem.taskDescription);
-      conDateTime =
-          TextEditingController(text: cubitCurrentState.localTaskItem.dateTime);
-      isTaskNew = cubitCurrentState.localTaskItem.isNew;
-      taskTypeList = cubitCurrentState.taskTypeList;
-    } else {
-      conTaskName = TextEditingController(text: 'no data');
-      conTaskType = TextEditingController(text: 'no data');
-      conTaskDescription = TextEditingController(text: 'no data');
-      conDateTime = TextEditingController(text: 'no data');
-      isTaskNew = false;
-      taskTypeList = [];
-    }
-
+    LocalTask selectedTask =
+        BlocProvider.of<TaskItemCubit>(context).selectedTask!;
+    //taskTypeList = BlocProvider.of<TaskoCubit>(context).allTaskType;
+    selectedTaskID = selectedTask.id!;
+    selectedTaskisNew = selectedTask.isNew;
+    conTaskName = TextEditingController(text: selectedTask.taskName);
+    conTaskType = TextEditingController(text: selectedTask.taskType);
+    conTaskDescription =
+        TextEditingController(text: selectedTask.taskDescription);
+    conDateTime = TextEditingController(text: selectedTask.dateTime);
+    isTaskNew = selectedTask.isNew;
   }
 
   @override
@@ -77,7 +65,6 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
       appBar: AppBar(
         title: const Text('Task Detail '),
       ),
-
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -130,20 +117,23 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
                   ),
                   const Gap(20),
                   FormSubmitButtonCustom.build(
-                      context: context,
-                      formKey: formKey,
-                      onValidate: () {
-                        BlocProvider.of<TaskoCubit>(context)
-                          ..submitEditTaskDetail(
-                            updatedTask: LocalTask(
-                                taskName: conTaskName.text,
-                                taskType: conTaskType.text,
-                                taskDescription: conTaskDescription.text,
-                                dateTime: conDateTime.text,
-                                isNew: false),
-                          )
-                          ..openShowTaskDetail();
-                      }),
+                    context: context,
+                    formKey: formKey,
+                    onValidate: () {
+                      BlocProvider.of<TaskItemCubit>(context).editTaskDetail(
+                        LocalTask(
+                            id: selectedTaskID,
+                            taskName: conTaskName.text,
+                            taskType: conTaskType.text,
+                            taskDescription: conTaskDescription.text,
+                            dateTime: conDateTime.text,
+                            isNew: selectedTaskisNew),
+                      );
+                      BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+                      setState(() {});
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -152,7 +142,6 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
       ),
     );
   }
-
 
   _selectDate() async {
     DateTime? pickedDate = await showDatePicker(
@@ -178,7 +167,6 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
         conDateTime.text = '';
 
         SnackBarCustom.build(
-
             message: 'Enter date and time correctly', context: context);
       });
     }

@@ -1,4 +1,5 @@
-import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:excp_training/view/widget/text_form_password_custom.dart';
 import 'package:flutter/material.dart';
@@ -76,10 +77,18 @@ class _EditPasswordState extends State<EditPassword> {
                     context: context,
                     formKey: formKey,
                     onValidate: () {
-                      BlocProvider.of<TaskoCubit>(context).submitEditPassword(
-                          oldPassword: conOldPassword.text,
-                          newPassword: conNewPassword.text,
-                          confirmPassword: conConfirmPassword.text);
+                      BlocProvider.of<ProfileCubit>(context).editPassword(
+                        oldPassword: conOldPassword.text,
+                        newPassword: conNewPassword.text,
+                        confirmPassword: conConfirmPassword.text,
+                      );
+                      if(BlocProvider.of<ProfileCubit>(context).state is ProfileSuccess) {
+                        Navigator.pop(context);
+                      }
+                      // BlocProvider.of<TaskoCubit>(context).submitEditPassword(
+                      //     oldPassword: conOldPassword.text,
+                      //     newPassword: conNewPassword.text,
+                      //     confirmPassword: conConfirmPassword.text);
                     }),
               ],
             ),
