@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "575663963087",
+    "project_id": "tasko-7bd39",
+    "storage_bucket": "tasko-7bd39.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575663963087:android:5baeb97bcc94d232eff0ba",
+        "android_client_info": {
+          "package_name": "com.example.excp_training"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC08OiJkJSNt6I1nmGK6VvXyTvWo4QBlzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575663963087:android:06e0f82abd4e038ceff0ba",
+        "android_client_info": {
+          "package_name": "tasko.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC08OiJkJSNt6I1nmGK6VvXyTvWo4QBlzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
