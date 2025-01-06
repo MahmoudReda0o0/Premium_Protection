@@ -40,6 +40,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
   equatable: ^2.0.5
+  firebase_core: 
   intl: ^0.20.1
   shared_preferences: ^2.3.4
 dev_dependencies:
