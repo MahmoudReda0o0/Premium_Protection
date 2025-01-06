@@ -1,4 +1,6 @@
-import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
+import 'package:excp_training/model/local_data/local_user.dart';
+import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,27 +32,23 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    final cubitCurrentState = BlocProvider.of<TaskoCubit>(context).state;
-    if (cubitCurrentState is EditProfileState) {
-      conFristName =
-          TextEditingController(text: cubitCurrentState.localUser.fristName);
-      conSecondName =
-          TextEditingController(text: cubitCurrentState.localUser.secondName);
-      conLastName =
-          TextEditingController(text: cubitCurrentState.localUser.lastName);
-      conEmail = TextEditingController(text: cubitCurrentState.localUser.email);
-      conphoneNum =
-          TextEditingController(text: cubitCurrentState.localUser.phoneNumber);
-      conCountry =
-          TextEditingController(text: cubitCurrentState.localUser.country);
-    } else {
-      conFristName = TextEditingController(text: 'no data');
-      conSecondName = TextEditingController(text: 'no data');
-      conLastName = TextEditingController(text: 'no data');
-      conEmail = TextEditingController(text: 'no data');
-      conphoneNum = TextEditingController(text: 'no data');
-      conCountry = TextEditingController(text: 'no data');
-    }
+    LocalUser localUser = BlocProvider.of<ProfileCubit>(context).localUser!;
+    //final cubitCurrentState = BlocProvider.of<ProfileCubit>(context).state;
+    //if (cubitCurrentState is ProfileSuccess) {
+    conFristName = TextEditingController(text: localUser.fristName);
+    conSecondName = TextEditingController(text: localUser.secondName);
+    conLastName = TextEditingController(text: localUser.lastName);
+    conEmail = TextEditingController(text: localUser.email);
+    conphoneNum = TextEditingController(text: localUser.phoneNumber);
+    conCountry = TextEditingController(text: localUser.country);
+    // } else {
+    //   conFristName = TextEditingController(text: 'no data');
+    //   conSecondName = TextEditingController(text: 'no data');
+    //   conLastName = TextEditingController(text: 'no data');
+    //   conEmail = TextEditingController(text: 'no data');
+    //   conphoneNum = TextEditingController(text: 'no data');
+    //   conCountry = TextEditingController(text: 'no data');
+    // }
   }
 
   @override
@@ -115,16 +113,25 @@ class _EditProfileState extends State<EditProfile> {
                       context: context,
                       formKey: formKey,
                       onValidate: () {
-                        BlocProvider.of<TaskoCubit>(context)
-                          ..submitEditProfile(
-                            fristName: conFristName.text,
-                            secondName: conSecondName.text,
-                            lastName: conLastName.text,
-                            phoneNumber: conphoneNum.text,
-                            country: conCountry.text,
-                            email: conEmail.text,
-                          )
-                          ..openProfile();
+                        BlocProvider.of<ProfileCubit>(context).editProfile(
+                          fristName: conFristName.text,
+                          secondName: conSecondName.text,
+                          lastName: conLastName.text,
+                          phoneNumber: conphoneNum.text,
+                          country: conCountry.text,
+                          email: conEmail.text,
+                        );
+                        Navigator.pop(context);
+                        // BlocProvider.of<TaskoCubit>(context)
+                        //   ..submitEditProfile(
+                        //     fristName: conFristName.text,
+                        //     secondName: conSecondName.text,
+                        //     lastName: conLastName.text,
+                        //     phoneNumber: conphoneNum.text,
+                        //     country: conCountry.text,
+                        //     email: conEmail.text,
+                        //   )
+                        //   ..openProfile();
                       }),
                 ],
               ),

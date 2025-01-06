@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../utils/app_color.dart';
-import '../../view model/cubit/tasko_cubit.dart';
+import '../../view model/cubit/general_cubit/tasko_cubit.dart';
 import '../home_page/home_page.dart';
 import '../widget/form_submit_button.dart';
 import '../widget/rich_text_custom.dart';

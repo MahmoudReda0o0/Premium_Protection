@@ -9,10 +9,13 @@ class FormSubmitButtonCustom {
       required BuildContext context,
       required GlobalKey<FormState> formKey,
       Function? onTap,
-      Function? onValidate}) {
+      Function? onValidate,
+      double height =50,
+      double width = 300,
+      }) {
     return SizedBox(
-      width: 300,
-      height: 50,
+      width: width,
+      height: height,
       child: ElevatedButton(
         onPressed: () {
           (onTap ?? () {})();

@@ -1,14 +1,18 @@
+import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:excp_training/utils/app_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../utils/route/app_route.dart';
-import '../../view model/cubit/tasko_cubit.dart';
+import '../../view model/cubit/general_cubit/tasko_cubit.dart';
+import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../tasks/task_type.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +48,8 @@ class HomeDrawer extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                BlocProvider.of<TaskoCubit>(context).openProfile();
+                BlocProvider.of<ProfileCubit>(context).getLocalUserData();
+                Navigator.pushNamed(context, AppRoute.profile);
               },
               onLongPress: () => Navigator.pushNamed(context, AppRoute.login),
             ),
@@ -60,7 +65,8 @@ class HomeDrawer extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                BlocProvider.of<TaskoCubit>(context).openTaskType();
+                BlocProvider.of<TaskTypeCubit>(context).getTaskTypeList();
+                Navigator.pushNamed(context, AppRoute.taskType);
               },
             ),
           ],

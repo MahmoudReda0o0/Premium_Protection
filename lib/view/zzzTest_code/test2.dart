@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../view model/cubit/tasko_cubit.dart';
+import '../../view model/cubit/general_cubit/tasko_cubit.dart';
 
 class Test2 extends StatelessWidget {
   const Test2({super.key});

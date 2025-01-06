@@ -1,3 +1,6 @@
+//import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/login_cubit/login_cubit.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/widget/LoadingPage.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +9,13 @@ import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/app_color.dart';
-import '../../view model/cubit/tasko_cubit.dart';
+
 import '../../utils/route/app_route.dart';
+import '../home_page/home_page.dart';
 import '../register/register.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/container_image.dart';
+import '../widget/error_page.dart';
 import '../widget/form_submit_button.dart';
 import '../widget/text_form_custom.dart';
 import '../widget/text_form_password_custom.dart';
@@ -32,6 +37,8 @@ class _LoginState extends State<Login> {
   String sharedEmileKey = 'email key';
   String sharedPasswordKey = 'password key';
   bool? sharedPrefValue;
+  String? getSharedEmailValue;
+  String? getSharedPasswordValue;
 
   sharedSetDate(String key, dynamic data) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -46,13 +53,20 @@ class _LoginState extends State<Login> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     sharedPrefValue = pref.getBool(sharedCheckBoxKey);
     setState(() {});
-    if (sharedPrefValue != true) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        ),
+    if (sharedPrefValue == true) {
+      getSharedEmailValue = pref.getString(sharedEmileKey);
+      getSharedPasswordValue = pref.getString(sharedPasswordKey);
+      await BlocProvider.of<LoginCubit>(context).userLogin(
+        email: getSharedEmailValue!,
+        password: getSharedPasswordValue!,
       );
+      var cubitState = BlocProvider.of<LoginCubit>(context).state;
+      if (cubitState is LoginSuccess) {
+        BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+        Navigator.pushNamed(context, AppRoute.homePage);
+      } else {
+        SnackBarCustom.build(message: 'state: $cubitState ', context: context);
+      }
     } else {
       print('shared navigate value is false');
     }
@@ -61,7 +75,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    //sharedNavigate();
+    sharedNavigate();
     conEmail = TextEditingController();
     conPassword = TextEditingController();
   }
@@ -76,18 +90,18 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     bool activeKeyBoard = MediaQuery.of(context).viewInsets.bottom != 0;
-    return BlocBuilder<TaskoCubit, TaskoState>(
+    return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-        if (state is InitialState) {
+        if (state is LoginInitial) {
           return loginBuild(context, activeKeyBoard);
-        } else if (state is LoadingState) {
-          return const Center(
-            child: LoadingPage(),
+        } else if (state is LoginSuccess) {
+          return const Scaffold(
+            backgroundColor: AppColor.white,
           );
+        } else if (state is LoginLoading) {
+          return const LoadingPage();
         } else {
-          return Center(
-            child: Text('Error State : $state'),
-          );
+          return ErrorPage(errorMessage: state.toString());
         }
       },
     );
@@ -168,22 +182,21 @@ class _LoginState extends State<Login> {
                       const Gap(20),
                       FormSubmitButtonCustom.build(
                         onValidate: () async {
-                          // SnackBarCustom.build(
-                          //   message: 'checkBoxValue: $checkBoxValue',
-                          //   context: context,
-                          // );
-                          if (checkBoxValue == true) {
-                            sharedSetDate(sharedCheckBoxKey, checkBoxValue);
-                            sharedSetDate(sharedEmileKey, conEmail.text);
-                            sharedSetDate(sharedPasswordKey, conPassword.text);
-                          }
-                          await BlocProvider.of<TaskoCubit>(context).userLogin(
+                          await BlocProvider.of<LoginCubit>(context).userLogin(
                             email: conEmail.text,
                             password: conPassword.text,
                           );
                           var cubitState =
-                              BlocProvider.of<TaskoCubit>(context).state;
-                          if (cubitState is SuccessState) {
+                              BlocProvider.of<LoginCubit>(context).state;
+                          if (cubitState is LoginSuccess) {
+                            if (checkBoxValue == true) {
+                              sharedSetDate(sharedCheckBoxKey, checkBoxValue);
+                              sharedSetDate(sharedEmileKey, conEmail.text);
+                              sharedSetDate(
+                                  sharedPasswordKey, conPassword.text);
+                            }
+                            BlocProvider.of<TaskoCubit>(context)
+                                .getAllLocalTask();
                             Navigator.pushNamed(context, AppRoute.homePage);
                           } else {
                             SnackBarCustom.build(
