@@ -85,7 +85,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                     controller: conTaskName,
                     lableText: 'Task',
                     errorMessage: "Enter Task Name",
-                    onSaved: (value) => taskName = value!,
+                   // onSaved: (value) => taskName = value!,
                   ),
                   BlocBuilder<TaskTypeCubit, TaskTypeState>(
                       builder: (context, state) {

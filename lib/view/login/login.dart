@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../model/hive/shared_preference.dart';
 import '../../utils/app_color.dart';
 
 import '../../utils/route/app_route.dart';
@@ -33,33 +34,24 @@ class _LoginState extends State<Login> {
   late TextEditingController conEmail;
   late TextEditingController conPassword;
   bool checkBoxValue = false;
-  String sharedCheckBoxKey = 'remember Me';
-  String sharedEmileKey = 'email key';
-  String sharedPasswordKey = 'password key';
+
   bool? sharedPrefValue;
   String? getSharedEmailValue;
   String? getSharedPasswordValue;
 
-  sharedSetDate(String key, dynamic data) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    if (data is bool) {
-      pref.setBool(key, data);
-    } else {
-      pref.setString(key, data);
-    }
-  }
-
   sharedNavigate() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    sharedPrefValue = pref.getBool(sharedCheckBoxKey);
+    sharedPrefValue = pref.getBool(SharedPreferenceCustom.sharedCheckBoxKey);
     setState(() {});
     if (sharedPrefValue == true) {
-      getSharedEmailValue = pref.getString(sharedEmileKey);
-      getSharedPasswordValue = pref.getString(sharedPasswordKey);
-      await BlocProvider.of<LoginCubit>(context).userLogin(
-        email: getSharedEmailValue!,
-        password: getSharedPasswordValue!,
-      );
+      getSharedEmailValue =
+          pref.getString(SharedPreferenceCustom.sharedEmileKey);
+      getSharedPasswordValue =
+          pref.getString(SharedPreferenceCustom.sharedPasswordKey);
+      BlocProvider.of<LoginCubit>(context).setEmailAndPassword(
+          emailValue: getSharedEmailValue!,
+          passwordValue: getSharedPasswordValue!);
+      await BlocProvider.of<LoginCubit>(context).userLogin();
       var cubitState = BlocProvider.of<LoginCubit>(context).state;
       if (cubitState is LoginSuccess) {
         BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
@@ -100,6 +92,13 @@ class _LoginState extends State<Login> {
           );
         } else if (state is LoginLoading) {
           return const LoadingPage();
+        } else if (state is LoginError) {
+          return ErrorPage(
+            errorMessage: state.errorMessage,
+            onTap: () {
+              BlocProvider.of<LoginCubit>(context).resetLoginState();
+            },
+          );
         } else {
           return ErrorPage(errorMessage: state.toString());
         }
@@ -125,7 +124,7 @@ class _LoginState extends State<Login> {
               children: [
                 Container(
                   child: const Text(
-                    'Vesrsion 0.0.7',
+                    'Vesrsion 0.0.8',
                     style: TextStyle(
                         color: AppColor.grayDark, fontWeight: FontWeight.bold),
                   ),
@@ -182,18 +181,26 @@ class _LoginState extends State<Login> {
                       const Gap(20),
                       FormSubmitButtonCustom.build(
                         onValidate: () async {
-                          await BlocProvider.of<LoginCubit>(context).userLogin(
-                            email: conEmail.text,
-                            password: conPassword.text,
+                          BlocProvider.of<LoginCubit>(context)
+                              .setEmailAndPassword(
+                            emailValue: conEmail.text,
+                            passwordValue: conPassword.text,
                           );
+                          await BlocProvider.of<LoginCubit>(context)
+                              .userLogin();
                           var cubitState =
                               BlocProvider.of<LoginCubit>(context).state;
                           if (cubitState is LoginSuccess) {
                             if (checkBoxValue == true) {
-                              sharedSetDate(sharedCheckBoxKey, checkBoxValue);
-                              sharedSetDate(sharedEmileKey, conEmail.text);
-                              sharedSetDate(
-                                  sharedPasswordKey, conPassword.text);
+                              SharedPreferenceCustom.setSharedSetDate(
+                                  SharedPreferenceCustom.sharedCheckBoxKey,
+                                  checkBoxValue);
+                              SharedPreferenceCustom.setSharedSetDate(
+                                  SharedPreferenceCustom.sharedEmileKey,
+                                  conEmail.text);
+                              SharedPreferenceCustom.setSharedSetDate(
+                                  SharedPreferenceCustom.sharedPasswordKey,
+                                  conPassword.text);
                             }
                             BlocProvider.of<TaskoCubit>(context)
                                 .getAllLocalTask();

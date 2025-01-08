@@ -14,6 +14,7 @@ import 'package:excp_training/view/tasks/task_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../view/zzzTest_code/home_test.dart';
 import '../../view/zzzTest_code/test1.dart';
 import '../../view/zzzTest_code/test2.dart';
 
@@ -28,7 +29,8 @@ class AppRoute {
       profile = '/profile',
       editProfile = '/editProfile',
       editPassword = '/editPassword',
-      taskType = '/taskType';
+      taskType = '/taskType',
+      signUpScreenTEST = '/SignUpScreenTEST';
 
   static String test1 = '/test1', test2 = '/test2';
 
@@ -48,6 +50,7 @@ class AppRoute {
     taskType: (context) => const TaskType(),
     test1: (context) => const Test1(),
     test2: (context) => const Test2(),
+    //signUpScreenTEST: (context) =>  SignUpScreenTEST(),
   };
   // login: (context) => BlocProvider(
   //       create: (context) => TaskoCubit(),

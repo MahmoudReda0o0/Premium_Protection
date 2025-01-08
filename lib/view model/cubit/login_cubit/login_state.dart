@@ -9,6 +9,8 @@ sealed class LoginState extends Equatable {
 
 final class LoginInitial extends LoginState {}
 
+
+
 final class LoginLoading extends LoginState {}
 
 final class LoginError extends LoginState {
@@ -18,6 +20,6 @@ final class LoginError extends LoginState {
 
 final class LoginSuccess extends LoginState {
   String token;
-  bool loginStep;
-  LoginSuccess({required this.token, required this.loginStep});
+  //bool loginStep;
+  LoginSuccess({required this.token});
 }

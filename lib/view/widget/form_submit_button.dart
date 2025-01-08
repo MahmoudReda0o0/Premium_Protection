@@ -14,7 +14,7 @@ class FormSubmitButtonCustom {
       double width = 300,
       }) {
     return SizedBox(
-      width: width,
+      width: width ,
       height: height,
       child: ElevatedButton(
         onPressed: () {

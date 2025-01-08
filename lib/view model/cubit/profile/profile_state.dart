@@ -10,10 +10,15 @@ sealed class ProfileState extends Equatable {
 final class ProfileInitial extends ProfileState {}
 
 final class ProfileSuccess extends ProfileState {
-  LocalUser localUser;
-  ProfileSuccess({required this.localUser});
+  Map<String,dynamic> userInfo;
+  ProfileSuccess({required this.userInfo});
 }
 
-final class ProfileError extends ProfileState {}
+final class ProfileCreateUserDone extends ProfileState {}
+
+final class ProfileError extends ProfileState {
+  String errorMessage;
+  ProfileError({required this.errorMessage});
+}
 
 final class ProfileLoading extends ProfileState {}

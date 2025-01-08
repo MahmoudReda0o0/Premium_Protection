@@ -1,3 +1,4 @@
+import 'package:excp_training/model/firebase/collection_name.dart';
 import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/profile/change_password.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,10 @@ class Profile extends StatelessWidget {
           return _profileBuild(context, state);
         } else if (state is ProfileLoading) {
           return const LoadingPage();
+        } else if (state is ProfileError) {
+          return ErrorPage(
+            errorMessage: state.errorMessage,
+          );
         } else {
           return ErrorPage(
             errorMessage: state.toString(),
@@ -55,17 +60,19 @@ class Profile extends StatelessWidget {
                 ShowDateListTile(
                   listTileTitle: 'Name ',
                   text:
-                      '${state.localUser.fristName} ${state.localUser.secondName} ${state.localUser.lastName}',
+                      '${state.userInfo[FBCollectionName.userFristName]} ${state.userInfo[FBCollectionName.userSecondName]} ${state.userInfo[FBCollectionName.userLastName]}',
                 ),
                 ShowDateListTile(
-                    listTileTitle: 'Email ', text: state.localUser.email),
+                    listTileTitle: 'Email ',
+                    text: state.userInfo[FBCollectionName.userEmail]),
                 ShowDateListTile(
                     listTileTitle: 'Phone num ',
-                    text: state.localUser.phoneNumber),
+                    text: state.userInfo[FBCollectionName.userPhoneNumber]),
                 ShowDateListTile(
-                    listTileTitle: 'Country ', text: state.localUser.country),
-                ShowDateListTile(
-                    listTileTitle: 'password ', text: state.localUser.password),
+                    listTileTitle: 'Country ',
+                    text: state.userInfo[FBCollectionName.userCountry]),
+                // ShowDateListTile(
+                //     listTileTitle: 'password ', text: state.userInfo[FBCollectionName.userPassword]),
               ],
             ),
           ),

@@ -32,15 +32,15 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    LocalUser localUser = BlocProvider.of<ProfileCubit>(context).localUser!;
+   // LocalUser? localUser = BlocProvider.of<ProfileCubit>(context).localUser!;
     //final cubitCurrentState = BlocProvider.of<ProfileCubit>(context).state;
     //if (cubitCurrentState is ProfileSuccess) {
-    conFristName = TextEditingController(text: localUser.fristName);
-    conSecondName = TextEditingController(text: localUser.secondName);
-    conLastName = TextEditingController(text: localUser.lastName);
-    conEmail = TextEditingController(text: localUser.email);
-    conphoneNum = TextEditingController(text: localUser.phoneNumber);
-    conCountry = TextEditingController(text: localUser.country);
+    // conFristName = TextEditingController(text: localUser.fristName);
+    // conSecondName = TextEditingController(text: localUser.secondName);
+    // conLastName = TextEditingController(text: localUser.lastName);
+    // conEmail = TextEditingController(text: localUser.email);
+    // conphoneNum = TextEditingController(text: localUser.phoneNumber);
+    // conCountry = TextEditingController(text: localUser.country);
     // } else {
     //   conFristName = TextEditingController(text: 'no data');
     //   conSecondName = TextEditingController(text: 'no data');
