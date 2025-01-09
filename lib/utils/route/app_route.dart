@@ -1,4 +1,5 @@
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view/forget_password/forget_password.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/login/login.dart';
@@ -14,12 +15,14 @@ import 'package:excp_training/view/tasks/task_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../view/zzzTest_code/home_test.dart';
 import '../../view/zzzTest_code/test1.dart';
 import '../../view/zzzTest_code/test2.dart';
 
 class AppRoute {
   static const String login = '/',
       register = '/register',
+      forgetPassword = '/forgetPassword',
       navigationHome = '/navigationHome',
       homePage = '/homePage',
       addNewTask = '/addNewTask',
@@ -28,7 +31,8 @@ class AppRoute {
       profile = '/profile',
       editProfile = '/editProfile',
       editPassword = '/editPassword',
-      taskType = '/taskType';
+      taskType = '/taskType',
+      signUpScreenTEST = '/SignUpScreenTEST';
 
   static String test1 = '/test1', test2 = '/test2';
 
@@ -37,7 +41,7 @@ class AppRoute {
   static Map<String, Widget Function(BuildContext)> routes = {
     login: (context) => const Login(),
     register: (context) => const Register(),
-    
+    forgetPassword: (context) =>  ForgetPassword(),
     homePage: (context) => const HomePage(),
     addNewTask: (context) => const AddNewTask(),
     taskDetail: (context) => const ShowTaskDetail(),
@@ -48,6 +52,7 @@ class AppRoute {
     taskType: (context) => const TaskType(),
     test1: (context) => const Test1(),
     test2: (context) => const Test2(),
+    //signUpScreenTEST: (context) =>  SignUpScreenTEST(),
   };
   // login: (context) => BlocProvider(
   //       create: (context) => TaskoCubit(),

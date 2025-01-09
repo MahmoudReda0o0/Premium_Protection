@@ -6,13 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../utils/route/app_route.dart';
 import '../../view model/cubit/general_cubit/tasko_cubit.dart';
+import '../../view model/cubit/login_cubit/login_cubit.dart';
 import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../tasks/task_type.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -36,42 +35,56 @@ class HomeDrawer extends StatelessWidget {
                     .buttonColor, // Use the primary color from the constant class
               ),
             ),
-            ListTile(
-              leading: const Icon(
-                Icons.home,
-                color: AppColor.grayDark,
-              ),
-              title: const Text(
-                'Profile',
-                style: TextStyle(
-                  color: AppColor.grayDark,
-                ),
-              ),
+            _drawerHeaderItem(
+                context: context,
+                title: 'Profile',
+                iconData: Icons.person,
+                onTap: () {
+                  BlocProvider.of<ProfileCubit>(context).getUserInfo();
+                  Navigator.pushNamed(context, AppRoute.profile);
+                }),
+            _drawerHeaderItem(
+                context: context,
+                title: 'Task Type',
+                iconData: Icons.settings,
+                onTap: () {
+                  BlocProvider.of<TaskTypeCubit>(context).getTaskTypeList();
+                  Navigator.pushNamed(context, AppRoute.taskType);
+                }),
+            _drawerHeaderItem(
+              context: context,
+              title: 'open login ',
+              iconData: Icons.settings_backup_restore_rounded,
               onTap: () {
-                BlocProvider.of<ProfileCubit>(context).getLocalUserData();
-                Navigator.pushNamed(context, AppRoute.profile);
-              },
-              onLongPress: () => Navigator.pushNamed(context, AppRoute.login),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.settings,
-                color: AppColor.grayDark,
-              ),
-              title: const Text(
-                'Task Type',
-                style: TextStyle(
-                  color: AppColor.grayDark,
-                ),
-              ),
-              onTap: () {
-                BlocProvider.of<TaskTypeCubit>(context).getTaskTypeList();
-                Navigator.pushNamed(context, AppRoute.taskType);
+                BlocProvider.of<LoginCubit>(context).resetLoginState();
+                Navigator.pushNamed(context, AppRoute.login);
               },
             ),
           ],
         ),
       ),
+    );
+  }
+
+  ListTile _drawerHeaderItem(
+      {required BuildContext context,
+      required String title,
+      required IconData iconData,
+      required Function onTap}) {
+    return ListTile(
+      leading: Icon(
+        iconData,
+        color: AppColor.grayDark,
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: AppColor.grayDark,
+        ),
+      ),
+      onTap: () {
+        onTap();
+      },
     );
   }
 }
