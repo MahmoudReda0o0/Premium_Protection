@@ -14,7 +14,8 @@ final class ProfileSuccess extends ProfileState {
   ProfileSuccess({required this.userInfo});
 }
 
-final class ProfileCreateUserDone extends ProfileState {}
+final class ProfileUpdateSuccess extends ProfileState {}
+
 
 final class ProfileError extends ProfileState {
   String errorMessage;

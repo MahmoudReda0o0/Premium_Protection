@@ -29,6 +29,9 @@ class Profile extends StatelessWidget {
         } else if (state is ProfileError) {
           return ErrorPage(
             errorMessage: state.errorMessage,
+            onTap: () {
+              Navigator.pop(context);
+            },
           );
         } else {
           return ErrorPage(
@@ -97,6 +100,7 @@ class Profile extends StatelessWidget {
                       //tilteSize: 10,
                       buttonColor: AppColor.buttonColor,
                       onPressed: () {
+                        //SnackBarCustom.build(message: 'coming soon', context: context);
                         Navigator.pushNamed(context, AppRoute.editProfile);
                       }),
                 ),

@@ -1,3 +1,4 @@
+import 'package:excp_training/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ErrorPage extends StatelessWidget {
@@ -11,7 +12,9 @@ class ErrorPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Error : $errorMessage'),
+          SizedBox(
+            width: mediaWidth*0.9,
+            child: Text('Error : $errorMessage')),
           ElevatedButton.icon(
               onPressed: () {
                 (onTap != null) ? onTap!() : (){};

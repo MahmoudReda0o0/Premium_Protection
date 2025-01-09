@@ -1,4 +1,5 @@
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view/forget_password/forget_password.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/login/login.dart';
@@ -21,6 +22,7 @@ import '../../view/zzzTest_code/test2.dart';
 class AppRoute {
   static const String login = '/',
       register = '/register',
+      forgetPassword = '/forgetPassword',
       navigationHome = '/navigationHome',
       homePage = '/homePage',
       addNewTask = '/addNewTask',
@@ -39,7 +41,7 @@ class AppRoute {
   static Map<String, Widget Function(BuildContext)> routes = {
     login: (context) => const Login(),
     register: (context) => const Register(),
-    
+    forgetPassword: (context) =>  ForgetPassword(),
     homePage: (context) => const HomePage(),
     addNewTask: (context) => const AddNewTask(),
     taskDetail: (context) => const ShowTaskDetail(),

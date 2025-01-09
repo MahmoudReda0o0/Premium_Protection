@@ -8,12 +8,12 @@ class FirebaseFireStoreUserInfoModel {
 
   static String collectionName = 'User Info';
 
+  final Map<String, dynamic>? userData;
   String errorMessage;
-  bool? hasData;
-  final Map<String, dynamic>? userDate;
+  bool hasData;
 
   FirebaseFireStoreUserInfoModel(
-      {required this.userDate, required this.errorMessage});
+      {this.userData, required this.errorMessage, required this.hasData});
 
   // saveLocalUserInfo({
   //   required String userID,
@@ -28,7 +28,7 @@ class FirebaseFireStoreUserInfoModel {
   //   this.fristName = fristName;
   // }
 
-  static Future<void> setUserInfo({
+  static Future<FirebaseFireStoreUserInfoModel> setUserInfo({
     required String fristNameValue,
     required String secondNameValue,
     required String lastNameValue,
@@ -53,11 +53,17 @@ class FirebaseFireStoreUserInfoModel {
           FBCollectionName.userEmail: emailValue,
           //password: password,
         });
+        return FirebaseFireStoreUserInfoModel(
+            errorMessage: 'everything is ok', hasData: true);
       } else {
         print('user is null');
+        return FirebaseFireStoreUserInfoModel(
+            errorMessage: 'User is null', hasData: false);
       }
     } catch (e) {
       print('firebase catch error: $e');
+      return FirebaseFireStoreUserInfoModel(
+          errorMessage: 'Firebase Catch  Error: $e', hasData: false);
     }
   }
 
@@ -79,19 +85,52 @@ class FirebaseFireStoreUserInfoModel {
           // country = doc.get('country');
           // email = doc.get('email');
           // password = doc.get('password');
-           return FirebaseFireStoreUserInfoModel(
-            errorMessage: 'Everything is ok', userDate: userData);
+          return FirebaseFireStoreUserInfoModel(
+              errorMessage: 'Everything is ok',
+              userData: userData,
+              hasData: true);
         }
         return FirebaseFireStoreUserInfoModel(
-            errorMessage: 'doc is null', userDate: null);
+            errorMessage: 'doc is null', userData: null, hasData: false);
       } else {
         return FirebaseFireStoreUserInfoModel(
-            errorMessage: 'User is null', userDate: null);
+            errorMessage: 'User is null', userData: null, hasData: false);
       }
     } catch (e) {
       print(e);
       return FirebaseFireStoreUserInfoModel(
-          errorMessage: 'Firebase Catch  Error: $e', userDate: null);
+          errorMessage: 'Firebase Catch  Error: $e',
+          userData: null,
+          hasData: false);
+    }
+  }
+
+  static Future<FirebaseFireStoreUserInfoModel> updateUserInfo(
+      {required Map<String, dynamic> upDatedInfo}) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection(collectionName)
+            .doc(user.uid)
+            .update(upDatedInfo);
+        return FirebaseFireStoreUserInfoModel(
+          errorMessage: 'everything is ok',
+          hasData: true,
+        );
+      } else {
+        print('user is null');
+        return FirebaseFireStoreUserInfoModel(
+          errorMessage: 'User is null',
+          hasData: false,
+        );
+      }
+    } catch (e) {
+      print('firebase catch error: $e');
+      return FirebaseFireStoreUserInfoModel(
+        errorMessage: 'Firebase Catch  Error: $e',
+        hasData: false,
+      );
     }
   }
 }

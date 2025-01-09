@@ -12,6 +12,7 @@ import '../../model/hive/shared_preference.dart';
 import '../../utils/app_color.dart';
 
 import '../../utils/route/app_route.dart';
+import '../../view model/cubit/register/register_cubit.dart';
 import '../home_page/home_page.dart';
 import '../register/register.dart';
 import '../widget/SnackBarCustom.dart';
@@ -228,12 +229,7 @@ class _LoginState extends State<Login> {
                 const Gap(30),
                 TextButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const HomePage(),
-                    //   ),
-                    // );
+                    Navigator.pushNamed(context, AppRoute.forgetPassword);
                   },
                   child: const Text(
                     'Forgot Password?',
@@ -248,6 +244,7 @@ class _LoginState extends State<Login> {
                     fristText: 'Don\'t have an account ?',
                     secondText: '  Register Now',
                     action: () {
+                      BlocProvider.of<RegisterCubit>(context).resetRegisterState();
                       Navigator.pushNamed(context, AppRoute.register);
                     }),
               ],

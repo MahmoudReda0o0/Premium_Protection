@@ -1,6 +1,7 @@
 import 'package:excp_training/firebase_options.dart';
 import 'package:excp_training/utils/app_color.dart';
 import 'package:excp_training/utils/route/app_route.dart';
+import 'package:excp_training/view%20model/cubit/forget_password/forget_password_cubit.dart';
 import 'package:excp_training/view%20model/cubit/login_cubit/login_cubit.dart';
 import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view%20model/cubit/register/register_cubit.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ProfileCubit()),
         BlocProvider(create: (context) => TaskTypeCubit()),
         BlocProvider(create: (context) => RegisterCubit()),
+        BlocProvider(create: (context) => ForgetPasswordCubit()),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

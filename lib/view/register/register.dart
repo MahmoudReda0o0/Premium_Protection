@@ -29,14 +29,14 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController conEmail = TextEditingController();
-  TextEditingController conPassword = TextEditingController();
-  TextEditingController conConfirmPassword = TextEditingController();
   TextEditingController conFirstName = TextEditingController();
   TextEditingController conSecondName = TextEditingController();
   TextEditingController conLastName = TextEditingController();
   TextEditingController conCountry = TextEditingController();
   TextEditingController conPhoneNumber = TextEditingController();
+  TextEditingController conEmail = TextEditingController();
+  TextEditingController conPassword = TextEditingController();
+  TextEditingController conConfirmPassword = TextEditingController();
 
   @override
   void initState() {
@@ -45,14 +45,14 @@ class _RegisterState extends State<Register> {
 
   @override
   void dispose() {
-    conEmail.dispose();
-    conPassword.dispose();
-    conConfirmPassword.dispose();
     conFirstName.dispose();
     conSecondName.dispose();
     conLastName.dispose();
     conCountry.dispose();
     conPhoneNumber.dispose();
+    conEmail.dispose();
+    conPassword.dispose();
+    conConfirmPassword.dispose();
     super.dispose();
   }
 
@@ -62,7 +62,7 @@ class _RegisterState extends State<Register> {
       if (state is RegisterInitial) {
         return _registerBuild(context);
       } else if (state is RegisterSuccess) {
-        return  Scaffold(
+        return Scaffold(
           backgroundColor: AppColor.white,
           body: Center(
             child: Text('state: ${state.toString()}'),
@@ -86,138 +86,153 @@ class _RegisterState extends State<Register> {
     bool activeKeyBoard = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       backgroundColor: AppColor.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Gap(30),
-            ContainerImageCustom(
-              image: 'assets/logo_title.png',
-              height: 120,
-              width: 120,
-            ),
-            const Gap(20),
-            const Text(
-              'Welcome to our App ',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grayDark,
-                  fontStyle: FontStyle.italic),
-            ),
-            const Gap(10),
-            Form(
-              key: _formKey,
-              child: Column(children: [
-                TextFormCustom(
-                  controller: conFirstName,
-                  lableText: 'first Name',
-                  errorMessage: 'please enter your first name',
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Gap(0),
+              ListTile(
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColor.grayDark,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                TextFormCustom(
-                  controller: conSecondName,
-                  lableText: 'Second Name',
-                  errorMessage: 'please enter your second name',
-                ),
-                TextFormCustom(
-                  controller: conLastName,
-                  lableText: 'last Name',
-                  errorMessage: 'please enter your last name',
-                ),
-                TextFormCustom(
-                  controller: conPhoneNumber,
-                  numberOnly: true,
-                  lableText: 'Phone Number',
-                  errorMessage: 'please enter your phone number',
-                ),
-                TextFormCustom(
-                  controller: conCountry,
-                  lableText: 'Country',
-                  errorMessage: 'please enter your Counter',
-                ),
-                TextFormCustom(
-                  controller: conEmail,
-                  lableText: 'Email',
-                  errorMessage: 'please enter your email',
-                ),
-                TextFormPasswordCustom(
-                  controller: conPassword,
-                  lableText: 'Password',
-                  errorMessage: 'please enter your password',
-                ),
-                TextFormPasswordCustom(
-                  controller: conConfirmPassword,
-                  lableText: 'Confirm Password',
-                  errorMessage: 'please enter your password',
-                ),
-                FormSubmitButtonCustom.build(
-                  formKey: _formKey,
-                  context: context,
-                  onValidate: () async {
-                    if (conPassword.text == conConfirmPassword.text) {
-                      if (true
-                        //conEmail.text.contains('@') &&
-                          //conEmail.text.contains('.com')
-                          ) {
-                        await BlocProvider.of<RegisterCubit>(context)
-                            .userRegister(
-                                email: conEmail.text,
-                                password: conPassword.text);
-                        await BlocProvider.of<ProfileCubit>(context)
-                            .setUserInfo(
-                          fristName: conFirstName.text,
-                          secondName: conSecondName.text,
-                          lastName: conLastName.text,
-                          email: conEmail.text,
-                          phoneNumber: conPhoneNumber.text,
-                          country: conCountry.text,
-                        );
-
-                        var registerCubitState =
-                            BlocProvider.of<RegisterCubit>(context).state;
-                        var profileCubitState =
-                            BlocProvider.of<RegisterCubit>(context).state;
-
-                        if (registerCubitState is RegisterSuccess &&
-                            profileCubitState is ProfileInitial) {
-                          Navigator.pushReplacementNamed(
-                              context, AppRoute.login);
+              ),
+              ContainerImageCustom(
+                image: 'assets/logo_title.png',
+                height: 120,
+                width: 120,
+              ),
+              const Gap(20),
+              const Text(
+                'Welcome to our App ',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grayDark,
+                    fontStyle: FontStyle.italic),
+              ),
+              const Gap(10),
+              Form(
+                key: _formKey,
+                child: Column(children: [
+                  TextFormCustom(
+                    controller: conFirstName,
+                    lableText: 'first Name',
+                    errorMessage: 'please enter your first name',
+                  ),
+                  TextFormCustom(
+                    controller: conSecondName,
+                    lableText: 'Second Name',
+                    errorMessage: 'please enter your second name',
+                  ),
+                  TextFormCustom(
+                    controller: conLastName,
+                    lableText: 'last Name',
+                    errorMessage: 'please enter your last name',
+                  ),
+                  TextFormCustom(
+                    controller: conPhoneNumber,
+                    numberOnly: true,
+                    lableText: 'Phone Number',
+                    errorMessage: 'please enter your phone number',
+                  ),
+                  TextFormCustom(
+                    controller: conCountry,
+                    lableText: 'Country',
+                    errorMessage: 'please enter your Counter',
+                  ),
+                  TextFormCustom(
+                    controller: conEmail,
+                    lableText: 'Email',
+                    errorMessage: 'please enter your email',
+                  ),
+                  TextFormPasswordCustom(
+                    controller: conPassword,
+                    lableText: 'Password',
+                    errorMessage: 'please enter your password',
+                  ),
+                  TextFormPasswordCustom(
+                    controller: conConfirmPassword,
+                    lableText: 'Confirm Password',
+                    errorMessage: 'please enter your password',
+                  ),
+                  FormSubmitButtonCustom.build(
+                    formKey: _formKey,
+                    context: context,
+                    onValidate: () async {
+                      if (conPassword.text == conConfirmPassword.text) {
+                        if (conEmail.text.contains('@') &&
+                            conEmail.text.contains('.com')) {
+                          await BlocProvider.of<RegisterCubit>(context)
+                              .userRegister(
+                                  fristName: conFirstName.text,
+                                  secondName: conSecondName.text,
+                                  lastName: conLastName.text,
+                                  phoneNumber: conPhoneNumber.text,
+                                  country: conCountry.text,
+                                  email: conEmail.text,
+                                  password: conPassword.text);
+                          // await BlocProvider.of<ProfileCubit>(context)
+                          //     .setUserInfo(
+                          //   fristName: conFirstName.text,
+                          //   secondName: conSecondName.text,
+                          //   lastName: conLastName.text,
+                          //   email: conEmail.text,
+                          //   phoneNumber: conPhoneNumber.text,
+                          //   country: conCountry.text,
+                          // );
+        
+                          var registerCubitState =
+                              BlocProvider.of<RegisterCubit>(context).state;
+                          // var profileCubitState =
+                          //     BlocProvider.of<RegisterCubit>(context).state;
+        
+                          if (registerCubitState is RegisterSuccess) {
+                            Navigator.pushReplacementNamed(
+                                context, AppRoute.login);
+                          } else {
+                            SnackBarCustom.build(
+                              message:
+                                  'Register Cubit state : ${registerCubitState.toString()}',
+                              context: context,
+                            );
+                          }
                         } else {
                           SnackBarCustom.build(
                             message:
-                                '''Register Cubit state : ${registerCubitState.toString()}
-                            Register Cubit state : ${profileCubitState.toString()}''',
+                                'Enter valid email , email must contain @gmail.com',
                             context: context,
                           );
                         }
                       } else {
                         SnackBarCustom.build(
-                          message: 'Enter valid email',
+                          message: 'Password does not match',
                           context: context,
                         );
                       }
-                    } else {
-                      SnackBarCustom.build(
-                        message: 'Password does not match',
-                        context: context,
-                      );
-                    }
-                  },
-                ),
-              ]),
-            ),
-            const Gap(20),
-            RichTextCustom(
-              fristText: ' have an account ?',
-              secondText: '  Login',
-              action: () {
-                Navigator.pushReplacementNamed(context, AppRoute.login);
-              },
-            ),
-            activeKeyBoard
-                ? Container(height: 150, width: 200, color: AppColor.white)
-                : const Gap(50),
-          ],
+                    },
+                  ),
+                ]),
+              ),
+              const Gap(20),
+              RichTextCustom(
+                fristText: ' have an account ?',
+                secondText: '  Login',
+                action: () {
+                  Navigator.pushReplacementNamed(context, AppRoute.login);
+                },
+              ),
+              activeKeyBoard
+                  ? Container(height: 150, width: 200, color: AppColor.white)
+                  : const Gap(50),
+            ],
+          ),
         ),
       ),
     );

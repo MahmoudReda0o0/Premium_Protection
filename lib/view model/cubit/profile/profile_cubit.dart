@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:excp_training/model/firebase/collection_name.dart';
 import 'package:excp_training/model/local_data/local_user.dart';
 
 import '../../../main.dart';
@@ -12,41 +13,44 @@ part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileInitial());
+
+  late Map<String, dynamic> userDate;
   // LocalUser? localUser;
 
-  setUserInfo({
-  
-    required String fristName,
-    required String secondName,
-    required String lastName,
-    required String phoneNumber,
-    required String country,
-    required String email,
-    //required String password,
-  }) async {
-    emit(ProfileLoading());
-    try {
-      await FirebaseFireStoreUserInfoModel.setUserInfo(
-        fristNameValue: fristName,
-        secondNameValue: secondName,
-        lastNameValue: lastName,
-        phoneNumberValue: phoneNumber,
-        countryValue: country,
-        emailValue: email,
-      ); // passwordValue: password;
-      emit(ProfileInitial());
-    } catch (e) {
-      emit(ProfileError(errorMessage: 'Cubit Catch Error: $e'));
-      print('👌👌👌👌cubit catch error $e');
-    }
-  }
+  // setUserInfo({
+
+  //   required String fristName,
+  //   required String secondName,
+  //   required String lastName,
+  //   required String phoneNumber,
+  //   required String country,
+  //   required String email,
+  //   //required String password,
+  // }) async {
+  //   emit(ProfileLoading());
+  //   try {
+  //     await FirebaseFireStoreUserInfoModel.setUserInfo(
+  //       fristNameValue: fristName,
+  //       secondNameValue: secondName,
+  //       lastNameValue: lastName,
+  //       phoneNumberValue: phoneNumber,
+  //       countryValue: country,
+  //       emailValue: email,
+  //     ); // passwordValue: password;
+  //     emit(ProfileInitial());
+  //   } catch (e) {
+  //     emit(ProfileError(errorMessage: 'Cubit Catch Error: $e'));
+  //     print('👌👌👌👌cubit catch error $e');
+  //   }
+  // }
 
   Future<void> getUserInfo() async {
     emit(ProfileLoading());
     try {
       final user = await FirebaseFireStoreUserInfoModel.getUserInfo();
-      if (user.userDate != null) {
-        emit(ProfileSuccess(userInfo: user.userDate!));
+      if (user.userData != null) {
+        userDate = user.userData!;
+        emit(ProfileSuccess(userInfo: userDate));
       } else {
         emit(ProfileError(errorMessage: 'Error :${user.errorMessage}'));
       }
@@ -56,31 +60,63 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  updateUserinfo({
+    required String fristName,
+    required String secondName,
+    required String lastName,
+    required String email,
+    required String phoneNumber,
+    required String country,
+  }) async {
+    Map<String, dynamic> updatedInfo = {
+      FBCollectionName.userFristName: fristName,
+      FBCollectionName.userSecondName: secondName,
+      FBCollectionName.userLastName: lastName,
+      FBCollectionName.userPhoneNumber: phoneNumber,
+      FBCollectionName.userCountry: country,
+      FBCollectionName.userEmail: email,
+    };
+    try {
+      emit(ProfileLoading());
+      final response = await FirebaseFireStoreUserInfoModel.updateUserInfo(
+          upDatedInfo: updatedInfo);
+      if (response.hasData == true) {
+        emit(ProfileUpdateSuccess());
+        await Future.delayed(const Duration(milliseconds: 1500));
+        getUserInfo();
+      } else {
+        emit(ProfileError(errorMessage: 'Error :${response.errorMessage}'));
+      }
+    } catch (e) {}
+  }
+
+  /// ------------------------------------------------------------------------\\\
+
   getLocalUserData() {
     emit(ProfileLoading());
     // localUser = LocalUser.getLocalUserData();
     // emit(ProfileSuccess(localUser: localUser!));
   }
 
-  editProfile({
-    required String fristName,
-    required String secondName,
-    required String email,
-    required String lastName,
-    required String phoneNumber,
-    required String country,
-  }) {
-    emit(ProfileLoading());
-    // LocalUser.editLocalUserData(
-    //   fristName: fristName,
-    //   secondName: secondName,
-    //   email: email,
-    //   lastName: lastName,
-    //   phoneNumber: phoneNumber,
-    //   country: country,
-    // );
-    getLocalUserData();
-  }
+  // editProfile({
+  //   required String fristName,
+  //   required String secondName,
+  //   required String email,
+  //   required String lastName,
+  //   required String phoneNumber,
+  //   required String country,
+  // }) {
+  //   emit(ProfileLoading());
+  //   // LocalUser.editLocalUserData(
+  //   //   fristName: fristName,
+  //   //   secondName: secondName,
+  //   //   email: email,
+  //   //   lastName: lastName,
+  //   //   phoneNumber: phoneNumber,
+  //   //   country: country,
+  //   // );
+  //   getLocalUserData();
+  // }
 
   editPassword(
       {required String oldPassword,
