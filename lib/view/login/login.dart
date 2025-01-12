@@ -55,7 +55,7 @@ class _LoginState extends State<Login> {
       await BlocProvider.of<LoginCubit>(context).userLogin();
       var cubitState = BlocProvider.of<LoginCubit>(context).state;
       if (cubitState is LoginSuccess) {
-        BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+        BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
         Navigator.pushNamed(context, AppRoute.homePage);
       } else {
         SnackBarCustom.build(message: 'state: $cubitState ', context: context);
@@ -204,7 +204,7 @@ class _LoginState extends State<Login> {
                                   conPassword.text);
                             }
                             BlocProvider.of<TaskoCubit>(context)
-                                .getAllLocalTask();
+                                .getFirestoreTasks();
                             Navigator.pushNamed(context, AppRoute.homePage);
                           } else {
                             SnackBarCustom.build(

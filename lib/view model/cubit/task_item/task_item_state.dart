@@ -11,12 +11,14 @@ final class TaskItemInitial extends TaskItemState {}
 
 final class TaskItemLoading extends TaskItemState {}
 
+final class TaskAddedSuccess extends TaskItemState {}
+
 final class TaskItemSuccess extends TaskItemState {
-  LocalTask selectedTask;
+  TaskModelID selectedTask;
   TaskItemSuccess({required this.selectedTask});
 }
 
 final class TaskItemError extends TaskItemState {
-  final String message;
-  const TaskItemError({required this.message});
+  final String errorMessage;
+  const TaskItemError({required this.errorMessage});
 }

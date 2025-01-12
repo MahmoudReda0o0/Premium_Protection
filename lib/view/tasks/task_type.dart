@@ -201,15 +201,15 @@ class _TaskTypeState extends State<TaskType> {
                                         'All Completed Task with this Type will be deleted',
                                     context: context,
                                     onTapYes: () {
-                                      BlocProvider.of<TaskTypeCubit>(context)
-                                          .deleteTasktype(
-                                        taskType:
-                                            state.addedTaskTypeList[index],
-                                        taskList:
-                                            BlocProvider.of<TaskoCubit>(context)
-                                                .allLocalTask,
-                                      );
-                                    });
+                                      //BlocProvider.of<TaskTypeCubit>(context)
+                                       //   .deleteTasktype(
+                                        //    state.addedTaskTypeList[index],
+                                        // taskList:
+                                        //     BlocProvider.of<TaskoCubit>(context)
+                                        //         .allTasks,
+                                     // );
+                                    }
+                                    );
                                 // BlocProvider.of<TaskTypeCubit>(context)
                                 //     .deleteTasktype(
                                 //         state.addedTaskTypeList[index]);

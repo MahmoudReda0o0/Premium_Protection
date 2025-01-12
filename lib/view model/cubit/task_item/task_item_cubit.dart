@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/main.dart';
+import 'package:excp_training/model/firebase/task_data.dart';
 import 'package:excp_training/model/local_data/local_task_data.dart';
+import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/view/widget/SnackBarCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,62 +15,75 @@ part 'task_item_state.dart';
 class TaskItemCubit extends Cubit<TaskItemState> {
   TaskItemCubit() : super(TaskItemInitial());
 
-  LocalTask? selectedTask;
+  TaskModelID? selectedTask;
   // int? localTaskIndex;
 
-  getLocalTask({required LocalTask selectedTask}) {
+  getTaskItemInfo({required TaskModelID selectedTask}) {
     emit(TaskItemLoading());
     this.selectedTask = selectedTask;
-    print('👀👀👀  selectedTask: ${selectedTask.taskName}');
+    print('👀👀👀  selectedTask: ${selectedTask.task!.name}');
     emit(TaskItemSuccess(selectedTask: selectedTask));
   }
 
-  editTaskComplete() {
+  
+
+  editTaskComplete() async {
     emit(TaskItemLoading());
-    selectedTask!.isNew = false;
-    LocalTask.editTaskDetail(selectedTask!);
+    selectedTask!.task!.isNew = false;
+    final response =
+        await FB_FirestoreTaskData.editTaskDetail(updatedTask: selectedTask!);
+    if (response.success! == true) {
+      emit(TaskItemSuccess(selectedTask: selectedTask!));
+    } else {
+      emit(TaskItemError(errorMessage: response.errorMessage!));
+    }
     emit(TaskItemSuccess(selectedTask: selectedTask!));
   }
 
-  editTaskDetail(LocalTask updatedTask) {
+  editTaskDetail(TaskModel updatedTaskData) async {
     emit(TaskItemLoading());
-    selectedTask = updatedTask;
-    LocalTask.editTaskDetail(updatedTask);
-    emit(TaskItemSuccess(selectedTask: selectedTask!));
+    selectedTask!.task = updatedTaskData;
+    final response =
+        await FB_FirestoreTaskData.editTaskDetail(updatedTask: selectedTask!);
+    if (response.success! == true) {
+      emit(TaskItemSuccess(selectedTask: selectedTask!));
+    } else {
+      emit(TaskItemError(errorMessage: response.errorMessage!));
+    }
   }
 
 
-
-
-
-  deleteTask({required LocalTask deletedTask}) {
+  addNewTask({required TaskModel newTask}) async {
     emit(TaskItemLoading());
-    if (deletedTask.isNew) {
+    final response = await FB_FirestoreTaskData.addNewTask(newTask: newTask);
+    if (response.success! == true) {
+      emit(TaskItemInitial());
+    } else {
+      emit(TaskItemError(errorMessage: response.errorMessage!));
+    }
+    //emit(TaskItemSuccess(selectedTask: newTask));
+  }
+
+  
+
+  deleteTask({required TaskModelID deletedTask}) async {
+    emit(TaskItemLoading());
+    if (deletedTask.task!.isNew!) {
       SnackBarCustom.build(
         message: 'Task Is Still New',
         context: navigatorKey.currentContext!,
       );
+      emit(TaskItemInitial());
     } else {
-      LocalTask.deleteTask(deletedTask: deletedTask);
+      final response =await FB_FirestoreTaskData.deleteTask(taskId: deletedTask.id!);
+      if (response.success! == true) {
+        emit(TaskItemInitial());
+      } else {
+        emit(TaskItemError(errorMessage: response.errorMessage!));
+      }
+
     }
 
     //emit(TaskItemSuccess(selectedTask: LocalTask.taskList.last));
-  }
-
-
-
-  addNewTask(
-      {required String taskName,
-      required String taskType,
-      required String taskDescription,
-      required String dateTime}) async {
-    emit(TaskItemLoading());
-    await Future.delayed(const Duration(seconds: 1));
-    LocalTask.addNewTask(
-        taskName: taskName,
-        taskType: taskType,
-        taskDescription: taskDescription,
-        dateTime: dateTime);
-    emit(TaskItemSuccess(selectedTask: LocalTask.taskList.last));
   }
 }

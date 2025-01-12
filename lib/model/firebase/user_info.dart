@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'collection_name.dart';
+import 'FB_field_name.dart';
 
 class FirebaseFireStoreUserInfoModel {
   // String userID;
-
-  static String collectionName = 'User Info';
 
   final Map<String, dynamic>? userData;
   String errorMessage;
@@ -40,17 +38,18 @@ class FirebaseFireStoreUserInfoModel {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
+        
         print('User ID: ${user.uid}');
         await FirebaseFirestore.instance
-            .collection(collectionName)
+            .collection(FB.collectionUserInfo)
             .doc(user.uid)
             .set({
-          FBCollectionName.userFristName: fristNameValue,
-          FBCollectionName.userSecondName: secondNameValue,
-          FBCollectionName.userLastName: lastNameValue,
-          FBCollectionName.userPhoneNumber: phoneNumberValue,
-          FBCollectionName.userCountry: countryValue,
-          FBCollectionName.userEmail: emailValue,
+          FB.userFristName: fristNameValue,
+          FB.userSecondName: secondNameValue,
+          FB.userLastName: lastNameValue,
+          FB.userPhoneNumber: phoneNumberValue,
+          FB.userCountry: countryValue,
+          FB.userEmail: emailValue,
           //password: password,
         });
         return FirebaseFireStoreUserInfoModel(
@@ -73,7 +72,7 @@ class FirebaseFireStoreUserInfoModel {
       if (user != null) {
         print('User ID: ${user.uid}');
         final doc = await FirebaseFirestore.instance
-            .collection(collectionName)
+            .collection(FB.collectionUserInfo)
             .doc(user.uid)
             .get();
         if (doc.exists) {
@@ -111,7 +110,7 @@ class FirebaseFireStoreUserInfoModel {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await FirebaseFirestore.instance
-            .collection(collectionName)
+            .collection(FB.collectionUserInfo)
             .doc(user.uid)
             .update(upDatedInfo);
         return FirebaseFireStoreUserInfoModel(

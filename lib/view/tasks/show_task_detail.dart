@@ -55,7 +55,11 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
       } else if (state is TaskItemLoading) {
         return const LoadingPage();
       } else {
-        return ErrorPage(errorMessage: state.toString());
+        return ErrorPage(
+            errorMessage: state.toString(),
+            onTap: () {
+              Navigator.pop(context);
+            });
       }
     });
   }
@@ -81,13 +85,13 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
               ),
               onPressed: () async {
                 await DeleteShowDialog.build(
-                  title: ' Delete this task !',
+                    title: ' Delete this task !',
                     context: context,
                     onTapYes: () {
                       BlocProvider.of<TaskItemCubit>(context).deleteTask(
                         deletedTask: state.selectedTask,
                       );
-                      BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+                      BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
                     });
                 Navigator.pushReplacementNamed(context, AppRoute.homePage);
               })
@@ -107,20 +111,19 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
               children: [
                 ShowDateListTile(
                   listTileTitle: 'Task',
-                  text: state.selectedTask.taskName,
-                  
+                  text: state.selectedTask.task!.name!,
                 ),
                 ShowDateListTile(
                   listTileTitle: 'Type',
-                  text: state.selectedTask.taskType,
+                  text: state.selectedTask.task!.type!,
                 ),
                 ShowDateListTile(
                   listTileTitle: 'Des',
-                  text: state.selectedTask.taskDescription,
+                  text: state.selectedTask.task!.description!,
                 ),
                 ShowDateListTile(
                   listTileTitle: 'Date',
-                  text: state.selectedTask.dateTime,
+                  text: state.selectedTask.task!.dateAndTime!,
                 ),
                 isCompletedTask(state),
                 const Gap(10),
@@ -154,8 +157,9 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
   Expanded finishTaskButton(BuildContext context, TaskItemSuccess state) {
     return Expanded(
       child: ButtonCustom.build(
-        buttonColor:
-            state.selectedTask.isNew ? AppColor.green : AppColor.orangeDark,
+        buttonColor: state.selectedTask.task!.isNew!
+            ? AppColor.green
+            : AppColor.orangeDark,
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -170,18 +174,17 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                   buttonColor: AppColor.orangeDark,
                   onPressed: () {
                     Navigator.pop(context);
-                    SnackBarCustom.build(
-                        message: 'Change Your Mind', context: context);
+                    // SnackBarCustom.build(
+                    //     message: 'Change Your Mind', context: context);
                   },
                   title: 'NO',
                   width: 120),
               ButtonCustom.build(
                   buttonColor: AppColor.green,
-                  onPressed: () {
+                  onPressed: () async{
                     //selectedTask.isNew = false;
-
-                    BlocProvider.of<TaskItemCubit>(context).editTaskComplete();
-                    BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+                    await BlocProvider.of<TaskItemCubit>(context).editTaskComplete();
+                    BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
                     setState(() {});
                     Navigator.pop(context);
                   },
@@ -190,7 +193,8 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
             ],
           ),
         ),
-        title: state.selectedTask.isNew ? 'Finish Task' : 'Redo Task',
+        title: 'Finish Task',
+        //title: state.selectedTask.task!.isNew! ? 'Finish Task' : 'Redo Task',
       ),
     );
   }
@@ -211,15 +215,15 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
             color: AppColor.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-                color: state.selectedTask.isNew
+                color: state.selectedTask.task!.isNew!
                     ? AppColor.orangeWhite
                     : AppColor.green,
                 width: 2),
           ),
           child: Text(
-            state.selectedTask.isNew ? 'Not Completed' : 'Completed ',
+            state.selectedTask.task!.isNew! ? 'Not Completed' : 'Completed ',
             style: TextStyle(
-              color: state.selectedTask.isNew
+              color: state.selectedTask.task!.isNew!
                   ? AppColor.orangeWhite
                   : AppColor.green,
               fontSize: 20,

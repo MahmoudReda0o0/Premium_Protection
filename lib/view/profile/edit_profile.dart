@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../model/firebase/collection_name.dart';
+import '../../model/firebase/FB_field_name.dart';
 import '../../utils/app_color.dart';
 import '../../model/local_data/local_task_data.dart';
 import '../widget/LoadingPage.dart';
@@ -39,17 +39,17 @@ class _EditProfileState extends State<EditProfile> {
     final cubitCurrentState = BlocProvider.of<ProfileCubit>(context).state;
     if (cubitCurrentState is ProfileSuccess) {
       conFristName = TextEditingController(
-          text: cubitCurrentState.userInfo[FBCollectionName.userFristName]);
+          text: cubitCurrentState.userInfo[FB.userFristName]);
       conSecondName = TextEditingController(
-          text: cubitCurrentState.userInfo[FBCollectionName.userSecondName]);
+          text: cubitCurrentState.userInfo[FB.userSecondName]);
       conLastName = TextEditingController(
-          text: cubitCurrentState.userInfo[FBCollectionName.userLastName]);
-      conEmail = TextEditingController(
-          text: cubitCurrentState.userInfo[FBCollectionName.userEmail]);
+          text: cubitCurrentState.userInfo[FB.userLastName]);
+      conEmail =
+          TextEditingController(text: cubitCurrentState.userInfo[FB.userEmail]);
       conphoneNum = TextEditingController(
-          text: cubitCurrentState.userInfo[FBCollectionName.userPhoneNumber]);
+          text: cubitCurrentState.userInfo[FB.userPhoneNumber]);
       conCountry = TextEditingController(
-          text: cubitCurrentState.userInfo[FBCollectionName.userCountry]);
+          text: cubitCurrentState.userInfo[FB.userCountry]);
     } else {
       conFristName = TextEditingController(text: 'no data');
       conSecondName = TextEditingController(text: 'no data');

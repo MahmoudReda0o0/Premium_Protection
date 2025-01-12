@@ -64,7 +64,7 @@ class TaskTypeCubit extends Cubit<TaskTypeState> {
         emit(TaskTypeLoading());
         if (deletedTaskType.isNotEmpty) {
           for (var e in deletedTaskType) {
-            LocalTask.deleteTask(deletedTask: e);
+            //LocalTask.deleteTask(deletedTask: e);
           }
         }
         LocalTask.deletaTaskType(taskType);
@@ -76,7 +76,7 @@ class TaskTypeCubit extends Cubit<TaskTypeState> {
                 'All tasks with this type deleted : ${deletedTaskType.length}',
             context: navigatorKey.currentContext!);
         BlocProvider.of<TaskoCubit>(navigatorKey.currentContext!)
-            .getAllLocalTask();
+            .getFirestoreTasks();
       } else {
         SnackBarCustom.build(
             message: 'there are Unfinished tasks with this type',

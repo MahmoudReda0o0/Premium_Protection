@@ -1,3 +1,4 @@
+import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/task_item/task_item_cubit.dart';
 import 'package:excp_training/view/tasks/task_type.dart';
@@ -28,7 +29,6 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
   late TextEditingController conTaskName;
   late TextEditingController conTaskType;
   late TextEditingController conTaskDescription;
-  late bool isTaskNew;
 
   List<String> taskTypeList = [];
 
@@ -38,17 +38,15 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
   @override
   void initState() {
     super.initState();
-    LocalTask selectedTask =
+    TaskModelID selectedTask =
         BlocProvider.of<TaskItemCubit>(context).selectedTask!;
     taskTypeList = BlocProvider.of<TaskTypeCubit>(context).allTaskType!;
-    selectedTaskID = selectedTask.id!;
-    selectedTaskisNew = selectedTask.isNew;
-    conTaskName = TextEditingController(text: selectedTask.taskName);
-    conTaskType = TextEditingController(text: selectedTask.taskType);
-    conTaskDescription =
-        TextEditingController(text: selectedTask.taskDescription);
-    conDateTime = TextEditingController(text: selectedTask.dateTime);
-    isTaskNew = selectedTask.isNew;
+    //selectedTaskID = selectedTask.id!;
+    selectedTaskisNew = selectedTask.task!.isNew!;
+    conTaskName = TextEditingController(text: selectedTask.task!.name);
+    conTaskType = TextEditingController(text: selectedTask.task!.type);
+    conTaskDescription = TextEditingController(text: selectedTask.task!.description);
+    conDateTime = TextEditingController(text: selectedTask.task!.dateAndTime);
   }
 
   @override
@@ -123,15 +121,14 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
                     formKey: formKey,
                     onValidate: () {
                       BlocProvider.of<TaskItemCubit>(context).editTaskDetail(
-                        LocalTask(
-                            id: selectedTaskID,
-                            taskName: conTaskName.text,
-                            taskType: conTaskType.text,
-                            taskDescription: conTaskDescription.text,
-                            dateTime: conDateTime.text,
+                        TaskModel(
+                            name: conTaskName.text,
+                            type: conTaskType.text,
+                            description: conTaskDescription.text,
+                            dateAndTime: conDateTime.text,
                             isNew: selectedTaskisNew),
                       );
-                      BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+                      BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
                       setState(() {});
                       Navigator.pop(context);
                     },
