@@ -40,12 +40,13 @@ class DeleteShowDialog {
           ButtonCustom.build(
               buttonColor: AppColor.green,
               onPressed: () {
+                Navigator.pop(context);
                 onTapYes();
                 // BlocProvider.of<TaskItemCubit>(context).deleteTask(
                 //   deletedTask: selectedTask,
                 // );
                 // BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
-                Navigator.pop(context);
+               
               },
               title: 'YES',
               width: 120),

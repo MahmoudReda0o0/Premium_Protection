@@ -9,6 +9,29 @@ class FB_FirestoreTaskData {
   List<TaskModelID>? tasks;
   String? errorMessage;
 
+  static Future<FB_FirestoreTaskData> addNewTask(
+      {required TaskModel newTask}) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection(FB.collectionUserInfo)
+            .doc(user.uid)
+            .collection(FB.collectionTaskData)
+            .doc()
+            .set(newTask.toFirestore());
+        print("Task added successfully");
+        return FB_FirestoreTaskData(
+            success: true, errorMessage: 'everything is ok');
+      } else {
+        return FB_FirestoreTaskData(
+            success: false, errorMessage: 'User is null');
+      }
+    } catch (e) {
+      return FB_FirestoreTaskData(
+          success: false, errorMessage: 'firestore catch error: $e');
+    }
+  }
   FB_FirestoreTaskData({this.errorMessage, this.tasks, this.success});
   static Future<FB_FirestoreTaskData> getTasksListData() async {
     try {
@@ -19,7 +42,6 @@ class FB_FirestoreTaskData {
             .doc(user.uid)
             .collection(FB.collectionTaskData)
             .get();
-
         List<TaskModelID> taskModelID = [];
         for (var doc in response.docs) {
           taskModelID.add(
@@ -33,7 +55,6 @@ class FB_FirestoreTaskData {
         //     .map((doc) =>
         //         TaskModel.fromFirestore(doc.data() as Map<String, dynamic>))
         //     .toList();
-
         return FB_FirestoreTaskData(
             tasks: taskModelID,
             success: true,
@@ -72,30 +93,9 @@ class FB_FirestoreTaskData {
     }
   }
 
-  static Future<FB_FirestoreTaskData> addNewTask(
-      {required TaskModel newTask}) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await FirebaseFirestore.instance
-            .collection(FB.collectionUserInfo)
-            .doc(user.uid)
-            .collection(FB.collectionTaskData)
-            .add(newTask.toFirestore());
-        print("Task added successfully");
-        return FB_FirestoreTaskData(
-            success: true, errorMessage: 'everything is ok');
-      } else {
-        return FB_FirestoreTaskData(
-            success: false, errorMessage: 'User is null');
-      }
-    } catch (e) {
-      return FB_FirestoreTaskData(
-          success: false, errorMessage: 'firestore catch error: $e');
-    }
-  }
 
- static Future<FB_FirestoreTaskData> deleteTask({required String taskId}) async {
+  static Future<FB_FirestoreTaskData> deleteTask(
+      {required String taskId}) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {

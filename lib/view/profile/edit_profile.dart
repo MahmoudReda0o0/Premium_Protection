@@ -39,7 +39,7 @@ class _EditProfileState extends State<EditProfile> {
     final cubitCurrentState = BlocProvider.of<ProfileCubit>(context).state;
     if (cubitCurrentState is ProfileSuccess) {
       conFristName = TextEditingController(
-          text: cubitCurrentState.userInfo[FB.userFristName]);
+          text: cubitCurrentState.userInfo[FB.userFirstName]);
       conSecondName = TextEditingController(
           text: cubitCurrentState.userInfo[FB.userSecondName]);
       conLastName = TextEditingController(

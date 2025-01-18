@@ -1,7 +1,7 @@
 class FB {
   // ---------------------- User Info ---------------------\\
   static String collectionUserInfo = 'User Info',
-      userFristName = 'First Name',
+      userFirstName = 'First Name',
       userSecondName = 'Second Name',
       userLastName = 'Last Name',
       userPhoneNumber = 'Phone Number',
@@ -20,5 +20,7 @@ class FB {
 
   // ---------------------- Task type ---------------------\\
   static String collectionTaskType = 'Task Type',
-      taskTypeName = 'Task Type Name';
+      docIDTaskType = 'tasktypeIDmanualgenerated',
+      typeFixedList = 'Fixed List',
+      typeAddedList = 'Added List';
 }

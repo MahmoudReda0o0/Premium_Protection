@@ -40,12 +40,13 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
     super.initState();
     TaskModelID selectedTask =
         BlocProvider.of<TaskItemCubit>(context).selectedTask!;
-    taskTypeList = BlocProvider.of<TaskTypeCubit>(context).allTaskType!;
+    taskTypeList = BlocProvider.of<TaskTypeCubit>(context).allTypeList!;
     //selectedTaskID = selectedTask.id!;
     selectedTaskisNew = selectedTask.task!.isNew!;
     conTaskName = TextEditingController(text: selectedTask.task!.name);
     conTaskType = TextEditingController(text: selectedTask.task!.type);
-    conTaskDescription = TextEditingController(text: selectedTask.task!.description);
+    conTaskDescription =
+        TextEditingController(text: selectedTask.task!.description);
     conDateTime = TextEditingController(text: selectedTask.task!.dateAndTime);
   }
 

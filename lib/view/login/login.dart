@@ -89,7 +89,7 @@ class _LoginState extends State<Login> {
           return loginBuild(context, activeKeyBoard);
         } else if (state is LoginSuccess) {
           return const Scaffold(
-            backgroundColor: AppColor.white,
+            backgroundColor: AppColor.buttonColor,
           );
         } else if (state is LoginLoading) {
           return const LoadingPage();
@@ -125,7 +125,7 @@ class _LoginState extends State<Login> {
               children: [
                 Container(
                   child: const Text(
-                    'Vesrsion 0.0.8',
+                    'Vesrsion 0.0.9',
                     style: TextStyle(
                         color: AppColor.grayDark, fontWeight: FontWeight.bold),
                   ),
@@ -205,7 +205,7 @@ class _LoginState extends State<Login> {
                             }
                             BlocProvider.of<TaskoCubit>(context)
                                 .getFirestoreTasks();
-                            Navigator.pushNamed(context, AppRoute.homePage);
+                            Navigator.pushReplacementNamed(context, AppRoute.homePage);
                           } else {
                             SnackBarCustom.build(
                                 message: 'state: $cubitState ',

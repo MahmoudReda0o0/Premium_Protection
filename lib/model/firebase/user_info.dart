@@ -27,42 +27,41 @@ class FirebaseFireStoreUserInfoModel {
   // }
 
   static Future<FirebaseFireStoreUserInfoModel> setUserInfo({
-    required String fristNameValue,
+    required String firstNameValue,
     required String secondNameValue,
     required String lastNameValue,
     required String phoneNumberValue,
     required String countryValue,
     required String emailValue,
-    //required String passwordValue,
   }) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        
-        print('User ID: ${user.uid}');
+        print('User ID: \${user.uid}');
+
         await FirebaseFirestore.instance
-            .collection(FB.collectionUserInfo)
+            .collection('User Info')
             .doc(user.uid)
             .set({
-          FB.userFristName: fristNameValue,
+          FB.userFirstName: firstNameValue,
           FB.userSecondName: secondNameValue,
           FB.userLastName: lastNameValue,
           FB.userPhoneNumber: phoneNumberValue,
           FB.userCountry: countryValue,
           FB.userEmail: emailValue,
-          //password: password,
         });
+
         return FirebaseFireStoreUserInfoModel(
-            errorMessage: 'everything is ok', hasData: true);
+            errorMessage: 'Everything is OK', hasData: true);
       } else {
-        print('user is null');
+        print('User is null');
         return FirebaseFireStoreUserInfoModel(
             errorMessage: 'User is null', hasData: false);
       }
     } catch (e) {
-      print('firebase catch error: $e');
+      print('Firebase catch error: \$e');
       return FirebaseFireStoreUserInfoModel(
-          errorMessage: 'Firebase Catch  Error: $e', hasData: false);
+          errorMessage: 'Firebase Catch Error: \$e', hasData: false);
     }
   }
 

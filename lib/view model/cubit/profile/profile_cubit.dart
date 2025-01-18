@@ -69,7 +69,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required String country,
   }) async {
     Map<String, dynamic> updatedInfo = {
-      FB.userFristName: fristName,
+      FB.userFirstName: fristName,
       FB.userSecondName: secondName,
       FB.userLastName: lastName,
       FB.userPhoneNumber: phoneNumber,

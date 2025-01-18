@@ -37,7 +37,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       if (firebaseAuthModel!.userCredential != null) {
         FirebaseFireStoreUserInfoModel response =
             await FirebaseFireStoreUserInfoModel.setUserInfo(
-          fristNameValue: fristName,
+          firstNameValue: fristName,
           secondNameValue: secondName,
           lastNameValue: lastName,
           phoneNumberValue: phoneNumber,

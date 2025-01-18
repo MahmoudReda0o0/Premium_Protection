@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
 
   Scaffold pageBuild(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColor.grayWhite,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Home Page'),
           centerTitle: true,
@@ -93,6 +93,7 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         
         decoration: BoxDecoration(
+         // shape: BoxShape.circle,
           color: selectedIndex == index ? AppColor.grayWhite : null,
           borderRadius: BorderRadius.circular(10),
         ),
@@ -125,7 +126,7 @@ class _HomePageState extends State<HomePage> {
           fit: BoxFit.fitHeight,
         ),
         const Text(
-          'Do Task To Change Your Life',
+          'Add Task To improve Your Life',
           style: TextStyle(
               color: AppColor.orangeWhite,
               fontSize: 20,

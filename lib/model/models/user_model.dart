@@ -19,7 +19,7 @@ class UserModel {
   });
 
   UserModel.fromFirebase(Map<String, dynamic> data) {
-    fristName = data[FB.userFristName];
+    fristName = data[FB.userFirstName];
     secondName = data[FB.userSecondName];
     lastName = data[FB.userLastName];
     phoneNumber = data[FB.userPhoneNumber];
@@ -29,8 +29,8 @@ class UserModel {
   }
 
   Map<String, dynamic> toFirebase() {
-    Map<String,dynamic> data = <String,dynamic>{};
-    data[FB.userFristName] = fristName;
+    Map<String, dynamic> data = <String, dynamic>{};
+    data[FB.userFirstName] = fristName;
     data[FB.userSecondName] = secondName;
     data[FB.userLastName] = lastName;
     data[FB.userPhoneNumber] = phoneNumber;

@@ -1,8 +1,13 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:excp_training/main.dart';
 import 'package:excp_training/model/firebase/task_data.dart';
 import 'package:excp_training/model/models/task_model.dart';
+import 'package:excp_training/utils/app_color.dart';
+import 'package:flutter/material.dart';
 import '../../../model/local_data/local_task_data.dart';
+import '../../../view/widget/SnackBarCustom.dart';
 part 'tasko_state.dart';
 
 class TaskoCubit extends Cubit<TaskoState> {
@@ -38,6 +43,83 @@ class TaskoCubit extends Cubit<TaskoState> {
       }
     } catch (e) {
       emit(ErrorState(errorMessage: e.toString()));
+    }
+  }
+
+  deleteTasksWithType({required String type}) async {
+    emit(LoadingState());
+    try {
+      List<String> finishedTaskId = [];
+      bool finishedTaskBool = false;
+      bool unMatchType = false;
+      for (var e in allTasks) {
+        if (e.task!.type == type) {
+          if (e.task!.isNew == false) {
+            finishedTaskId.add(e.id!);
+            finishedTaskBool = true;
+            continue;
+          } else {
+            finishedTaskBool = false;
+            SnackBarCustom.build(
+              context: navigatorKey.currentState!.context,
+              message:
+                  'Error with task id: ${e.task!.name} :: Task is not completed yet',
+            );
+            emit(SuccessState(
+                allTask: allTasks,
+                newTask: newTasks,
+                completedTask: completedTask));
+            break;
+          }
+        } else {
+          unMatchType = true;
+          continue;
+        }
+      }
+      if (unMatchType) {
+        emit(SuccessState(
+          allTask: allTasks,
+          newTask: newTasks,
+          completedTask: completedTask,
+          deleteTaskWithType: true,
+        ));
+      }
+      if (finishedTaskBool) {
+        bool errorOccurred = false;
+        for (var e in finishedTaskId) {
+          final response = await FB_FirestoreTaskData.deleteTask(taskId: e);
+          if (response.success! == true) {
+            continue;
+          } else {
+            SnackBarCustom.build(
+                context: navigatorKey.currentState!.context,
+                message: 'Error with task id: ${e} :: ${response.errorMessage}',
+                duration: 3,
+                messageColor: AppColor.red);
+            emit(ErrorState(errorMessage: response.errorMessage!));
+            errorOccurred = true;
+            break;
+          }
+        }
+        if (!errorOccurred) {
+         emit(SuccessState(
+              allTask: allTasks,
+              newTask: newTasks,
+              completedTask: completedTask,
+              deleteTaskWithType: true));
+        }
+      } else {
+        emit(SuccessState(
+            allTask: allTasks,
+            newTask: newTasks,
+            completedTask: completedTask));
+      }
+    } catch (e) {
+      emit(
+        ErrorState(
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 

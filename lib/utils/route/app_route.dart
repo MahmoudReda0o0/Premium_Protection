@@ -41,7 +41,7 @@ class AppRoute {
   static Map<String, Widget Function(BuildContext)> routes = {
     login: (context) => const Login(),
     register: (context) => const Register(),
-    forgetPassword: (context) =>  ForgetPassword(),
+    forgetPassword: (context) =>  const ForgetPassword(),
     homePage: (context) => const HomePage(),
     addNewTask: (context) => const AddNewTask(),
     taskDetail: (context) => const ShowTaskDetail(),

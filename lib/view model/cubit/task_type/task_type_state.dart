@@ -11,7 +11,10 @@ final class TaskTypeInitial extends TaskTypeState {}
 
 final class TaskTypeLoading extends TaskTypeState {}
 
-final class TaskTypeError extends TaskTypeState {}
+final class TaskTypeError extends TaskTypeState {
+  String errorMessage;
+  TaskTypeError({required this.errorMessage});
+}
 
 final class TaskTypeSuccess extends TaskTypeState {
   List<String> fixedTaskTypeList;

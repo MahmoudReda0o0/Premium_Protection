@@ -20,9 +20,22 @@ final class SuccessState extends TaskoState {
   List<TaskModelID> allTask;
   List<TaskModelID> newTask;
   List<TaskModelID> completedTask;
+  bool deleteTaskWithType;
   SuccessState({
     required this.allTask,
     required this.newTask,
     required this.completedTask,
+    this.deleteTaskWithType=false,
   });
 }
+
+// final class SuccessDeleteState extends TaskoState {
+//   //  List<TaskModelID> allTask;
+//   // List<TaskModelID> newTask;
+//   // List<TaskModelID> completedTask;
+//   // SuccessDeleteState({
+//   //   required this.allTask,
+//   //   required this.newTask,
+//   //   required this.completedTask,
+//   // });
+// }

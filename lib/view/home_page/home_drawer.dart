@@ -41,6 +41,7 @@ class HomeDrawer extends StatelessWidget {
                 iconData: Icons.person,
                 onTap: () {
                   BlocProvider.of<ProfileCubit>(context).getUserInfo();
+                  Navigator.pop(context);
                   Navigator.pushNamed(context, AppRoute.profile);
                 }),
             _drawerHeaderItem(
@@ -49,6 +50,7 @@ class HomeDrawer extends StatelessWidget {
                 iconData: Icons.settings,
                 onTap: () {
                   BlocProvider.of<TaskTypeCubit>(context).getTaskTypeList();
+                  Navigator.pop(context);
                   Navigator.pushNamed(context, AppRoute.taskType);
                 }),
             _drawerHeaderItem(
@@ -57,7 +59,7 @@ class HomeDrawer extends StatelessWidget {
               iconData: Icons.settings_backup_restore_rounded,
               onTap: () {
                 BlocProvider.of<LoginCubit>(context).resetLoginState();
-                Navigator.pushNamed(context, AppRoute.login);
+                Navigator.pushReplacementNamed(context, AppRoute.login);
               },
             ),
           ],
