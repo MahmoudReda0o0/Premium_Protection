@@ -55,11 +55,21 @@ class HomeDrawer extends StatelessWidget {
                 }),
             _drawerHeaderItem(
               context: context,
-              title: 'open login ',
+              title: 'Update Android Widget',
+              iconData: Icons.android_outlined,
+              onTap: () {
+                BlocProvider.of<TaskoCubit>(context).androidWidgetUpdate();
+
+                Navigator.pop(context);
+              },
+            ),
+            _drawerHeaderItem(
+              context: context,
+              title: 'Logout',
               iconData: Icons.settings_backup_restore_rounded,
               onTap: () {
-                BlocProvider.of<LoginCubit>(context).resetLoginState();
-                Navigator.pushReplacementNamed(context, AppRoute.login);
+                BlocProvider.of<LoginCubit>(context).logout();
+                Navigator.pushReplacementNamed(context, AppRoute.initialRoute);
               },
             ),
           ],

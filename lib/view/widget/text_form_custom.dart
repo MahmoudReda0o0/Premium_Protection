@@ -54,6 +54,7 @@ class _TextFormCustomState extends State<TextFormCustom> {
           suffixIcon: (widget.iconDate != null)
               ? IconButton(
                   onPressed: () {
+                    FocusScope.of(context).unfocus();
                     widget.iconOnTap();
                   },
                   icon: Icon(widget.iconDate),
@@ -84,7 +85,7 @@ class _TextFormCustomState extends State<TextFormCustom> {
           }
         },
         //onEditingComplete: () => print(''),
-       // onSaved: widget.onSaved,
+        // onSaved: widget.onSaved,
       ),
     );
   }

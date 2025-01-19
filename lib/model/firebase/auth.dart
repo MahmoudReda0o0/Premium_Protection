@@ -61,8 +61,14 @@ class FirebaseAuthModel {
 
   //--------------------------- FireBase Logout ------------------------//
 
-  Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
+ static Future<bool> signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
   }
 
   //--------------------------- FireBase Email Verification ------------------------//

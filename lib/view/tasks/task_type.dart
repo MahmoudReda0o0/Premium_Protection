@@ -221,6 +221,9 @@ class _TaskTypeState extends State<TaskType> {
                                               .state;
                                       if (taskoState is SuccessState) {
                                         if (taskoState.deleteTaskWithType) {
+                                          await BlocProvider.of<TaskoCubit>(
+                                                  context)
+                                              .getFirestoreTasks();
                                           await BlocProvider.of<TaskTypeCubit>(
                                                   context)
                                               .deleteType(
@@ -233,7 +236,6 @@ class _TaskTypeState extends State<TaskType> {
                                       }
                                       // BlocProvider.of<TaskoCubit>(context)
                                       //     .getFirestoreTasks();
-                               
                                     });
                                 // BlocProvider.of<TaskTypeCubit>(context)
                                 //     .deleteTasktype(

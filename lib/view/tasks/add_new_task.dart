@@ -128,8 +128,10 @@ class _AddNewTaskState extends State<AddNewTask> {
                     readOnly: true,
                     iconDate: Icons.calendar_today,
                     iconOnTap: () {
+                      
+                      // FocusScope.of(context).unfocus();
                       setState(() {});
-                      FocusScope.of(context).unfocus();
+
                       _selectDate();
                     },
                   ),

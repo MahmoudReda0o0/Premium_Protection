@@ -7,6 +7,7 @@ import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import '../../../model/local_data/local_task_data.dart';
+import '../../../utils/android_home_page/android_home_page.dart';
 import '../../../view/widget/SnackBarCustom.dart';
 part 'tasko_state.dart';
 
@@ -44,6 +45,17 @@ class TaskoCubit extends Cubit<TaskoState> {
     } catch (e) {
       emit(ErrorState(errorMessage: e.toString()));
     }
+  }
+
+  androidWidgetUpdate() async {
+    for (var e in newTasks) {
+      await AndroidWidgetManager.saveTask(e.task!.name!);
+    }
+    SnackBarCustom.build(
+        context: navigatorKey.currentState!.context,
+        message: 'Your New Tasks Saved in Android Widget',
+        duration: 3,
+        messageColor: AppColor.green);
   }
 
   deleteTasksWithType({required String type}) async {
@@ -102,7 +114,13 @@ class TaskoCubit extends Cubit<TaskoState> {
           }
         }
         if (!errorOccurred) {
-         emit(SuccessState(
+          SnackBarCustom.build(
+            context: navigatorKey.currentState!.context,
+            message: 'you have delete : ${finishedTaskId.length} tasks',
+            duration: 3,
+            // messageColor: AppColor.red
+          );
+          emit(SuccessState(
               allTask: allTasks,
               newTask: newTasks,
               completedTask: completedTask,
