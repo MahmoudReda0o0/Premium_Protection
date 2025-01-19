@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'collection_name.dart';
+import 'FB_field_name.dart';
 
 class FirebaseFireStoreUserInfoModel {
   // String userID;
-
-  static String collectionName = 'User Info';
 
   final Map<String, dynamic>? userData;
   String errorMessage;
@@ -29,41 +27,41 @@ class FirebaseFireStoreUserInfoModel {
   // }
 
   static Future<FirebaseFireStoreUserInfoModel> setUserInfo({
-    required String fristNameValue,
+    required String firstNameValue,
     required String secondNameValue,
     required String lastNameValue,
     required String phoneNumberValue,
     required String countryValue,
     required String emailValue,
-    //required String passwordValue,
   }) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        print('User ID: ${user.uid}');
+        print('User ID: \${user.uid}');
+
         await FirebaseFirestore.instance
-            .collection(collectionName)
+            .collection('User Info')
             .doc(user.uid)
             .set({
-          FBCollectionName.userFristName: fristNameValue,
-          FBCollectionName.userSecondName: secondNameValue,
-          FBCollectionName.userLastName: lastNameValue,
-          FBCollectionName.userPhoneNumber: phoneNumberValue,
-          FBCollectionName.userCountry: countryValue,
-          FBCollectionName.userEmail: emailValue,
-          //password: password,
+          FB.userFirstName: firstNameValue,
+          FB.userSecondName: secondNameValue,
+          FB.userLastName: lastNameValue,
+          FB.userPhoneNumber: phoneNumberValue,
+          FB.userCountry: countryValue,
+          FB.userEmail: emailValue,
         });
+
         return FirebaseFireStoreUserInfoModel(
-            errorMessage: 'everything is ok', hasData: true);
+            errorMessage: 'Everything is OK', hasData: true);
       } else {
-        print('user is null');
+        print('User is null');
         return FirebaseFireStoreUserInfoModel(
             errorMessage: 'User is null', hasData: false);
       }
     } catch (e) {
-      print('firebase catch error: $e');
+      print('Firebase catch error: \$e');
       return FirebaseFireStoreUserInfoModel(
-          errorMessage: 'Firebase Catch  Error: $e', hasData: false);
+          errorMessage: 'Firebase Catch Error: \$e', hasData: false);
     }
   }
 
@@ -73,7 +71,7 @@ class FirebaseFireStoreUserInfoModel {
       if (user != null) {
         print('User ID: ${user.uid}');
         final doc = await FirebaseFirestore.instance
-            .collection(collectionName)
+            .collection(FB.collectionUserInfo)
             .doc(user.uid)
             .get();
         if (doc.exists) {
@@ -111,7 +109,7 @@ class FirebaseFireStoreUserInfoModel {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await FirebaseFirestore.instance
-            .collection(collectionName)
+            .collection(FB.collectionUserInfo)
             .doc(user.uid)
             .update(upDatedInfo);
         return FirebaseFireStoreUserInfoModel(

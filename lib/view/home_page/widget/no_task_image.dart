@@ -11,15 +11,16 @@ class NoTaskImage   {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Gap(180),
+        const Gap(150),
         ContainerImageCustom(
           height: 300,
           width: MediaQuery.of(navigatorKey.currentState!.context).size.width,
           image: 'assets/working.gif',
           fit: BoxFit.fitHeight,
         ),
+        const Gap(20),
         const Text(
-          'Do Task To Change Your Life',
+          'Master Your Time, Master Your Life',
           style: TextStyle(
               color: AppColor.orangeWhite,
               fontSize: 20,

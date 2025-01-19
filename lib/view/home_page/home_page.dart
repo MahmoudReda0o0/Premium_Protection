@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../utils/app_color.dart';
+import '../../utils/android_home_page/android_home_page.dart';
 import '../../utils/route/app_route.dart';
 import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../widget/SnackBarCustom.dart';
@@ -31,8 +32,6 @@ class _HomePageState extends State<HomePage> {
   // ];
   int selectedIndex = 0;
 
-  
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TaskoCubit, TaskoState>(builder: (context, state) {
@@ -42,11 +41,11 @@ class _HomePageState extends State<HomePage> {
 
   Scaffold pageBuild(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColor.grayWhite,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Home Page'),
           centerTitle: true,
-          actions:const [
+          actions: const [
             Text('Sort '),
             SortPopupMenu(),
             Gap(5),
@@ -63,6 +62,7 @@ class _HomePageState extends State<HomePage> {
             color: AppColor.white,
           ),
           onPressed: () {
+            AndroidWidgetManager.saveTask('add task');
             BlocProvider.of<TaskTypeCubit>(context).getTaskTypeList();
             Navigator.pushNamed(context, AppRoute.addNewTask);
           },
@@ -72,7 +72,10 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              barItem(icon: Icons.work_history_outlined, title: 'New Tasks', index: 0),
+              barItem(
+                  icon: Icons.work_history_outlined,
+                  title: 'New Tasks',
+                  index: 0),
               barItem(icon: Icons.done, title: 'Completed', index: 1),
               barItem(icon: Icons.list, title: 'All Tasks ', index: 2),
               Gap(10),
@@ -91,8 +94,8 @@ class _HomePageState extends State<HomePage> {
         selectedIndex = index;
       }),
       child: Container(
-        
         decoration: BoxDecoration(
+          // shape: BoxShape.circle,
           color: selectedIndex == index ? AppColor.grayWhite : null,
           borderRadius: BorderRadius.circular(10),
         ),
@@ -125,7 +128,7 @@ class _HomePageState extends State<HomePage> {
           fit: BoxFit.fitHeight,
         ),
         const Text(
-          'Do Task To Change Your Life',
+          'Add Task To improve Your Life',
           style: TextStyle(
               color: AppColor.orangeWhite,
               fontSize: 20,

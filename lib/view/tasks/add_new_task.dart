@@ -1,14 +1,12 @@
 import 'package:excp_training/utils/route/app_route.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/task_item/task_item_cubit.dart';
-import 'package:excp_training/view/home_page/home_page.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-
-import '../../model/local_data/local_task_data.dart';
+import '../../model/models/task_model.dart';
 import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../widget/LoadingPage.dart';
 import '../widget/SnackBarCustom.dart';
@@ -52,19 +50,23 @@ class _AddNewTaskState extends State<AddNewTask> {
 
   @override
   Widget build(BuildContext context) {
-
-    return _addNewTaskBuild(context);
-    // return BlocBuilder<TaskItemCubit, TaskItemState>(
-    //   builder: (context, state) {
-    //     if (state is TaskItemInitial || state is TaskItemSuccess) {
-    //       return _addNewTaskBuild(context);
-    //     } else if (state is TaskItemLoading) {
-    //       return const LoadingPage();
-    //     } else {
-    //       return ErrorPage(errorMessage: state.toString());
-    //     }
-    //   },
-    // );
+    //return _addNewTaskBuild(context);
+    return BlocBuilder<TaskItemCubit, TaskItemState>(
+      builder: (context, state) {
+        if (state is TaskItemInitial || state is TaskItemSuccess) {
+          return _addNewTaskBuild(context);
+        } else if (state is TaskItemLoading) {
+          return const LoadingPage();
+        } else {
+          return ErrorPage(
+            errorMessage: state.toString(),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          );
+        }
+      },
+    );
   }
 
   Scaffold _addNewTaskBuild(BuildContext context) {
@@ -85,7 +87,6 @@ class _AddNewTaskState extends State<AddNewTask> {
                     controller: conTaskName,
                     lableText: 'Task',
                     errorMessage: "Enter Task Name",
-                   // onSaved: (value) => taskName = value!,
                   ),
                   BlocBuilder<TaskTypeCubit, TaskTypeState>(
                       builder: (context, state) {
@@ -112,8 +113,9 @@ class _AddNewTaskState extends State<AddNewTask> {
                           ),
                         ),
                       );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
                     }
-                     else {return Center(child: CircularProgressIndicator());}
                   }),
                   TextFormCustom(
                       controller: conTaskDescription,
@@ -126,10 +128,10 @@ class _AddNewTaskState extends State<AddNewTask> {
                     readOnly: true,
                     iconDate: Icons.calendar_today,
                     iconOnTap: () {
-                      setState(() {
-                        
-                      });
-                       FocusScope.of(context).unfocus();
+                      
+                      // FocusScope.of(context).unfocus();
+                      setState(() {});
+
                       _selectDate();
                     },
                   ),
@@ -140,11 +142,15 @@ class _AddNewTaskState extends State<AddNewTask> {
                       onValidate: () async {
                         await BlocProvider.of<TaskItemCubit>(context)
                             .addNewTask(
-                                taskName: conTaskName.text,
-                                taskType: conTaskType.text,
-                                taskDescription: conTaskDescription.text,
-                                dateTime: conDateTime.text);
-                        BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+                          newTask: TaskModel(
+                              name: conTaskName.text,
+                              type: conTaskType.text,
+                              description: conTaskDescription.text,
+                              dateAndTime: conDateTime.text,
+                              isNew: true),
+                        );
+                        BlocProvider.of<TaskoCubit>(context)
+                            .getFirestoreTasks();
                         setState(() {});
                         Navigator.pushReplacementNamed(
                             context, AppRoute.homePage);

@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:excp_training/model/models/task_model.dart';
+
 class LocalTask {
   int? id;
   String taskName;
@@ -224,8 +226,8 @@ class LocalTask {
     }
   }
 
-  static deleteTask({required LocalTask deletedTask}) {
-    taskList.removeWhere((test) => test.id == deletedTask.id);
+  static deleteTask({required TaskModelID deletedTask}) {
+   // taskList.removeWhere((test) => test.id == deletedTask.id);
     // for (int i = 0; i < taskList.length; i++) {
     //   if (taskList[i].id == deletedTask.id) {
     //     taskList.remove(deletedTask);

@@ -1,3 +1,4 @@
+import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/utils/constants.dart';
 import 'package:excp_training/view%20model/cubit/task_item/task_item_cubit.dart';
 import 'package:excp_training/view%20model/cubit/task_type/task_type_cubit.dart';
@@ -31,114 +32,19 @@ class _TaskListState extends State<TaskList> {
   Widget build(BuildContext context) {
     return BlocBuilder<TaskoCubit, TaskoState>(builder: (context, state) {
       if (state is SuccessState) {
-        List<LocalTask> taskList = [];
+        List<TaskModelID> taskList = [];
         switch (widget.index) {
           case 0:
-            taskList = state.localNewTask;
+            taskList = state.newTask;
             break;
           case 1:
-            taskList = state.localCompletedTask;
+            taskList = state.completedTask;
             break;
           case 2:
-            taskList = state.localAllTask;
+            taskList = state.allTask;
             break;
         }
-        return Container(
-          padding: const EdgeInsets.only(bottom: 15),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: AppColor.white,
-          child: taskList.isEmpty
-              ? NoTaskImage.build()
-              : ListView.builder(
-                  itemCount: taskList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding:
-                          const EdgeInsets.only(top: 10, left: 5, right: 5),
-                      child: Card(
-                        elevation:
-                            8.0, // Adjust the elevation for shadow intensity
-                        shadowColor: Colors.grey
-                            .withOpacity(0.5), // Shadow color with opacity
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 65,
-                              width: 20,
-                              decoration: BoxDecoration(
-                                color: taskList[index].isNew
-                                    ? AppColor.orangeWhite
-                                    : AppColor.green,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10)),
-                              ),
-                            ),
-                            Expanded(
-                              child: ListTile(
-                                onLongPress: () {
-                                  DeleteShowDialog.build(
-                                    title: 'Do you want to delete this Task Type !',
-                                      context: context,
-                                      onTapYes: () {
-                                        BlocProvider.of<TaskItemCubit>(context)
-                                            .deleteTask(
-                                          deletedTask:  taskList[index],
-                                        );
-                                        BlocProvider.of<TaskoCubit>(context)
-                                            .getAllLocalTask();
-                                      });
-                                  // deleteShowDialog(context, taskList, index);
-                                },
-                                onTap: () {
-                                  BlocProvider.of<TaskItemCubit>(context)
-                                      .getLocalTask(
-                                    selectedTask: taskList[index],
-                                  );
-                                  BlocProvider.of<TaskTypeCubit>(context)
-                                      .getTaskTypeList();
-                                  Navigator.pushNamed(
-                                      context, AppRoute.taskDetail);
-                                },
-                                leading: Text(
-                                  taskList[index].taskName,
-                                  style: const TextStyle(
-                                      color: AppColor.grayDark,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                trailing: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      taskList[index].isNew
-                                          ? 'New Task'
-                                          : 'Completed',
-                                      style: TextStyle(
-                                          color: taskList[index].isNew
-                                              ? AppColor.orangeWhite
-                                              : AppColor.green,
-                                          fontSize: 12),
-                                    ),
-                                    Text(
-                                      taskList[index].dateTime,
-                                      style: const TextStyle(
-                                          color: AppColor.grayDark,
-                                          fontSize: 12),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-        );
+        return _buildScreen(context, taskList);
       } else if (state is LoadingState) {
         return const LoadingPage();
       } else {
@@ -147,6 +53,101 @@ class _TaskListState extends State<TaskList> {
         );
       }
     });
+  }
+
+  Container _buildScreen(BuildContext context, List<TaskModelID> taskList) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 15),
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      color: AppColor.white,
+      child: taskList.isEmpty
+          ? NoTaskImage.build()
+          : ListView.builder(
+              itemCount: taskList.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
+                  child: Card(
+                    elevation: 8.0, // Adjust the elevation for shadow intensity
+                    shadowColor: Colors.grey
+                        .withOpacity(0.5), // Shadow color with opacity
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 65,
+                          width: 20,
+                          decoration: BoxDecoration(
+                            color: taskList[index].task!.isNew!
+                                ? AppColor.orangeWhite
+                                : AppColor.green,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(10)),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListTile(
+                            onLongPress: () {
+                              DeleteShowDialog.build(
+                                  title:
+                                      'Do you want to delete this Task Type !',
+                                  context: context,
+                                  onTapYes: () {
+                                    BlocProvider.of<TaskItemCubit>(context)
+                                        .deleteTask(
+                                      deletedTask: taskList[index],
+                                    );
+                                    BlocProvider.of<TaskoCubit>(context)
+                                        .getFirestoreTasks();
+                                  });
+                              // deleteShowDialog(context, taskList, index);
+                            },
+                            onTap: () {
+                              BlocProvider.of<TaskItemCubit>(context)
+                                  .getTaskItemInfo(
+                                selectedTask: taskList[index],
+                              );
+                              BlocProvider.of<TaskTypeCubit>(context)
+                                  .getTaskTypeList();
+                              Navigator.pushNamed(context, AppRoute.taskDetail);
+                            },
+                            leading: Text(
+                              taskList[index].task!.name!,
+                              style: const TextStyle(
+                                  color: AppColor.grayDark,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  taskList[index].task!.isNew!
+                                      ? 'New Task'
+                                      : 'Completed',
+                                  style: TextStyle(
+                                      color: taskList[index].task!.isNew!
+                                          ? AppColor.orangeWhite
+                                          : AppColor.green,
+                                      fontSize: 12),
+                                ),
+                                Text(
+                                  taskList[index].task!.dateAndTime!,
+                                  style: const TextStyle(
+                                      color: AppColor.grayDark, fontSize: 12),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
   }
 
   // Future<dynamic> deleteShowDialog(

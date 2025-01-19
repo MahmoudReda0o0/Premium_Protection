@@ -1,4 +1,4 @@
-import 'package:excp_training/model/firebase/collection_name.dart';
+import 'package:excp_training/model/firebase/FB_field_name.dart';
 import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/profile/change_password.dart';
 import 'package:flutter/material.dart';
@@ -63,17 +63,17 @@ class Profile extends StatelessWidget {
                 ShowDateListTile(
                   listTileTitle: 'Name ',
                   text:
-                      '${state.userInfo[FBCollectionName.userFristName]} ${state.userInfo[FBCollectionName.userSecondName]} ${state.userInfo[FBCollectionName.userLastName]}',
+                      '${state.userInfo[FB.userFirstName]} ${state.userInfo[FB.userSecondName]} ${state.userInfo[FB.userLastName]}',
                 ),
                 ShowDateListTile(
                     listTileTitle: 'Email ',
-                    text: state.userInfo[FBCollectionName.userEmail]),
+                    text: state.userInfo[FB.userEmail]),
                 ShowDateListTile(
                     listTileTitle: 'Phone num ',
-                    text: state.userInfo[FBCollectionName.userPhoneNumber]),
+                    text: state.userInfo[FB.userPhoneNumber]),
                 ShowDateListTile(
                     listTileTitle: 'Country ',
-                    text: state.userInfo[FBCollectionName.userCountry]),
+                    text: state.userInfo[FB.userCountry]),
                 // ShowDateListTile(
                 //     listTileTitle: 'password ', text: state.userInfo[FBCollectionName.userPassword]),
               ],

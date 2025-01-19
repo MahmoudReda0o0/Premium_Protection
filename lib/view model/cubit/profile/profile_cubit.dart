@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:excp_training/model/firebase/collection_name.dart';
+import 'package:excp_training/model/firebase/FB_field_name.dart';
 import 'package:excp_training/model/local_data/local_user.dart';
 
 import '../../../main.dart';
@@ -69,12 +69,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     required String country,
   }) async {
     Map<String, dynamic> updatedInfo = {
-      FBCollectionName.userFristName: fristName,
-      FBCollectionName.userSecondName: secondName,
-      FBCollectionName.userLastName: lastName,
-      FBCollectionName.userPhoneNumber: phoneNumber,
-      FBCollectionName.userCountry: country,
-      FBCollectionName.userEmail: email,
+      FB.userFirstName: fristName,
+      FB.userSecondName: secondName,
+      FB.userLastName: lastName,
+      FB.userPhoneNumber: phoneNumber,
+      FB.userCountry: country,
+      FB.userEmail: email,
     };
     try {
       emit(ProfileLoading());

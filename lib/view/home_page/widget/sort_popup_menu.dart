@@ -15,14 +15,14 @@ class SortPopupMenu extends StatelessWidget {
         PopupMenuItem(
           child: const Text('Normal'),
           onTap: () {
-            BlocProvider.of<TaskoCubit>(context).getAllLocalTask();
+            BlocProvider.of<TaskoCubit>(context).sortTaskNormal();
             //Navigator.pushNamed(context, AppRoute.changePassword);
           },
         ),
         PopupMenuItem(
           child: const Text('Time'),
           onTap: () {
-            BlocProvider.of<TaskoCubit>(context).sortLocalTaskByTime();
+            BlocProvider.of<TaskoCubit>(context).sortTaskByTime();
           },
         )
       ],
