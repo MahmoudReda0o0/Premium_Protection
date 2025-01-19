@@ -1,14 +1,23 @@
+//import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/login_cubit/login_cubit.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
+import 'package:excp_training/view/widget/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constant/constant.dart';
-import '../../view model/cubit/tasko_cubit.dart';
+import '../../model/hive/shared_preference.dart';
+import '../../utils/app_color.dart';
+
+import '../../utils/route/app_route.dart';
+import '../../view model/cubit/register/register_cubit.dart';
+import '../home_page/home_page.dart';
 import '../register/register.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/container_image.dart';
+import '../widget/error_page.dart';
 import '../widget/form_submit_button.dart';
 import '../widget/text_form_custom.dart';
 import '../widget/text_form_password_custom.dart';
@@ -26,40 +35,40 @@ class _LoginState extends State<Login> {
   late TextEditingController conEmail;
   late TextEditingController conPassword;
   bool checkBoxValue = false;
-  String sharedCheckBoxKey = 'remember Me';
-  String sharedEmileKey = 'email key';
-  String sharedPasswordKey = 'password key';
-  bool? sharedPrefValue;
 
-  sharedSetDate(String key, dynamic data) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    if (data is bool) {
-      pref.setBool(key, data);
-    } else {
-      pref.setString(key, data);
-    }
-  }
+  // bool? sharedPrefValue;
+  // String? getSharedEmailValue;
+  // String? getSharedPasswordValue;
 
-  sharedNavigate() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    sharedPrefValue = pref.getBool(sharedCheckBoxKey);
-    setState(() {});
-    if (sharedPrefValue != true) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        ),
-      );
-    } else {
-      print('shared navigate value is false');
-    }
-  }
+  // sharedNavigate() async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   sharedPrefValue = pref.getBool(SharedPreferenceCustom.sharedCheckBoxKey);
+  //   setState(() {});
+  //   if (sharedPrefValue == true) {
+  //     getSharedEmailValue =
+  //         pref.getString(SharedPreferenceCustom.sharedEmileKey);
+  //     getSharedPasswordValue =
+  //         pref.getString(SharedPreferenceCustom.sharedPasswordKey);
+  //     BlocProvider.of<LoginCubit>(context).setEmailAndPassword(
+  //         emailValue: getSharedEmailValue!,
+  //         passwordValue: getSharedPasswordValue!);
+  //     await BlocProvider.of<LoginCubit>(context).userLogin();
+  //     var cubitState = BlocProvider.of<LoginCubit>(context).state;
+  //     if (cubitState is LoginSuccess) {
+  //       BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
+  //       Navigator.pushNamed(context, AppRoute.homePage);
+  //     } else {
+  //       SnackBarCustom.build(message: 'state: $cubitState ', context: context);
+  //     }
+  //   } else {
+  //     print('shared navigate value is false');
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    //sharedNavigate();
+    // sharedNavigate();
     conEmail = TextEditingController();
     conPassword = TextEditingController();
   }
@@ -74,9 +83,34 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     bool activeKeyBoard = MediaQuery.of(context).viewInsets.bottom != 0;
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        if (state is LoginInitial) {
+          return loginBuild(context, activeKeyBoard);
+        } else if (state is LoginSuccess) {
+          return const Scaffold(
+            backgroundColor: AppColor.buttonColor,
+          );
+        } else if (state is LoginLoading) {
+          return const LoadingPage();
+        } else if (state is LoginError) {
+          return ErrorPage(
+            errorMessage: state.errorMessage,
+            onTap: () {
+              BlocProvider.of<LoginCubit>(context).resetLoginState();
+            },
+          );
+        } else {
+          return ErrorPage(errorMessage: state.toString());
+        }
+      },
+    );
+  }
+
+  Scaffold loginBuild(BuildContext context, bool activeKeyBoard) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constant.white,
+      backgroundColor: AppColor.white,
       body: GestureDetector(
         onTap: () {
           print('tap on screen');
@@ -90,13 +124,17 @@ class _LoginState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  child:const Text('Vesrsion 0.0.6',style: TextStyle(color: Constant.grayDark,fontWeight: FontWeight.bold),),
+                  child: const Text(
+                    'Vesrsion 0.0.9',
+                    style: TextStyle(
+                        color: AppColor.grayDark, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const Gap(5),
                 Visibility(
                   visible: !activeKeyBoard,
                   child: ContainerImageCustom(
-                    image: Constant.logo_tile,
+                    image: AppColor.logo_tile,
                     height: 230,
                     width: 230,
                   ),
@@ -113,7 +151,6 @@ class _LoginState extends State<Login> {
                         //textFieldValue: email,
                         // onSaved: (value) => email = value!,
                       ),
-
                       const Gap(10),
                       TextFormPasswordCustom(
                         controller: conPassword,
@@ -129,7 +166,7 @@ class _LoginState extends State<Login> {
                           leading: const Text(
                             'Remember Me',
                             style: TextStyle(
-                                color: Constant.grayDark,
+                                color: AppColor.grayDark,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18),
                           ),
@@ -144,21 +181,36 @@ class _LoginState extends State<Login> {
                       ),
                       const Gap(20),
                       FormSubmitButtonCustom.build(
-                        onValidate: () {
-                          // SnackBarCustom.build(
-                          //   message: 'checkBoxValue: $checkBoxValue',
-                          //   context: context,
-                          // );
-                          if (checkBoxValue == true) {
-                            sharedSetDate(sharedCheckBoxKey, checkBoxValue);
-                            sharedSetDate(sharedEmileKey, conEmail.text);
-                            sharedSetDate(sharedPasswordKey, conPassword.text);
-                          }
-
-                          BlocProvider.of<TaskoCubit>(context).userLogin(
-                            email: conEmail.text,
-                            password: conPassword.text,
+                        onValidate: () async {
+                          BlocProvider.of<LoginCubit>(context)
+                              .setEmailAndPassword(
+                            emailValue: conEmail.text,
+                            passwordValue: conPassword.text,
                           );
+                          await BlocProvider.of<LoginCubit>(context)
+                              .userLogin();
+                          var cubitState =
+                              BlocProvider.of<LoginCubit>(context).state;
+                          if (cubitState is LoginSuccess) {
+                            if (checkBoxValue == true) {
+                              SharedPreferenceCustom.setSharedSetDate(
+                                  SharedPreferenceCustom.sharedCheckBoxKey,
+                                  checkBoxValue);
+                              SharedPreferenceCustom.setSharedSetDate(
+                                  SharedPreferenceCustom.sharedEmileKey,
+                                  conEmail.text);
+                              SharedPreferenceCustom.setSharedSetDate(
+                                  SharedPreferenceCustom.sharedPasswordKey,
+                                  conPassword.text);
+                            }
+                            BlocProvider.of<TaskoCubit>(context)
+                                .getFirestoreTasks();
+                            Navigator.pushReplacementNamed(context, AppRoute.homePage);
+                          } else {
+                            SnackBarCustom.build(
+                                message: 'state: $cubitState ',
+                                context: context);
+                          }
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(
@@ -169,7 +221,6 @@ class _LoginState extends State<Login> {
                         formKey: _formKey,
                         snakBarMessage:
                             'Email: ${conEmail.text}, Password: ${conPassword.text} ',
-
                         context: context,
                       ),
                     ],
@@ -178,18 +229,13 @@ class _LoginState extends State<Login> {
                 const Gap(30),
                 TextButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const HomePage(),
-                    //   ),
-                    // );
+                    Navigator.pushNamed(context, AppRoute.forgetPassword);
                   },
                   child: const Text(
                     'Forgot Password?',
                     style: TextStyle(
                       fontSize: 20,
-                      color: Constant.buttonColor,
+                      color: AppColor.buttonColor,
                     ),
                   ),
                 ),
@@ -198,7 +244,8 @@ class _LoginState extends State<Login> {
                     fristText: 'Don\'t have an account ?',
                     secondText: '  Register Now',
                     action: () {
-                      BlocProvider.of<TaskoCubit>(context).openRegister();
+                      BlocProvider.of<RegisterCubit>(context).resetRegisterState();
+                      Navigator.pushNamed(context, AppRoute.register);
                     }),
               ],
             ),

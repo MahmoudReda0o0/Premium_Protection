@@ -1,4 +1,5 @@
-import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:excp_training/view/widget/text_form_password_custom.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../constant/constant.dart';
+import '../../utils/app_color.dart';
 import '../../model/local_data/local_task_data.dart';
+import '../../utils/route/app_route.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
 
@@ -46,7 +48,7 @@ class _EditPasswordState extends State<EditPassword> {
         title: const Text(
           'Change Password',
           style: TextStyle(
-              color: Constant.grayDark,
+              color: AppColor.grayDark,
               fontWeight: FontWeight.bold,
               fontSize: 25),
         ),
@@ -76,10 +78,23 @@ class _EditPasswordState extends State<EditPassword> {
                     context: context,
                     formKey: formKey,
                     onValidate: () {
-                      BlocProvider.of<TaskoCubit>(context).submitEditPassword(
-                          oldPassword: conOldPassword.text,
-                          newPassword: conNewPassword.text,
-                          confirmPassword: conConfirmPassword.text);
+                      SnackBarCustom.build(
+                          message: 'Page Under Development \n Change password with your email',
+                          duration: 5,
+                          context: context);
+                          Navigator.pushNamed(context, AppRoute.forgetPassword);
+                      // BlocProvider.of<ProfileCubit>(context).editPassword(
+                      //   oldPassword: conOldPassword.text,
+                      //   newPassword: conNewPassword.text,
+                      //   confirmPassword: conConfirmPassword.text,
+                      // );
+                      // if(BlocProvider.of<ProfileCubit>(context).state is ProfileSuccess) {
+                      //   Navigator.pop(context);
+                      // }
+                      // BlocProvider.of<TaskoCubit>(context).submitEditPassword(
+                      //     oldPassword: conOldPassword.text,
+                      //     newPassword: conNewPassword.text,
+                      //     confirmPassword: conConfirmPassword.text);
                     }),
               ],
             ),

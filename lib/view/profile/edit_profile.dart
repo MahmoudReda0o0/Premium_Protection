@@ -1,13 +1,18 @@
-import 'package:excp_training/view%20model/cubit/tasko_cubit.dart';
+import 'package:excp_training/model/local_data/local_user.dart';
+import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../constant/constant.dart';
+import '../../model/firebase/FB_field_name.dart';
+import '../../utils/app_color.dart';
 import '../../model/local_data/local_task_data.dart';
+import '../widget/LoadingPage.dart';
 import '../widget/SnackBarCustom.dart';
+import '../widget/error_page.dart';
 import '../widget/form_submit_button.dart';
 
 // ignore: must_be_immutable
@@ -19,7 +24,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController conFristName;
   late TextEditingController conSecondName;
   late TextEditingController conLastName;
@@ -30,19 +35,21 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    final cubitCurrentState = BlocProvider.of<TaskoCubit>(context).state;
-    if (cubitCurrentState is EditProfileState) {
-      conFristName =
-          TextEditingController(text: cubitCurrentState.localUser.fristName);
-      conSecondName =
-          TextEditingController(text: cubitCurrentState.localUser.secondName);
-      conLastName =
-          TextEditingController(text: cubitCurrentState.localUser.lastName);
-      conEmail = TextEditingController(text: cubitCurrentState.localUser.email);
-      conphoneNum =
-          TextEditingController(text: cubitCurrentState.localUser.phoneNumber);
-      conCountry =
-          TextEditingController(text: cubitCurrentState.localUser.country);
+    // LocalUser? localUser = BlocProvider.of<ProfileCubit>(context).userDate;
+    final cubitCurrentState = BlocProvider.of<ProfileCubit>(context).state;
+    if (cubitCurrentState is ProfileSuccess) {
+      conFristName = TextEditingController(
+          text: cubitCurrentState.userInfo[FB.userFirstName]);
+      conSecondName = TextEditingController(
+          text: cubitCurrentState.userInfo[FB.userSecondName]);
+      conLastName = TextEditingController(
+          text: cubitCurrentState.userInfo[FB.userLastName]);
+      conEmail =
+          TextEditingController(text: cubitCurrentState.userInfo[FB.userEmail]);
+      conphoneNum = TextEditingController(
+          text: cubitCurrentState.userInfo[FB.userPhoneNumber]);
+      conCountry = TextEditingController(
+          text: cubitCurrentState.userInfo[FB.userCountry]);
     } else {
       conFristName = TextEditingController(text: 'no data');
       conSecondName = TextEditingController(text: 'no data');
@@ -66,10 +73,48 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
+      if (state is ProfileSuccess) {
+        return _editProfileBuild(context);
+      } else if (state is ProfileLoading) {
+        return const LoadingPage();
+      } else if (state is ProfileError) {
+        return ErrorPage(
+          errorMessage: state.errorMessage,
+          onTap: () {
+            Navigator.pop(context);
+          },
+        );
+      } else if (state is ProfileUpdateSuccess) {
+        return const Scaffold(
+          backgroundColor: AppColor.white,
+          body: Center(
+            child: Text(
+              'Your Profile Updated Successfully 🫡',
+              style: TextStyle(
+                  fontSize: 30,
+                  color: AppColor.grayDark,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+      return ErrorPage(
+        errorMessage: state.toString(),
+      );
+    });
+  }
+
+  Scaffold _editProfileBuild(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Profile', style: TextStyle(color: Constant.grayDark,fontSize: 30,fontWeight: FontWeight.bold)),
+        title: const Text('Profile',
+            style: TextStyle(
+                color: AppColor.grayDark,
+                fontSize: 30,
+                fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -77,7 +122,7 @@ class _EditProfileState extends State<EditProfile> {
           children: [
             const Gap(20),
             Form(
-              key: formKey,
+              key: _formKey,
               child: Column(
                 children: [
                   TextFormCustom(
@@ -93,10 +138,10 @@ class _EditProfileState extends State<EditProfile> {
                       controller: conLastName,
                       lableText: 'Last Name',
                       errorMessage: "Enter Your Last Name"),
-                  TextFormCustom(
-                      controller: conEmail,
-                      lableText: 'Email',
-                      errorMessage: "Enter Your Correct Email"),
+                  // TextFormCustom(
+                  //     controller: conEmail,
+                  //     lableText: 'Email',
+                  //     errorMessage: "Enter Your Correct Email"),
                   TextFormCustom(
                       controller: conCountry,
                       lableText: 'Country',
@@ -109,18 +154,28 @@ class _EditProfileState extends State<EditProfile> {
                   const Gap(20),
                   FormSubmitButtonCustom.build(
                       context: context,
-                      formKey: formKey,
-                      onValidate: () {
-                        BlocProvider.of<TaskoCubit>(context)
-                          ..submitEditProfile(
-                            fristName: conFristName.text,
-                            secondName: conSecondName.text,
-                            lastName: conLastName.text,
-                            phoneNumber: conphoneNum.text,
-                            country: conCountry.text,
-                            email: conEmail.text,
-                          )
-                          ..openProfile();
+                      formKey: _formKey,
+                      onValidate: () async {
+                        await BlocProvider.of<ProfileCubit>(context)
+                            .updateUserinfo(
+                          fristName: conFristName.text,
+                          secondName: conSecondName.text,
+                          lastName: conLastName.text,
+                          phoneNumber: conphoneNum.text,
+                          country: conCountry.text,
+                          email: conEmail.text,
+                        );
+                        Navigator.pop(context);
+                        // BlocProvider.of<TaskoCubit>(context)
+                        //   ..submitEditProfile(
+                        //     fristName: conFristName.text,
+                        //     secondName: conSecondName.text,
+                        //     lastName: conLastName.text,
+                        //     phoneNumber: conphoneNum.text,
+                        //     country: conCountry.text,
+                        //     email: conEmail.text,
+                        //   )
+                        //   ..openProfile();
                       }),
                 ],
               ),

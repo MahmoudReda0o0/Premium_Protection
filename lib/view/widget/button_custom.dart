@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constant/constant.dart';
+import '../../utils/app_color.dart';
 
 class ButtonCustom {
   static Widget build({
@@ -20,9 +20,7 @@ class ButtonCustom {
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-
-              side: const BorderSide(color: Constant.buttonColor),
-
+              side: const BorderSide(color: AppColor.buttonColor),
             ),
           ),
           backgroundColor: WidgetStateProperty.all<Color>(buttonColor),
@@ -33,13 +31,11 @@ class ButtonCustom {
         child: Center(
           child: Text(
             title,
-
             style: TextStyle(
               color: textColor,
               fontSize: tilteSize,
               fontWeight: FontWeight.bold,
             ),
-
           ),
         ),
       ),

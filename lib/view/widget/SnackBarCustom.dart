@@ -8,7 +8,10 @@ class SnackBarCustom {
       int duration = 2}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message,style: TextStyle(color: messageColor),),
+        content: Text(
+          message,
+          style: TextStyle(color: messageColor),
+        ),
         duration: Duration(seconds: duration),
       ),
     );

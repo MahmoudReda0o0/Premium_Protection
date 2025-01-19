@@ -2,20 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 
-double mediaHeight =
-    MediaQuery.of(navigatorKey.currentState!.context).size.height;
-double mediaWidth =
-    MediaQuery.of(navigatorKey.currentState!.context).size.width;
-
-class Constant {
-
+class AppColor {
   static const Color grayDark = Color(0xFF353432),
       grayWhite = Color(0xFF90A09D),
       white = Color(0xFFEEEEEE),
       buttonColor = Color(0xFF196774),
       orangeDark = Color(0xFFEF6024),
       orangeWhite = Color(0xFFF1931F),
-      red =Color(0xFFE43548),
+      red = Color(0xFFE43548),
       green = Color(0xFF2DB83D);
 
   // static const Color primaryColor =
@@ -37,8 +31,6 @@ class Constant {
   //     orangeGradientLight = Color(0xFFFF7043), // Lighter Orange from gradient
   //     pinkAccent = Color(0xFFC2185B), // Pinkish-red accent from logo
   //     purpleAccent = Color(0xFF8E24AA); // Purple accent from gradient
-
-
 
   static const String logo_tile = 'assets/logo_title.png',
       working = 'assets/working.gif';
