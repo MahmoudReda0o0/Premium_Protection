@@ -36,39 +36,39 @@ class _LoginState extends State<Login> {
   late TextEditingController conPassword;
   bool checkBoxValue = false;
 
-  bool? sharedPrefValue;
-  String? getSharedEmailValue;
-  String? getSharedPasswordValue;
+  // bool? sharedPrefValue;
+  // String? getSharedEmailValue;
+  // String? getSharedPasswordValue;
 
-  sharedNavigate() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    sharedPrefValue = pref.getBool(SharedPreferenceCustom.sharedCheckBoxKey);
-    setState(() {});
-    if (sharedPrefValue == true) {
-      getSharedEmailValue =
-          pref.getString(SharedPreferenceCustom.sharedEmileKey);
-      getSharedPasswordValue =
-          pref.getString(SharedPreferenceCustom.sharedPasswordKey);
-      BlocProvider.of<LoginCubit>(context).setEmailAndPassword(
-          emailValue: getSharedEmailValue!,
-          passwordValue: getSharedPasswordValue!);
-      await BlocProvider.of<LoginCubit>(context).userLogin();
-      var cubitState = BlocProvider.of<LoginCubit>(context).state;
-      if (cubitState is LoginSuccess) {
-        BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
-        Navigator.pushNamed(context, AppRoute.homePage);
-      } else {
-        SnackBarCustom.build(message: 'state: $cubitState ', context: context);
-      }
-    } else {
-      print('shared navigate value is false');
-    }
-  }
+  // sharedNavigate() async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   sharedPrefValue = pref.getBool(SharedPreferenceCustom.sharedCheckBoxKey);
+  //   setState(() {});
+  //   if (sharedPrefValue == true) {
+  //     getSharedEmailValue =
+  //         pref.getString(SharedPreferenceCustom.sharedEmileKey);
+  //     getSharedPasswordValue =
+  //         pref.getString(SharedPreferenceCustom.sharedPasswordKey);
+  //     BlocProvider.of<LoginCubit>(context).setEmailAndPassword(
+  //         emailValue: getSharedEmailValue!,
+  //         passwordValue: getSharedPasswordValue!);
+  //     await BlocProvider.of<LoginCubit>(context).userLogin();
+  //     var cubitState = BlocProvider.of<LoginCubit>(context).state;
+  //     if (cubitState is LoginSuccess) {
+  //       BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
+  //       Navigator.pushNamed(context, AppRoute.homePage);
+  //     } else {
+  //       SnackBarCustom.build(message: 'state: $cubitState ', context: context);
+  //     }
+  //   } else {
+  //     print('shared navigate value is false');
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    sharedNavigate();
+    // sharedNavigate();
     conEmail = TextEditingController();
     conPassword = TextEditingController();
   }

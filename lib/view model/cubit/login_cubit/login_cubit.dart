@@ -21,35 +21,6 @@ class LoginCubit extends Cubit<LoginState> {
   // LocalUser? localUser;
   String? token;
 
-  // getLocalUserData() {
-  //   if (localUser != null) {
-  //     print('😘😁👍localUser is aloredy here');
-  //     return;
-  //   } else {
-  //     localUser = LocalUser.getLocalUserData();
-  //     print('👌💕❤️  initialize New LocalUser: ${localUser!.email}');
-  //   }
-  // }
-
-  // userLogin({required String email, required String password}) async {
-  //   emit(LoginLoading());
-  //   await getLocalUserData();
-  //   await Future.delayed(
-  //     const Duration(seconds: 2),
-  //   );
-  //   if (localUser!.email == email && localUser!.password == password) {
-  //     emit(
-  //       LoginSuccess(token:token,loginStep: true),
-  //     );
-  //   } else {
-  //     SnackBarCustom.build(
-  //       message: 'Email or Password Was Wrong ',
-  //       context: navigatorKey.currentState!.context,
-  //     );
-  //     emit(LoginInitial());
-  //   }
-  // }
-
   setEmailAndPassword(
       {required String emailValue, required String passwordValue}) {
     email = emailValue;
@@ -81,29 +52,68 @@ class LoginCubit extends Cubit<LoginState> {
         context: navigatorKey.currentState!.context,
       );
     }
-
-    // await getLocalUserData();
-    // await Future.delayed(
-    //   const Duration(seconds: 2),
-    // );
-    // if (localUser!.email == email && localUser!.password == password) {
-    //   emit(
-    //     LoginSuccess(token: token, loginStep: true),
-    //   );
-    // } else {
-    //   SnackBarCustom.build(
-    //     message: 'Email or Password Was Wrong ',
-    //     context: navigatorKey.currentState!.context,
-    //   );
-    //   emit(LoginInitial());
-    // }
   }
 
-  
+  Future<void> logout() async {
+    emit(LoginLoading());
+    bool response = await FirebaseAuthModel.signOut();
+    if (response == true) {
+      SharedPreferenceCustom.setSharedSetDate(
+          SharedPreferenceCustom.sharedCheckBoxKey, false);
+      emit(LoginInitial());
+    } else {
+      emit(const LoginError(errorMessage: 'Logout Error'));
+    }
+  }
 
   resetLoginState() {
     SharedPreferenceCustom.setSharedSetDate(
         SharedPreferenceCustom.sharedCheckBoxKey, false);
     emit(LoginInitial());
   }
+
+  // getLocalUserData() {
+  //   if (localUser != null) {
+  //     print('😘😁👍localUser is aloredy here');
+  //     return;
+  //   } else {
+  //     localUser = LocalUser.getLocalUserData();
+  //     print('👌💕❤️  initialize New LocalUser: ${localUser!.email}');
+  //   }
+  // }
+
+  // userLogin({required String email, required String password}) async {
+  //   emit(LoginLoading());
+  //   await getLocalUserData();
+  //   await Future.delayed(
+  //     const Duration(seconds: 2),
+  //   );
+  //   if (localUser!.email == email && localUser!.password == password) {
+  //     emit(
+  //       LoginSuccess(token:token,loginStep: true),
+  //     );
+  //   } else {
+  //     SnackBarCustom.build(
+  //       message: 'Email or Password Was Wrong ',
+  //       context: navigatorKey.currentState!.context,
+  //     );
+  //     emit(LoginInitial());
+  //   }
+  // }
+
+  // await getLocalUserData();
+  // await Future.delayed(
+  //   const Duration(seconds: 2),
+  // );
+  // if (localUser!.email == email && localUser!.password == password) {
+  //   emit(
+  //     LoginSuccess(token: token, loginStep: true),
+  //   );
+  // } else {
+  //   SnackBarCustom.build(
+  //     message: 'Email or Password Was Wrong ',
+  //     context: navigatorKey.currentState!.context,
+  //   );
+  //   emit(LoginInitial());
+  // }
 }

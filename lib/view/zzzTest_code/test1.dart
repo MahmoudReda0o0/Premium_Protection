@@ -1,33 +1,58 @@
-import 'package:excp_training/utils/route/app_route.dart';
-import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
-import 'package:excp_training/view/zzzTest_code/test2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'utils_test/argument_test.dart';
+import '../../utils/android_home_page/android_home_page.dart';
 
-class Test1 extends StatelessWidget {
+class Test1 extends StatefulWidget {
   const Test1({super.key});
 
+  @override
+  State<Test1> createState() => _Test1State();
+}
+
+class _Test1State extends State<Test1> {
+  List<String> task = [];
+  TextEditingController conTask = TextEditingController();
   @override
   Widget build(BuildContext context) {
     // final Student student =
     //     ModalRoute.of(context)!.settings.arguments as Student;
     return Scaffold(
-      body: Column(
-        children: [
-          //Text('${student.name}'),
-          Center(
-            child: TextButton(
-              onPressed: () {
-                //BlocProvider.of<TaskoCubit>(context).getTestData();
-                Navigator.of(context)
-                    .pushNamed(AppRoute.test2, arguments: context);
-              },
-              child: const Text('Name : Go to Test 2'),
+      appBar: AppBar(
+        title: const Text('Tests'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: TextField(
+                controller: conTask,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    AndroidWidgetManager.saveTask(conTask.text);
+                    setState(() {
+                      task.add(conTask.text);
+                    });
+                    conTask.clear();
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        },
+      ),
+      body: ListView.builder(
+        itemCount: task.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Text(task[index]),
+          );
+        },
       ),
     );
   }
