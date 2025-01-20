@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../model/local_data/local_task_data.dart';
+import '../../model/local/local_task_data.dart';
 import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';

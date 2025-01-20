@@ -47,7 +47,7 @@ class FB_FirestoreTaskData {
           taskModelID.add(
             TaskModelID(
               id: doc.id,
-              task: TaskModel.fromFirestore(doc.data() as Map<String, dynamic>),
+              task: TaskModel.fromFirestore(doc.data()),
             ),
           );
         }

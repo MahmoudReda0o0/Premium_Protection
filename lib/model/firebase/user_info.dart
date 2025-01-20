@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../models/user_model.dart';
 import 'FB_field_name.dart';
 
 class FirebaseFireStoreUserInfoModel {
   // String userID;
 
-  final Map<String, dynamic>? userData;
+  UserModel? userData;
   String errorMessage;
   bool hasData;
 
@@ -27,12 +28,7 @@ class FirebaseFireStoreUserInfoModel {
   // }
 
   static Future<FirebaseFireStoreUserInfoModel> setUserInfo({
-    required String firstNameValue,
-    required String secondNameValue,
-    required String lastNameValue,
-    required String phoneNumberValue,
-    required String countryValue,
-    required String emailValue,
+    required UserModel userModel,
   }) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -42,14 +38,7 @@ class FirebaseFireStoreUserInfoModel {
         await FirebaseFirestore.instance
             .collection('User Info')
             .doc(user.uid)
-            .set({
-          FB.userFirstName: firstNameValue,
-          FB.userSecondName: secondNameValue,
-          FB.userLastName: lastNameValue,
-          FB.userPhoneNumber: phoneNumberValue,
-          FB.userCountry: countryValue,
-          FB.userEmail: emailValue,
-        });
+            .set(userModel.toFirebase());
 
         return FirebaseFireStoreUserInfoModel(
             errorMessage: 'Everything is OK', hasData: true);
@@ -75,7 +64,7 @@ class FirebaseFireStoreUserInfoModel {
             .doc(user.uid)
             .get();
         if (doc.exists) {
-          Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+          
           // fristName = doc.get('first name');
           // secondName = doc.get('second name');
           // lastName = doc.get('last name');
@@ -85,7 +74,7 @@ class FirebaseFireStoreUserInfoModel {
           // password = doc.get('password');
           return FirebaseFireStoreUserInfoModel(
               errorMessage: 'Everything is ok',
-              userData: userData,
+              userData: UserModel.fromFirebase(doc.data() as Map<String, dynamic>),
               hasData: true);
         }
         return FirebaseFireStoreUserInfoModel(
@@ -104,14 +93,14 @@ class FirebaseFireStoreUserInfoModel {
   }
 
   static Future<FirebaseFireStoreUserInfoModel> updateUserInfo(
-      {required Map<String, dynamic> upDatedInfo}) async {
+      {required UserModel upDatedInfo}) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await FirebaseFirestore.instance
             .collection(FB.collectionUserInfo)
             .doc(user.uid)
-            .update(upDatedInfo);
+            .update(upDatedInfo.toFirebase());
         return FirebaseFireStoreUserInfoModel(
           errorMessage: 'everything is ok',
           hasData: true,

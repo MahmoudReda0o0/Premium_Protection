@@ -2,11 +2,13 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/model/firebase/auth.dart';
+import 'package:excp_training/model/hive/hive_constant.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../../main.dart';
-import '../../../model/hive/shared_preference.dart';
-import '../../../model/local_data/local_user.dart';
+import '../../../model/local_data/shared_preference.dart';
+import '../../../model/local/local_user.dart';
 import '../../../view/widget/SnackBarCustom.dart';
 
 part 'login_state.dart';
@@ -58,8 +60,9 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginLoading());
     bool response = await FirebaseAuthModel.signOut();
     if (response == true) {
-      SharedPreferenceCustom.setSharedSetDate(
-          SharedPreferenceCustom.sharedCheckBoxKey, false);
+      Hive.box(HiveConstant.checkLoginBox).put(HiveConstant.checkBoxKey, false);
+      // SharedPreferenceCustom.setSharedSetDate(
+      //     SharedPreferenceCustom.sharedCheckBoxKey, false);
       emit(LoginInitial());
     } else {
       emit(const LoginError(errorMessage: 'Logout Error'));
@@ -67,8 +70,9 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   resetLoginState() {
-    SharedPreferenceCustom.setSharedSetDate(
-        SharedPreferenceCustom.sharedCheckBoxKey, false);
+    Hive.box(HiveConstant.checkLoginBox).put(HiveConstant.checkBoxKey, false);
+    // SharedPreferenceCustom.setSharedSetDate(
+    //     SharedPreferenceCustom.sharedCheckBoxKey, false);
     emit(LoginInitial());
   }
 

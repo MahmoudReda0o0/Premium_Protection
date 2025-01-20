@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/model/firebase/user_info.dart';
+import 'package:excp_training/model/models/user_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../main.dart';
@@ -35,14 +36,18 @@ class RegisterCubit extends Cubit<RegisterState> {
         password: password,
       );
       if (firebaseAuthModel!.userCredential != null) {
+        UserModel userModel = UserModel(
+          fristName: fristName,
+          secondName: secondName,
+          lastName: lastName,
+          phoneNumber: phoneNumber,
+          country: country,
+          email: email,
+          password: password,
+        );
         FirebaseFireStoreUserInfoModel response =
             await FirebaseFireStoreUserInfoModel.setUserInfo(
-          firstNameValue: fristName,
-          secondNameValue: secondName,
-          lastNameValue: lastName,
-          phoneNumberValue: phoneNumber,
-          countryValue: country,
-          emailValue: email,
+         userModel: userModel
         );
         if (response.hasData == true) {
           await FirebaseAuthModel.emailVerification();

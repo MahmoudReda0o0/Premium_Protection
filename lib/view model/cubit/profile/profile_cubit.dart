@@ -2,7 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/model/firebase/FB_field_name.dart';
-import 'package:excp_training/model/local_data/local_user.dart';
+import 'package:excp_training/model/local/local_user.dart';
+import 'package:excp_training/model/models/user_model.dart';
 
 import '../../../main.dart';
 import '../../../model/firebase/user_info.dart';
@@ -14,7 +15,7 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileInitial());
 
-  late Map<String, dynamic> userDate;
+  late UserModel userDate;
   // LocalUser? localUser;
 
   // setUserInfo({
@@ -47,12 +48,12 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> getUserInfo() async {
     emit(ProfileLoading());
     try {
-      final user = await FirebaseFireStoreUserInfoModel.getUserInfo();
-      if (user.userData != null) {
-        userDate = user.userData!;
+      final response = await FirebaseFireStoreUserInfoModel.getUserInfo();
+      if (response.userData != null) {
+        userDate = response.userData!;
         emit(ProfileSuccess(userInfo: userDate));
       } else {
-        emit(ProfileError(errorMessage: 'Error :${user.errorMessage}'));
+        emit(ProfileError(errorMessage: 'Error :${response.errorMessage}'));
       }
     } catch (e) {
       emit(ProfileError(errorMessage: 'Cubit Catch Error: $e'));
@@ -67,15 +68,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     required String email,
     required String phoneNumber,
     required String country,
+     required String password
   }) async {
-    Map<String, dynamic> updatedInfo = {
-      FB.userFirstName: fristName,
-      FB.userSecondName: secondName,
-      FB.userLastName: lastName,
-      FB.userPhoneNumber: phoneNumber,
-      FB.userCountry: country,
-      FB.userEmail: email,
-    };
+    UserModel updatedInfo = UserModel(
+      fristName: fristName,
+      secondName: secondName,
+      lastName: lastName,
+      email: email,
+      phoneNumber: phoneNumber,
+      country: country,
+      password: password
+    );
     try {
       emit(ProfileLoading());
       final response = await FirebaseFireStoreUserInfoModel.updateUserInfo(

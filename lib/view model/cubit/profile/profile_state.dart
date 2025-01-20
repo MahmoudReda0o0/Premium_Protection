@@ -10,7 +10,7 @@ sealed class ProfileState extends Equatable {
 final class ProfileInitial extends ProfileState {}
 
 final class ProfileSuccess extends ProfileState {
-  Map<String,dynamic> userInfo;
+  UserModel userInfo;
   ProfileSuccess({required this.userInfo});
 }
 

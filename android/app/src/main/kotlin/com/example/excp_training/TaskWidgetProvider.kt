@@ -3,6 +3,7 @@ package com.example.excp_training
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -51,24 +52,17 @@ class TaskWidgetProvider : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(TAG, "onReceive called with action: ${intent?.action}")
-        super.onReceive(context, intent)
+    super.onReceive(context, intent)
 
-        if (intent?.action == "com.example.excp_training.UPDATE_WIDGET") {
-            Log.d(TAG, "Received custom action to update widget")
-            val appWidgetManager = AppWidgetManager.getInstance(context)
-            val componentName = android.content.ComponentName(context!!, TaskWidgetProvider::class.java)
-            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+    if (intent?.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
+        Log.d("TaskWidgetProvider", "Received ACTION_APPWIDGET_UPDATE broadcast")
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val componentName = ComponentName(context!!, TaskWidgetProvider::class.java)
+        val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
 
-            Log.d(TAG, "Found widget IDs to update: ${appWidgetIds.joinToString()}")
-            for (appWidgetId in appWidgetIds) {
-                updateWidget(context, appWidgetManager, appWidgetId)
-            }
-
-            // Notify that the data changed
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_view)
-        } else {
-            Log.d(TAG, "No custom action matched for intent")
+        for (appWidgetId in appWidgetIds) {
+            updateWidget(context, appWidgetManager, appWidgetId)
         }
     }
+}
 }

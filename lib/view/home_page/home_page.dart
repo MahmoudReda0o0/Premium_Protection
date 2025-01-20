@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../utils/app_color.dart';
-import '../../utils/android_home_page/android_home_page.dart';
+import '../../utils/android_home_page/android_widget_manager.dart';
 import '../../utils/route/app_route.dart';
 import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../widget/SnackBarCustom.dart';
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
             color: AppColor.white,
           ),
           onPressed: () {
-            AndroidWidgetManager.saveTask('add task');
+           
             BlocProvider.of<TaskTypeCubit>(context).getTaskTypeList();
             Navigator.pushNamed(context, AppRoute.addNewTask);
           },

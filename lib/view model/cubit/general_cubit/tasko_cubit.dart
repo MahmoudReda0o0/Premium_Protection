@@ -6,57 +6,78 @@ import 'package:excp_training/model/firebase/task_data.dart';
 import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/utils/app_color.dart';
 import 'package:flutter/material.dart';
-import '../../../model/local_data/local_task_data.dart';
-import '../../../utils/android_home_page/android_home_page.dart';
+import '../../../model/local/local_task_data.dart';
+import '../../../utils/android_home_page/android_widget_manager.dart';
 import '../../../view/widget/SnackBarCustom.dart';
 part 'tasko_state.dart';
 
+
+// class TaskModelID {
+//   String? id;
+//   TaskModel? task;
+
+//   TaskModelID({required this.id,required this.task});
+//   // TaskModelID.fromFirebase(Map<String,dynamic> data) {
+//   //   id = data['FB.taskID'];
+//   //   task = data['task']!=null?;
+//   // }
+// }
 class TaskoCubit extends Cubit<TaskoState> {
   TaskoCubit() : super(InitialState());
 
   List<TaskModelID> allTasks = [];
   List<TaskModelID> newTasks = [];
   List<TaskModelID> completedTask = [];
+  List<String> androidTasksList = [];
 
   Future<void> getFirestoreTasks() async {
-    emit(LoadingState());
-    try {
-      final response = await FB_FirestoreTaskData.getTasksListData();
-      if (response.success! == true) {
-        allTasks = response.tasks!;
-        newTasks = [];
-        completedTask = [];
-        //await Future.delayed(const Duration(microseconds: 50));
-        for (var e in allTasks) {
-          if (e.task!.isNew == true) {
-            newTasks.add(e);
-          } else {
-            completedTask.add(e);
-          }
-        }
-        print('🥵🥵🥵  New FirestoreTask: ${newTasks.length}');
-        print('🥵🥵🥵  Completed FirestoreTask: ${completedTask.length}');
-        emit(SuccessState(
-          allTask: allTasks,
-          newTask: newTasks,
-          completedTask: completedTask,
-        ));
-      }
-    } catch (e) {
-      emit(ErrorState(errorMessage: e.toString()));
-    }
-  }
+  emit(LoadingState());
+  try {
+    final response = await FB_FirestoreTaskData.getTasksListData();
+    if (response.success! == true) {
+      allTasks = response.tasks!;
+      newTasks = [];
+      completedTask = [];
+      androidTasksList = []; // Clear the list before adding new tasks
 
-  androidWidgetUpdate() async {
-    for (var e in newTasks) {
-      await AndroidWidgetManager.saveTask(e.task!.name!);
+      for (var e in allTasks) {
+        if (e.task!.isNew == true) {
+          newTasks.add(e);
+          androidTasksList.add(e.task!.name!);
+        } else {
+          completedTask.add(e);
+        }
+      }
+
+      print('🥵🥵🥵  New FirestoreTask: ${newTasks.length}');
+      print('🥵🥵🥵  Completed FirestoreTask: ${completedTask.length}');
+
+      // Save tasks and update widget
+      print('Saving tasks and updating widget...');
+      await AndroidWidgetManager.updateAndroidWidget(androidTasksList);
+      print('Widget update completed.');
+
+      emit(SuccessState(
+        allTask: allTasks,
+        newTask: newTasks,
+        completedTask: completedTask,
+      ));
     }
-    SnackBarCustom.build(
-        context: navigatorKey.currentState!.context,
-        message: 'Your New Tasks Saved in Android Widget',
-        duration: 3,
-        messageColor: AppColor.green);
+  } catch (e) {
+    emit(ErrorState(errorMessage: e.toString()));
   }
+}
+
+  // androidWidgetUpdate() async {
+  //   for (var e in newTasks) {
+  //     await AndroidWidgetManager.saveTask(newTasks.);
+  //   }
+  //   SnackBarCustom.build(
+  //       context: navigatorKey.currentState!.context,
+  //       message: 'Your New Tasks Saved in Android Widget',
+  //       duration: 3,
+  //       messageColor: AppColor.green);
+  // }
 
   deleteTasksWithType({required String type}) async {
     emit(LoadingState());

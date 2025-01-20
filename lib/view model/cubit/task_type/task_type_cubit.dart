@@ -8,7 +8,7 @@ import 'package:excp_training/view/widget/SnackBarCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../model/local_data/local_task_data.dart';
+import '../../../model/local/local_task_data.dart';
 import '../task_item/task_item_cubit.dart';
 
 part 'task_type_state.dart';

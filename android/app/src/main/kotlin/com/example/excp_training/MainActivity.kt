@@ -2,7 +2,7 @@ package com.example.excp_training
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log // Add this import
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -17,8 +17,7 @@ class MainActivity: FlutterActivity() {
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             if (call.method == "updateWidget") {
-                //log
-                // Update your widget here
+                Log.d("MainActivity", "updateWidget method called from Flutter") // Add logging
                 updateWidget()
                 result.success(null)
             } else {
@@ -28,19 +27,20 @@ class MainActivity: FlutterActivity() {
     }
 
     private fun updateWidget() {
-        // Update widget data
         val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
         val ids = appWidgetManager.getAppWidgetIds(
             ComponentName(applicationContext, TaskWidgetProvider::class.java)
         )
-        
-        // This is crucial - it triggers onDataSetChanged() in RemoteViewsFactory
+
+        // Notify the widget that the data has changed
         appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.task_list_view)
-        
-        // Send broadcast to update widget
+
+        // Send broadcast to update the widget
         val intent = Intent(applicationContext, TaskWidgetProvider::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
         sendBroadcast(intent)
+
+        Log.d("MainActivity", "Widget update broadcast sent for IDs: ${ids.joinToString()}") // Add logging
     }
 }

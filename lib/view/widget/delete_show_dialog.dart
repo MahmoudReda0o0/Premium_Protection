@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../model/local_data/local_task_data.dart';
+import '../../model/local/local_task_data.dart';
 import '../../utils/app_color.dart';
 import '../../view model/cubit/general_cubit/tasko_cubit.dart';
 import '../../view model/cubit/task_item/task_item_cubit.dart';

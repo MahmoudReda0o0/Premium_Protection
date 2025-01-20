@@ -8,7 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../utils/app_color.dart';
-import '../../model/local_data/local_task_data.dart';
+import '../../model/local/local_task_data.dart';
 import '../../utils/route/app_route.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';

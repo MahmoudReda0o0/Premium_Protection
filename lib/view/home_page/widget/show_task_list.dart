@@ -7,7 +7,7 @@ import 'package:excp_training/view/widget/error_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../model/local_data/local_task_data.dart';
+import '../../../model/local/local_task_data.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/route/app_route.dart';
 import '../../../view model/cubit/general_cubit/tasko_cubit.dart';

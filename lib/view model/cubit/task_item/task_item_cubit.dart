@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/main.dart';
 import 'package:excp_training/model/firebase/task_data.dart';
-import 'package:excp_training/model/local_data/local_task_data.dart';
+import 'package:excp_training/model/local/local_task_data.dart';
 import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/view/widget/SnackBarCustom.dart';
 import 'package:flutter/material.dart';

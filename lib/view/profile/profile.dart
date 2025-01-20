@@ -63,17 +63,16 @@ class Profile extends StatelessWidget {
                 ShowDateListTile(
                   listTileTitle: 'Name ',
                   text:
-                      '${state.userInfo[FB.userFirstName]} ${state.userInfo[FB.userSecondName]} ${state.userInfo[FB.userLastName]}',
+                      '${state.userInfo.fristName} ${state.userInfo.secondName} ${state.userInfo.lastName}',
                 ),
                 ShowDateListTile(
-                    listTileTitle: 'Email ',
-                    text: state.userInfo[FB.userEmail]),
+                    listTileTitle: 'Email ', text: state.userInfo.email!),
                 ShowDateListTile(
                     listTileTitle: 'Phone num ',
-                    text: state.userInfo[FB.userPhoneNumber]),
+                    text: state.userInfo.phoneNumber!),
                 ShowDateListTile(
                     listTileTitle: 'Country ',
-                    text: state.userInfo[FB.userCountry]),
+                    text: state.userInfo.country!),
                 // ShowDateListTile(
                 //     listTileTitle: 'password ', text: state.userInfo[FBCollectionName.userPassword]),
               ],

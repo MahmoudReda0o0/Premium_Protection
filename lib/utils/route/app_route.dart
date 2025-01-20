@@ -16,9 +16,9 @@ import 'package:excp_training/view/tasks/task_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../view/zzzTest_code/home_test.dart';
-import '../../view/zzzTest_code/test1.dart';
-import '../../view/zzzTest_code/test2.dart';
+import '../../view/zzzTest_code/test_screen/home_test.dart';
+import '../../view/zzzTest_code/test_screen/test1.dart';
+import '../../view/zzzTest_code/test_screen/test2.dart';
 
 class AppRoute {
   static const String introPageView = '/',

@@ -1,4 +1,4 @@
-import 'package:excp_training/model/local_data/local_user.dart';
+import 'package:excp_training/model/local/local_user.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../model/firebase/FB_field_name.dart';
 import '../../utils/app_color.dart';
-import '../../model/local_data/local_task_data.dart';
+import '../../model/local/local_task_data.dart';
 import '../widget/LoadingPage.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/error_page.dart';
@@ -28,9 +28,11 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController conFristName;
   late TextEditingController conSecondName;
   late TextEditingController conLastName;
-  late TextEditingController conEmail;
+  // late TextEditingController conEmail;
   late TextEditingController conphoneNum;
   late TextEditingController conCountry;
+  late String email;
+  late String password;
 
   @override
   void initState() {
@@ -38,32 +40,35 @@ class _EditProfileState extends State<EditProfile> {
     // LocalUser? localUser = BlocProvider.of<ProfileCubit>(context).userDate;
     final cubitCurrentState = BlocProvider.of<ProfileCubit>(context).state;
     if (cubitCurrentState is ProfileSuccess) {
-      conFristName = TextEditingController(
-          text: cubitCurrentState.userInfo[FB.userFirstName]);
-      conSecondName = TextEditingController(
-          text: cubitCurrentState.userInfo[FB.userSecondName]);
-      conLastName = TextEditingController(
-          text: cubitCurrentState.userInfo[FB.userLastName]);
-      conEmail =
-          TextEditingController(text: cubitCurrentState.userInfo[FB.userEmail]);
-      conphoneNum = TextEditingController(
-          text: cubitCurrentState.userInfo[FB.userPhoneNumber]);
-      conCountry = TextEditingController(
-          text: cubitCurrentState.userInfo[FB.userCountry]);
+      conFristName =
+          TextEditingController(text: cubitCurrentState.userInfo.fristName);
+      conSecondName =
+          TextEditingController(text: cubitCurrentState.userInfo.secondName);
+      conLastName =
+          TextEditingController(text: cubitCurrentState.userInfo.lastName);
+      // conEmail =
+      //     TextEditingController(text: cubitCurrentState.userInfo.lastName);
+      conphoneNum =
+          TextEditingController(text: cubitCurrentState.userInfo.phoneNumber);
+      conCountry =
+          TextEditingController(text: cubitCurrentState.userInfo.country);
+      email = cubitCurrentState.userInfo.email!;
+      password = cubitCurrentState.userInfo.password!;
     } else {
       conFristName = TextEditingController(text: 'no data');
       conSecondName = TextEditingController(text: 'no data');
       conLastName = TextEditingController(text: 'no data');
-      conEmail = TextEditingController(text: 'no data');
+      //conEmail = TextEditingController(text: 'no data');
       conphoneNum = TextEditingController(text: 'no data');
       conCountry = TextEditingController(text: 'no data');
+      
     }
   }
 
   @override
   void dispose() {
     conCountry.dispose();
-    conEmail.dispose();
+    //conEmail.dispose();
     conFristName.dispose();
     conLastName.dispose();
     conSecondName.dispose();
@@ -163,7 +168,8 @@ class _EditProfileState extends State<EditProfile> {
                           lastName: conLastName.text,
                           phoneNumber: conphoneNum.text,
                           country: conCountry.text,
-                          email: conEmail.text,
+                          email: email,
+                          password: password,
                         );
                         Navigator.pop(context);
                         // BlocProvider.of<TaskoCubit>(context)

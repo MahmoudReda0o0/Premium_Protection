@@ -1,4 +1,5 @@
 //import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
+import 'package:excp_training/model/hive/hive_constant.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/login_cubit/login_cubit.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
@@ -6,9 +7,9 @@ import 'package:excp_training/view/widget/LoadingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../model/hive/shared_preference.dart';
+import '../../model/local_data/shared_preference.dart';
 import '../../utils/app_color.dart';
 
 import '../../utils/route/app_route.dart';
@@ -108,6 +109,7 @@ class _LoginState extends State<Login> {
   }
 
   Scaffold loginBuild(BuildContext context, bool activeKeyBoard) {
+    var hiveCheckLogin = Hive.box(HiveConstant.checkLoginBox);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.white,
@@ -193,19 +195,25 @@ class _LoginState extends State<Login> {
                               BlocProvider.of<LoginCubit>(context).state;
                           if (cubitState is LoginSuccess) {
                             if (checkBoxValue == true) {
-                              SharedPreferenceCustom.setSharedSetDate(
-                                  SharedPreferenceCustom.sharedCheckBoxKey,
-                                  checkBoxValue);
-                              SharedPreferenceCustom.setSharedSetDate(
-                                  SharedPreferenceCustom.sharedEmileKey,
-                                  conEmail.text);
-                              SharedPreferenceCustom.setSharedSetDate(
-                                  SharedPreferenceCustom.sharedPasswordKey,
-                                  conPassword.text);
+                              hiveCheckLogin.putAll({
+                                HiveConstant.checkBoxKey: true,
+                                HiveConstant.emailKey: conEmail.text,
+                                HiveConstant.passwordKey: conPassword.text
+                              });
+                              // SharedPreferenceCustom.setSharedSetDate(
+                              //     SharedPreferenceCustom.sharedCheckBoxKey,
+                              //     checkBoxValue);
+                              // SharedPreferenceCustom.setSharedSetDate(
+                              //     SharedPreferenceCustom.sharedEmileKey,
+                              //     conEmail.text);
+                              // SharedPreferenceCustom.setSharedSetDate(
+                              //     SharedPreferenceCustom.sharedPasswordKey,
+                              //     conPassword.text);
                             }
                             BlocProvider.of<TaskoCubit>(context)
                                 .getFirestoreTasks();
-                            Navigator.pushReplacementNamed(context, AppRoute.homePage);
+                            Navigator.pushReplacementNamed(
+                                context, AppRoute.homePage);
                           } else {
                             SnackBarCustom.build(
                                 message: 'state: $cubitState ',
@@ -244,7 +252,8 @@ class _LoginState extends State<Login> {
                     fristText: 'Don\'t have an account ?',
                     secondText: '  Register Now',
                     action: () {
-                      BlocProvider.of<RegisterCubit>(context).resetRegisterState();
+                      BlocProvider.of<RegisterCubit>(context)
+                          .resetRegisterState();
                       Navigator.pushNamed(context, AppRoute.register);
                     }),
               ],

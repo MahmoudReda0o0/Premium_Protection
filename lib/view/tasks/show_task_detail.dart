@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../model/local_data/local_task_data.dart';
+import '../../model/local/local_task_data.dart';
 import '../../utils/constants.dart';
 import '../../utils/route/app_route.dart';
 import '../widget/LoadingPage.dart';

@@ -1,11 +1,7 @@
-import 'package:excp_training/view/intro_pageview/widget/intro_frist_page.dart';
-import 'package:excp_training/view/intro_pageview/widget/intro_second_page.dart';
-import 'package:excp_training/view/intro_pageview/widget/intro_theird_page.dart';
+import 'package:excp_training/model/hive/hive_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../model/hive/shared_preference.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../utils/app_color.dart';
 import '../../utils/route/app_route.dart';
 import '../../view model/cubit/general_cubit/tasko_cubit.dart';
@@ -43,19 +39,20 @@ class _IntroPageWiewState extends State<IntroPageWiew>
     ),
   ];
 
-  bool? sharedPrefValue;
+  bool? checkBoxValue;
   String? getSharedEmailValue;
   String? getSharedPasswordValue;
 
   sharedNavigate() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    sharedPrefValue = pref.getBool(SharedPreferenceCustom.sharedCheckBoxKey);
+    var hiveBox = Hive.box(HiveConstant.checkLoginBox);
+    //SharedPreferences pref = await SharedPreferences.getInstance();
+    checkBoxValue = hiveBox.get(HiveConstant.checkBoxKey);
     setState(() {});
-    if (sharedPrefValue == true) {
+    if (checkBoxValue == true) {
       getSharedEmailValue =
-          pref.getString(SharedPreferenceCustom.sharedEmileKey);
+           hiveBox.get(HiveConstant.emailKey);
       getSharedPasswordValue =
-          pref.getString(SharedPreferenceCustom.sharedPasswordKey);
+           hiveBox.get(HiveConstant.passwordKey);
       BlocProvider.of<LoginCubit>(context).setEmailAndPassword(
           emailValue: getSharedEmailValue!,
           passwordValue: getSharedPasswordValue!);
@@ -72,7 +69,7 @@ class _IntroPageWiewState extends State<IntroPageWiew>
     }
   }
 
-  @override 
+  @override
   void initState() {
     super.initState();
     sharedNavigate();
@@ -83,7 +80,7 @@ class _IntroPageWiewState extends State<IntroPageWiew>
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         if (state is LoginInitial) {
-          return _pageBuild(context,pageController,pages);
+          return _pageBuild(context, pageController, pages);
         } else if (state is LoginSuccess) {
           return const Scaffold(
             backgroundColor: AppColor.buttonColor,
@@ -103,21 +100,20 @@ class _IntroPageWiewState extends State<IntroPageWiew>
       },
     );
   }
-  }
+}
 
-  Scaffold _pageBuild(BuildContext context,PageController pageController,List<Widget> pages) {
-    return Scaffold(
+Scaffold _pageBuild(
+    BuildContext context, PageController pageController, List<Widget> pages) {
+  return Scaffold(
     floatingActionButton: FloatingActionButton(onPressed: () {
       print('🥵 ${pageController.page}');
       if (pageController.page == 2.0) {
         Navigator.pushReplacementNamed(context, AppRoute.login);
       } else {
         pageController.nextPage(
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.linear);
+            duration: const Duration(milliseconds: 500), curve: Curves.linear);
       }
     }),
     body: PageView(controller: pageController, children: pages),
   );
-  }
-
+}
