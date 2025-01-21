@@ -3,14 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/main.dart';
 import 'package:excp_training/model/firebase/task_data.dart';
+import 'package:excp_training/model/hive/hive_fun.dart';
 import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/utils/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import '../../../model/hive/hive_constant.dart';
 import '../../../model/local/local_task_data.dart';
 import '../../../utils/android_home_page/android_widget_manager.dart';
 import '../../../view/widget/SnackBarCustom.dart';
 part 'tasko_state.dart';
-
 
 // class TaskModelID {
 //   String? id;
@@ -31,42 +33,41 @@ class TaskoCubit extends Cubit<TaskoState> {
   List<String> androidTasksList = [];
 
   Future<void> getFirestoreTasks() async {
-  emit(LoadingState());
-  try {
-    final response = await FB_FirestoreTaskData.getTasksListData();
-    if (response.success! == true) {
-      allTasks = response.tasks!;
-      newTasks = [];
-      completedTask = [];
-      androidTasksList = []; // Clear the list before adding new tasks
-
-      for (var e in allTasks) {
-        if (e.task!.isNew == true) {
-          newTasks.add(e);
-          androidTasksList.add(e.task!.name!);
-        } else {
-          completedTask.add(e);
+    emit(LoadingState());
+    try {
+      final response = await FB_FirestoreTaskData.getTasksListData();
+      if (response.success! == true) {
+        allTasks = response.tasks!;
+        newTasks = [];
+        completedTask = [];
+        androidTasksList = []; // Clear the list before adding new tasks
+        for (var e in allTasks) {
+          if (e.task!.isNew == true) {
+            newTasks.add(e);
+            androidTasksList.add(e.task!.name!);
+          } else {
+            completedTask.add(e);
+          }
         }
+
+        print('🥵🥵🥵  New FirestoreTask: ${newTasks.length}');
+        print('🥵🥵🥵  Completed FirestoreTask: ${completedTask.length}');
+
+        // Save tasks and update widget
+        print('Saving tasks and updating widget...');
+        await AndroidWidgetManager.updateAndroidWidget(androidTasksList);
+        print('Widget update completed.');
+        await HiveFun.setTaskModelList(allTasks);
+        emit(SuccessState(
+          allTask: allTasks,
+          newTask: newTasks,
+          completedTask: completedTask,
+        ));
       }
-
-      print('🥵🥵🥵  New FirestoreTask: ${newTasks.length}');
-      print('🥵🥵🥵  Completed FirestoreTask: ${completedTask.length}');
-
-      // Save tasks and update widget
-      print('Saving tasks and updating widget...');
-      await AndroidWidgetManager.updateAndroidWidget(androidTasksList);
-      print('Widget update completed.');
-
-      emit(SuccessState(
-        allTask: allTasks,
-        newTask: newTasks,
-        completedTask: completedTask,
-      ));
+    } catch (e) {
+      emit(ErrorState(errorMessage: e.toString()));
     }
-  } catch (e) {
-    emit(ErrorState(errorMessage: e.toString()));
   }
-}
 
   // androidWidgetUpdate() async {
   //   for (var e in newTasks) {
@@ -98,6 +99,7 @@ class TaskoCubit extends Cubit<TaskoState> {
               message:
                   'Error with task id: ${e.task!.name} :: Task is not completed yet',
             );
+            await HiveFun.setTaskModelList(allTasks);
             emit(SuccessState(
                 allTask: allTasks,
                 newTask: newTasks,
@@ -110,6 +112,7 @@ class TaskoCubit extends Cubit<TaskoState> {
         }
       }
       if (unMatchType) {
+        await HiveFun.setTaskModelList(allTasks);
         emit(SuccessState(
           allTask: allTasks,
           newTask: newTasks,
@@ -118,6 +121,7 @@ class TaskoCubit extends Cubit<TaskoState> {
         ));
       }
       if (finishedTaskBool) {
+        
         bool errorOccurred = false;
         for (var e in finishedTaskId) {
           final response = await FB_FirestoreTaskData.deleteTask(taskId: e);
@@ -141,6 +145,7 @@ class TaskoCubit extends Cubit<TaskoState> {
             duration: 3,
             // messageColor: AppColor.red
           );
+          await HiveFun.setTaskModelList(allTasks);
           emit(SuccessState(
               allTask: allTasks,
               newTask: newTasks,
@@ -148,6 +153,7 @@ class TaskoCubit extends Cubit<TaskoState> {
               deleteTaskWithType: true));
         }
       } else {
+        await HiveFun.setTaskModelList(allTasks);
         emit(SuccessState(
             allTask: allTasks,
             newTask: newTasks,
@@ -169,6 +175,8 @@ class TaskoCubit extends Cubit<TaskoState> {
     } else {
       try {
         emit(LoadingState());
+        newTasks = [];
+        completedTask = [];
         for (var e in allTasks) {
           if (e.task!.isNew == true) {
             newTasks.add(e);

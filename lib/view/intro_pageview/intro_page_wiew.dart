@@ -44,15 +44,13 @@ class _IntroPageWiewState extends State<IntroPageWiew>
   String? getSharedPasswordValue;
 
   sharedNavigate() async {
-    var hiveBox = Hive.box(HiveConstant.checkLoginBox);
+    var hiveBox = Hive.box(HiveConstant.boxCheckLogin);
     //SharedPreferences pref = await SharedPreferences.getInstance();
-    checkBoxValue = hiveBox.get(HiveConstant.checkBoxKey);
+    checkBoxValue = hiveBox.get(HiveConstant.keyCheckBox);
     setState(() {});
     if (checkBoxValue == true) {
-      getSharedEmailValue =
-           hiveBox.get(HiveConstant.emailKey);
-      getSharedPasswordValue =
-           hiveBox.get(HiveConstant.passwordKey);
+      getSharedEmailValue = hiveBox.get(HiveConstant.keyEmail);
+      getSharedPasswordValue = hiveBox.get(HiveConstant.keyPassword);
       BlocProvider.of<LoginCubit>(context).setEmailAndPassword(
           emailValue: getSharedEmailValue!,
           passwordValue: getSharedPasswordValue!);

@@ -43,7 +43,7 @@ class FB_FirestoreTaskType {
           final fristDoc = collectionGet.docs.first.id;
           await collectionRef
               .doc(fristDoc)
-              .update(TypeModel(typeList).toFirestore());
+              .update(TypeModel(addedList: typeList).toFirestore());
           return FB_FirestoreTaskType(
               success: true,
               message: 'everything is ok',
@@ -114,7 +114,7 @@ class FB_FirestoreTaskType {
         final collectionGet = await collectionRef.get();
         await collectionRef
             .doc(collectionGet.docs.first.id)
-            .update(TypeModel(updatedTypeList).toFirestore());
+            .update(TypeModel(addedList: updatedTypeList).toFirestore());
        
         return FB_FirestoreTaskType(
             success: true, message: 'everything is ok', addedTypeList: []);

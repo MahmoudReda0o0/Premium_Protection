@@ -12,6 +12,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'model/hive/adapter/task_adapter.dart';
+import 'model/hive/adapter/task_list_adapter.dart';
+import 'model/hive/adapter/type_list_adapter.dart';
+import 'model/hive/adapter/user_info_adapter.dart';
 import 'view model/cubit/general_cubit/tasko_cubit.dart';
 import 'view/widget/themeData.dart';
 
@@ -32,9 +36,15 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await Hive.initFlutter();
+    // Hive.registerAdapter(HiveLocalDataAdapter());
+    Hive.registerAdapter(UserInfoAdapter()); // id => 1
+    Hive.registerAdapter(TypeListAdapter()); // id => 2
+    Hive.registerAdapter(TaskModelListAdapter()); // id => 3
+    Hive.registerAdapter(TaskModelAdapter()); // id => 4
     await Future.wait([
-      Hive.openBox(HiveConstant.checkLoginBox),
-      Hive.openBox(HiveConstant.androidWidgetBox),
+      Hive.openBox(HiveConstant.boxCheckLogin),
+      Hive.openBox(HiveConstant.boxAndroidWidget),
+      Hive.openBox(HiveConstant.boxlocalData),
     ]);
 
     runApp(const MyApp());
@@ -49,9 +59,41 @@ Future<void> main() async {
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>with WidgetsBindingObserver {
+   @override
+  void initState() {
+    super.initState();
+    // Add the observer to listen for app lifecycle events
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    // Remove the observer when the app is disposed
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    // Handle app lifecycle changes
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      // Close the Hive box when the app is paused or closed
+      await Hive.box(HiveConstant.boxlocalData).close();
+      await Hive.box(HiveConstant.boxCheckLogin).close();
+      await Hive.box(HiveConstant.boxAndroidWidget).close();
+      print('Hive box closed');
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

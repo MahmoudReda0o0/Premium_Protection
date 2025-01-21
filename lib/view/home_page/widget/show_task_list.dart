@@ -47,7 +47,15 @@ class _TaskListState extends State<TaskList> {
         return _buildScreen(context, taskList);
       } else if (state is LoadingState) {
         return const LoadingPage();
-      } else {
+      }else if (state is ErrorState) {
+        return ErrorPage(
+          errorMessage: state.errorMessage,
+          onTap: () {
+            Navigator.pop(context);
+          },
+        );
+      } 
+      else {
         return ErrorPage(
           errorMessage: 'Something went wrong State : $state',
         );

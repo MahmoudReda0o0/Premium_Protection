@@ -3,6 +3,7 @@ import 'package:excp_training/view/profile/change_password.dart';
 import 'package:excp_training/view/tasks/add_new_task.dart';
 import 'package:excp_training/view/tasks/task_type.dart';
 import 'package:excp_training/view/widget/LoadingPage.dart';
+import 'package:excp_training/view/zzzTest_code/test_screen/test2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -43,7 +44,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('Home Page'),
+          title: InkWell(
+            child: const Text('Home Page'),
+            onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const Test2()));},
+          ),
           centerTitle: true,
           actions: const [
             Text('Sort '),
@@ -62,7 +66,6 @@ class _HomePageState extends State<HomePage> {
             color: AppColor.white,
           ),
           onPressed: () {
-           
             BlocProvider.of<TaskTypeCubit>(context).getTaskTypeList();
             Navigator.pushNamed(context, AppRoute.addNewTask);
           },

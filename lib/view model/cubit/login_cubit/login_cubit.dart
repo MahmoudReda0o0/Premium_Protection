@@ -60,7 +60,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginLoading());
     bool response = await FirebaseAuthModel.signOut();
     if (response == true) {
-      Hive.box(HiveConstant.checkLoginBox).put(HiveConstant.checkBoxKey, false);
+      Hive.box(HiveConstant.boxCheckLogin).put(HiveConstant.keyCheckBox, false);
       // SharedPreferenceCustom.setSharedSetDate(
       //     SharedPreferenceCustom.sharedCheckBoxKey, false);
       emit(LoginInitial());
@@ -70,7 +70,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   resetLoginState() {
-    Hive.box(HiveConstant.checkLoginBox).put(HiveConstant.checkBoxKey, false);
+    Hive.box(HiveConstant.boxCheckLogin).put(HiveConstant.keyCheckBox, false);
     // SharedPreferenceCustom.setSharedSetDate(
     //     SharedPreferenceCustom.sharedCheckBoxKey, false);
     emit(LoginInitial());

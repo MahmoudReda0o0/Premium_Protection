@@ -109,7 +109,7 @@ class _LoginState extends State<Login> {
   }
 
   Scaffold loginBuild(BuildContext context, bool activeKeyBoard) {
-    var hiveCheckLogin = Hive.box(HiveConstant.checkLoginBox);
+    var hiveCheckLogin = Hive.box(HiveConstant.boxCheckLogin);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.white,
@@ -196,9 +196,9 @@ class _LoginState extends State<Login> {
                           if (cubitState is LoginSuccess) {
                             if (checkBoxValue == true) {
                               hiveCheckLogin.putAll({
-                                HiveConstant.checkBoxKey: true,
-                                HiveConstant.emailKey: conEmail.text,
-                                HiveConstant.passwordKey: conPassword.text
+                                HiveConstant.keyCheckBox: true,
+                                HiveConstant.keyEmail: conEmail.text,
+                                HiveConstant.keyPassword: conPassword.text
                               });
                               // SharedPreferenceCustom.setSharedSetDate(
                               //     SharedPreferenceCustom.sharedCheckBoxKey,

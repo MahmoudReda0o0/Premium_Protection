@@ -2,8 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/model/firebase/FB_field_name.dart';
+import 'package:excp_training/model/hive/hive_constant.dart';
+import 'package:excp_training/model/hive/hive_fun.dart';
 import 'package:excp_training/model/local/local_user.dart';
 import 'package:excp_training/model/models/user_model.dart';
+import 'package:hive/hive.dart';
 
 import '../../../main.dart';
 import '../../../model/firebase/user_info.dart';
@@ -16,34 +19,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileInitial());
 
   late UserModel userDate;
-  // LocalUser? localUser;
-
-  // setUserInfo({
-
-  //   required String fristName,
-  //   required String secondName,
-  //   required String lastName,
-  //   required String phoneNumber,
-  //   required String country,
-  //   required String email,
-  //   //required String password,
-  // }) async {
-  //   emit(ProfileLoading());
-  //   try {
-  //     await FirebaseFireStoreUserInfoModel.setUserInfo(
-  //       fristNameValue: fristName,
-  //       secondNameValue: secondName,
-  //       lastNameValue: lastName,
-  //       phoneNumberValue: phoneNumber,
-  //       countryValue: country,
-  //       emailValue: email,
-  //     ); // passwordValue: password;
-  //     emit(ProfileInitial());
-  //   } catch (e) {
-  //     emit(ProfileError(errorMessage: 'Cubit Catch Error: $e'));
-  //     print('👌👌👌👌cubit catch error $e');
-  //   }
-  // }
 
   Future<void> getUserInfo() async {
     emit(ProfileLoading());
@@ -51,6 +26,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       final response = await FirebaseFireStoreUserInfoModel.getUserInfo();
       if (response.userData != null) {
         userDate = response.userData!;
+        await HiveFun.putUserInfo(userDate);
         emit(ProfileSuccess(userInfo: userDate));
       } else {
         emit(ProfileError(errorMessage: 'Error :${response.errorMessage}'));
@@ -61,29 +37,29 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  updateUserinfo({
-    required String fristName,
-    required String secondName,
-    required String lastName,
-    required String email,
-    required String phoneNumber,
-    required String country,
-     required String password
-  }) async {
+  updateUserinfo(
+      {required String fristName,
+      required String secondName,
+      required String lastName,
+      required String email,
+      required String phoneNumber,
+      required String country,
+      required String password}) async {
     UserModel updatedInfo = UserModel(
-      fristName: fristName,
-      secondName: secondName,
-      lastName: lastName,
-      email: email,
-      phoneNumber: phoneNumber,
-      country: country,
-      password: password
-    );
+        fristName: fristName,
+        secondName: secondName,
+        lastName: lastName,
+        email: email,
+        phoneNumber: phoneNumber,
+        country: country,
+        password: password);
     try {
       emit(ProfileLoading());
       final response = await FirebaseFireStoreUserInfoModel.updateUserInfo(
           upDatedInfo: updatedInfo);
       if (response.hasData == true) {
+        await Hive.box(HiveConstant.boxlocalData)
+            .put(HiveConstant.keyUserInfo, updatedInfo);
         emit(ProfileUpdateSuccess());
         await Future.delayed(const Duration(milliseconds: 1500));
         getUserInfo();

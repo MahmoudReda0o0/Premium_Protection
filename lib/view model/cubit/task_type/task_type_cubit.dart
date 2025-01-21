@@ -2,11 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/main.dart';
 import 'package:excp_training/model/firebase/task_type.dart';
+import 'package:excp_training/model/hive/hive_constant.dart';
+import 'package:excp_training/model/hive/hive_fun.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view/tasks/add_new_task.dart';
 import 'package:excp_training/view/widget/SnackBarCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 
 import '../../../model/local/local_task_data.dart';
 import '../task_item/task_item_cubit.dart';
@@ -34,10 +37,11 @@ class TaskTypeCubit extends Cubit<TaskTypeState> {
   addNewType({required String newTaskType}) async {
     emit(TaskTypeLoading());
     addedTypeList.add(newTaskType);
-    allTypeList = [...allTypeList,...addedTypeList ];
+    allTypeList = [...allTypeList, ...addedTypeList];
     final response =
         await FB_FirestoreTaskType.addTypeList(typeList: addedTypeList);
     if (response.success! == true) {
+      await HiveFun.putTypeInfo(addedTypeList);
       emit(TaskTypeSuccess(
           fixedTaskTypeList: fixedTypeList,
           addedTaskTypeList: addedTypeList,
@@ -45,7 +49,6 @@ class TaskTypeCubit extends Cubit<TaskTypeState> {
     } else {
       emit(TaskTypeError(errorMessage: response.message!));
     }
-   
   }
 
   getTaskTypeList() async {
@@ -58,6 +61,7 @@ class TaskTypeCubit extends Cubit<TaskTypeState> {
       if (response.success! == true) {
         addedTypeList = response.addedTypeList!;
         allTypeList = [...fixedTypeList, ...addedTypeList];
+       await HiveFun.putTypeInfo(addedTypeList);
         emit(
           TaskTypeSuccess(
             fixedTaskTypeList: fixedTypeList,
@@ -81,6 +85,9 @@ class TaskTypeCubit extends Cubit<TaskTypeState> {
       final response = await FB_FirestoreTaskType.updateTypeList(
           updatedTypeList: addedTypeList);
       if (response.success! == true) {
+        await HiveFun.putTypeInfo(addedTypeList);
+        await Hive.box(HiveConstant.boxlocalData)
+            .put(HiveConstant.keyTypeList, addedTypeList);
         emit(TaskTypeSuccess(
             fixedTaskTypeList: fixedTypeList,
             addedTaskTypeList: addedTypeList,
@@ -181,21 +188,20 @@ class TaskTypeCubit extends Cubit<TaskTypeState> {
   //           context: navigatorKey.currentContext!);
   //     }
   //   }
-    // openTaskType() {
-    //   getTaskTypeList();
-    //   print('👾👿😈${addedTaskType}');
-    //   emit(TaskTypeState(
-    //     fixedTaskType: fixedTaskType!,
-    //     addedTaskType: addedTaskType!,
-    //   ));
-    // }
+  // openTaskType() {
+  //   getTaskTypeList();
+  //   print('👾👿😈${addedTaskType}');
+  //   emit(TaskTypeState(
+  //     fixedTaskType: fixedTaskType!,
+  //     addedTaskType: addedTaskType!,
+  //   ));
+  // }
 
-    // addNewTaskType(String newTaskType) {
-    //   emit(LoadingState());
-    //   LocalTask.addNewTaskType(newTaskType);
-    //   Future.delayed(const Duration(seconds: 1));
-    //   openTaskType();
-    // }
-    // }
-  }
-
+  // addNewTaskType(String newTaskType) {
+  //   emit(LoadingState());
+  //   LocalTask.addNewTaskType(newTaskType);
+  //   Future.delayed(const Duration(seconds: 1));
+  //   openTaskType();
+  // }
+  // }
+}

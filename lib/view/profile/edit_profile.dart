@@ -32,7 +32,7 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController conphoneNum;
   late TextEditingController conCountry;
   late String email;
-  late String password;
+  // late String password;
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _EditProfileState extends State<EditProfile> {
       conCountry =
           TextEditingController(text: cubitCurrentState.userInfo.country);
       email = cubitCurrentState.userInfo.email!;
-      password = cubitCurrentState.userInfo.password!;
+      // password = cubitCurrentState.userInfo.password!;
     } else {
       conFristName = TextEditingController(text: 'no data');
       conSecondName = TextEditingController(text: 'no data');
@@ -169,7 +169,7 @@ class _EditProfileState extends State<EditProfile> {
                           phoneNumber: conphoneNum.text,
                           country: conCountry.text,
                           email: email,
-                          password: password,
+                          password: 'password',
                         );
                         Navigator.pop(context);
                         // BlocProvider.of<TaskoCubit>(context)
