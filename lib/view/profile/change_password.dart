@@ -1,14 +1,17 @@
+import 'package:excp_training/view%20model/cubit/Internet_checker/internet_checker_cubit.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
+import 'package:excp_training/view/widget/page_error_state.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:excp_training/view/widget/text_form_password_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 
 import '../../utils/app_color.dart';
-import '../../model/local/local_task_data.dart';
+import '../../model/x/local_task_data.dart';
 import '../../utils/route/app_route.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
@@ -42,6 +45,23 @@ class _EditPasswordState extends State<EditPassword> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<InternetCheckerCubit, InternetCheckerState>(
+      builder: (context, state) {
+        if (state.isConnected) {
+          return _buildScreen(context);
+        } else {
+          return PageError(
+            errorMessage: 'Lost Connection',
+            onTap: () {
+              Navigator.pop(context);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Scaffold _buildScreen(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -79,10 +99,11 @@ class _EditPasswordState extends State<EditPassword> {
                     formKey: formKey,
                     onValidate: () {
                       SnackBarCustom.build(
-                          message: 'Page Under Development \n Change password with your email',
+                          message:
+                              'Page Under Development \n Change password with your email',
                           duration: 5,
                           context: context);
-                          Navigator.pushNamed(context, AppRoute.forgetPassword);
+                      Navigator.pushNamed(context, AppRoute.forgetPassword);
                       // BlocProvider.of<ProfileCubit>(context).editPassword(
                       //   oldPassword: conOldPassword.text,
                       //   newPassword: conNewPassword.text,

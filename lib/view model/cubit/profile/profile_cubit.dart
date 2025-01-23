@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:excp_training/model/firebase/FB_field_name.dart';
 import 'package:excp_training/model/hive/hive_constant.dart';
 import 'package:excp_training/model/hive/hive_fun.dart';
-import 'package:excp_training/model/local/local_user.dart';
+import 'package:excp_training/model/x/local_user.dart';
 import 'package:excp_training/model/models/user_model.dart';
 import 'package:hive/hive.dart';
 

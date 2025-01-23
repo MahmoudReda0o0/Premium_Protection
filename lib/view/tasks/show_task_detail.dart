@@ -1,24 +1,29 @@
+import 'package:excp_training/model/hive/hive_fun.dart';
+import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/utils/app_color.dart';
+import 'package:excp_training/view%20model/cubit/Internet_checker/internet_checker_cubit.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/task_item/task_item_cubit.dart';
+import 'package:excp_training/view/tasks/widget/offline_task_detail.dart';
 
 //import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
-import 'package:excp_training/view/widget/error_page.dart';
+import 'package:excp_training/view/widget/page_error_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../model/local/local_task_data.dart';
+import '../../model/x/local_task_data.dart';
 import '../../utils/constants.dart';
 import '../../utils/route/app_route.dart';
-import '../widget/LoadingPage.dart';
+import '../widget/page_loading_state.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/button_custom.dart';
 
 import '../widget/delete_show_dialog.dart';
 import '../widget/show_date_listTile.dart';
 import 'edit_task_detail.dart';
+import 'widget/text_isCompleted.dart';
 
 class ShowTaskDetail extends StatefulWidget {
   const ShowTaskDetail({super.key});
@@ -47,19 +52,39 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskItemCubit, TaskItemState>(builder: (context, state) {
-      if (state is TaskItemSuccess) {
-        return showTaskDetailBuild(context, state);
-      } else if (state is TaskItemLoading) {
-        return const LoadingPage();
+    return BlocBuilder<InternetCheckerCubit, InternetCheckerState>(
+        builder: (context, internetState) {
+      if (internetState.isConnected) {
+        return BlocBuilder<TaskItemCubit, TaskItemState>(
+          builder: (context, taskState) {
+            if (taskState is TaskItemSuccess) {
+              return showTaskDetailBuild(context, taskState);
+            } else if (taskState is TaskItemLoading) {
+              return const PageLoading();
+            }else if(taskState is TaskItemError){
+              return PageError(
+                errorMessage: taskState.errorMessage,
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              );
+            } 
+            else {
+              return PageError(
+                errorMessage: taskState.toString(),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              );
+            }
+          },
+        );
       } else {
-        return ErrorPage(
-            errorMessage: state.toString(),
-            onTap: () {
-              Navigator.pop(context);
-            });
+       TaskModel taskModel = HiveFun.getTaskModel();  // Hive Put Local Task Model
+        return OfflineTaskDetail(taskModel: taskModel,);
       }
     });
   }
@@ -125,7 +150,7 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                   listTileTitle: 'Date',
                   text: state.selectedTask.task!.dateAndTime!,
                 ),
-                isCompletedTask(state),
+                TextIscompleted(isCompleted: state.selectedTask.task!.isNew!),
                 const Gap(10),
               ],
             ),
@@ -181,9 +206,10 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
                   width: 120),
               ButtonCustom.build(
                   buttonColor: AppColor.green,
-                  onPressed: () async{
+                  onPressed: () async {
                     //selectedTask.isNew = false;
-                    await BlocProvider.of<TaskItemCubit>(context).editTaskComplete();
+                    await BlocProvider.of<TaskItemCubit>(context)
+                        .editTaskComplete();
                     BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
                     setState(() {});
                     Navigator.pop(context);
@@ -199,39 +225,5 @@ class _ShowTaskDetailState extends State<ShowTaskDetail> {
     );
   }
 
-  Container isCompletedTask(TaskItemSuccess state) {
-    return Container(
-      height: 50,
-      width: mediaWidth * 0.5,
-      decoration: BoxDecoration(
-        color: AppColor.grayWhite,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Center(
-        child: Container(
-          height: 50,
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColor.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-                color: state.selectedTask.task!.isNew!
-                    ? AppColor.orangeWhite
-                    : AppColor.green,
-                width: 2),
-          ),
-          child: Text(
-            state.selectedTask.task!.isNew! ? 'Not Completed' : 'Completed ',
-            style: TextStyle(
-              color: state.selectedTask.task!.isNew!
-                  ? AppColor.orangeWhite
-                  : AppColor.green,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  
 }

@@ -1,4 +1,5 @@
-import 'package:excp_training/model/local/local_user.dart';
+import 'package:excp_training/model/x/local_user.dart';
+import 'package:excp_training/view%20model/cubit/Internet_checker/internet_checker_cubit.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
@@ -9,10 +10,10 @@ import 'package:intl/intl.dart';
 
 import '../../model/firebase/FB_field_name.dart';
 import '../../utils/app_color.dart';
-import '../../model/local/local_task_data.dart';
-import '../widget/LoadingPage.dart';
+import '../../model/x/local_task_data.dart';
+import '../widget/page_loading_state.dart';
 import '../widget/SnackBarCustom.dart';
-import '../widget/error_page.dart';
+import '../widget/page_error_state.dart';
 import '../widget/form_submit_button.dart';
 
 // ignore: must_be_immutable
@@ -32,7 +33,7 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController conphoneNum;
   late TextEditingController conCountry;
   late String email;
-  // late String password;
+  late String password;
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _EditProfileState extends State<EditProfile> {
       conCountry =
           TextEditingController(text: cubitCurrentState.userInfo.country);
       email = cubitCurrentState.userInfo.email!;
-      // password = cubitCurrentState.userInfo.password!;
+      password = cubitCurrentState.userInfo.password!;
     } else {
       conFristName = TextEditingController(text: 'no data');
       conSecondName = TextEditingController(text: 'no data');
@@ -61,7 +62,6 @@ class _EditProfileState extends State<EditProfile> {
       //conEmail = TextEditingController(text: 'no data');
       conphoneNum = TextEditingController(text: 'no data');
       conCountry = TextEditingController(text: 'no data');
-      
     }
   }
 
@@ -78,36 +78,49 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
-      if (state is ProfileSuccess) {
-        return _editProfileBuild(context);
-      } else if (state is ProfileLoading) {
-        return const LoadingPage();
-      } else if (state is ProfileError) {
-        return ErrorPage(
-          errorMessage: state.errorMessage,
+    return BlocBuilder<InternetCheckerCubit, InternetCheckerState>(
+        builder: (builderContext, internetState) {
+      if (internetState.isConnected) {
+        return BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (context, state) {
+          if (state is ProfileSuccess) {
+            return _editProfileBuild(context);
+          } else if (state is ProfileLoading) {
+            return const PageLoading();
+          } else if (state is ProfileError) {
+            return PageError(
+              errorMessage: state.errorMessage,
+              onTap: () {
+                Navigator.pop(context);
+              },
+            );
+          } else if (state is ProfileUpdateSuccess) {
+            return const Scaffold(
+              backgroundColor: AppColor.white,
+              body: Center(
+                child: Text(
+                  'Your Profile Updated Successfully 🫡',
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: AppColor.grayDark,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+          return PageError(
+            errorMessage: state.toString(),
+          );
+        });
+      } else {
+        return PageError(
+          errorMessage: 'Lost Connection',
           onTap: () {
             Navigator.pop(context);
           },
         );
-      } else if (state is ProfileUpdateSuccess) {
-        return const Scaffold(
-          backgroundColor: AppColor.white,
-          body: Center(
-            child: Text(
-              'Your Profile Updated Successfully 🫡',
-              style: TextStyle(
-                  fontSize: 30,
-                  color: AppColor.grayDark,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        );
       }
-      return ErrorPage(
-        errorMessage: state.toString(),
-      );
     });
   }
 
@@ -169,7 +182,7 @@ class _EditProfileState extends State<EditProfile> {
                           phoneNumber: conphoneNum.text,
                           country: conCountry.text,
                           email: email,
-                          password: 'password',
+                          password: password,
                         );
                         Navigator.pop(context);
                         // BlocProvider.of<TaskoCubit>(context)

@@ -2,7 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excp_training/main.dart';
 import 'package:excp_training/model/firebase/task_data.dart';
-import 'package:excp_training/model/local/local_task_data.dart';
+import 'package:excp_training/model/hive/hive_fun.dart';
+import 'package:excp_training/model/x/local_task_data.dart';
 import 'package:excp_training/model/models/task_model.dart';
 import 'package:excp_training/view/widget/SnackBarCustom.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +19,18 @@ class TaskItemCubit extends Cubit<TaskItemState> {
   TaskModelID? selectedTask;
   // int? localTaskIndex;
 
-  getTaskItemInfo({required TaskModelID selectedTask}) {
+  getTaskItemInfo({required TaskModelID selectedTask})async {
     emit(TaskItemLoading());
     this.selectedTask = selectedTask;
     print('👀👀👀  selectedTask: ${selectedTask.task!.name}');
+    await HiveFun.putTaskModel(taskModel: selectedTask.task!);  // Hive Put Local Task Model
     emit(TaskItemSuccess(selectedTask: selectedTask));
   }
-
-  
 
   editTaskComplete() async {
     emit(TaskItemLoading());
     selectedTask!.task!.isNew = false;
+     await HiveFun.putTaskModel(taskModel: selectedTask!.task!);  // Hive Put Local Task Model
     final response =
         await FB_FirestoreTaskData.editTaskDetail(updatedTask: selectedTask!);
     if (response.success! == true) {
@@ -43,6 +44,7 @@ class TaskItemCubit extends Cubit<TaskItemState> {
   editTaskDetail(TaskModel updatedTaskData) async {
     emit(TaskItemLoading());
     selectedTask!.task = updatedTaskData;
+     await HiveFun.putTaskModel(taskModel: selectedTask!.task!);  // Hive Put Local Task Model
     final response =
         await FB_FirestoreTaskData.editTaskDetail(updatedTask: selectedTask!);
     if (response.success! == true) {
@@ -51,7 +53,6 @@ class TaskItemCubit extends Cubit<TaskItemState> {
       emit(TaskItemError(errorMessage: response.errorMessage!));
     }
   }
-
 
   addNewTask({required TaskModel newTask}) async {
     emit(TaskItemLoading());
@@ -64,8 +65,6 @@ class TaskItemCubit extends Cubit<TaskItemState> {
     //emit(TaskItemSuccess(selectedTask: newTask));
   }
 
-  
-
   deleteTask({required TaskModelID deletedTask}) async {
     emit(TaskItemLoading());
     if (deletedTask.task!.isNew!) {
@@ -75,18 +74,15 @@ class TaskItemCubit extends Cubit<TaskItemState> {
       );
       emit(TaskItemInitial());
     } else {
-      final response =await FB_FirestoreTaskData.deleteTask(taskId: deletedTask.id!);
+      final response =
+          await FB_FirestoreTaskData.deleteTask(taskId: deletedTask.id!);
       if (response.success! == true) {
         emit(TaskItemInitial());
       } else {
         emit(TaskItemError(errorMessage: response.errorMessage!));
       }
-
     }
 
     //emit(TaskItemSuccess(selectedTask: LocalTask.taskList.last));
   }
-
-
-
 }
