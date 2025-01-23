@@ -59,7 +59,6 @@ class HomeDrawer extends StatelessWidget {
               iconData: Icons.android_outlined,
               onTap: () {
                 //BlocProvider.of<TaskoCubit>(context).androidWidgetUpdate();
-
                 Navigator.pop(context);
               },
             ),

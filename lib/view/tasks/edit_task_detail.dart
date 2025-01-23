@@ -1,14 +1,16 @@
 import 'package:excp_training/model/models/task_model.dart';
+import 'package:excp_training/view%20model/cubit/Internet_checker/internet_checker_cubit.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/task_item/task_item_cubit.dart';
 import 'package:excp_training/view/tasks/task_type.dart';
+import 'package:excp_training/view/widget/page_error_state.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../model/local/local_task_data.dart';
+import '../../model/x/local_task_data.dart';
 import '../../view model/cubit/task_type/task_type_cubit.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/form_submit_button.dart';
@@ -61,6 +63,21 @@ class _EditTaskDetailState extends State<EditTaskDetail> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<InternetCheckerCubit, InternetCheckerState>(
+      builder: (context, state) {
+        if (state.isConnected) {
+          return _buildScreen(context);
+        } else {
+          return PageError(
+            errorMessage: 'Lost Connection',
+            onTap: () => Navigator.pop(context),
+          );
+        }
+      },
+    );
+  }
+
+  Scaffold _buildScreen(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

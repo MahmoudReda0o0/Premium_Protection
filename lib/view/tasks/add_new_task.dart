@@ -1,4 +1,5 @@
 import 'package:excp_training/utils/route/app_route.dart';
+import 'package:excp_training/view%20model/cubit/Internet_checker/internet_checker_cubit.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/task_item/task_item_cubit.dart';
 import 'package:excp_training/view/widget/text_form_custom.dart';
@@ -8,9 +9,9 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import '../../model/models/task_model.dart';
 import '../../view model/cubit/task_type/task_type_cubit.dart';
-import '../widget/LoadingPage.dart';
+import '../widget/page_loading_state.dart';
 import '../widget/SnackBarCustom.dart';
-import '../widget/error_page.dart';
+import '../widget/page_error_state.dart';
 import '../widget/form_submit_button.dart';
 
 class AddNewTask extends StatefulWidget {
@@ -51,19 +52,29 @@ class _AddNewTaskState extends State<AddNewTask> {
   @override
   Widget build(BuildContext context) {
     //return _addNewTaskBuild(context);
-    return BlocBuilder<TaskItemCubit, TaskItemState>(
+    return BlocBuilder<InternetCheckerCubit, InternetCheckerState>(
       builder: (context, state) {
-        if (state is TaskItemInitial || state is TaskItemSuccess) {
-          return _addNewTaskBuild(context);
-        } else if (state is TaskItemLoading) {
-          return const LoadingPage();
-        } else {
-          return ErrorPage(
-            errorMessage: state.toString(),
-            onTap: () {
-              Navigator.pop(context);
+        if (state.isConnected) {
+          return BlocBuilder<TaskItemCubit, TaskItemState>(
+            builder: (context, state) {
+              if (state is TaskItemInitial || state is TaskItemSuccess) {
+                return _addNewTaskBuild(context);
+              } else if (state is TaskItemLoading) {
+                return const PageLoading();
+              } else {
+                return PageError(
+                  errorMessage: state.toString(),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                );
+              }
             },
           );
+        } else {
+          return PageError(
+              errorMessage: 'Lost Connection',
+              onTap: () => Navigator.pop(context));
         }
       },
     );
@@ -128,7 +139,6 @@ class _AddNewTaskState extends State<AddNewTask> {
                     readOnly: true,
                     iconDate: Icons.calendar_today,
                     iconOnTap: () {
-                      
                       // FocusScope.of(context).unfocus();
                       setState(() {});
 

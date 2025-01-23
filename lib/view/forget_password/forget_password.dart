@@ -6,8 +6,8 @@ import 'package:gap/gap.dart';
 
 import '../../model/firebase/auth.dart';
 import '../../view model/cubit/forget_password/forget_password_cubit.dart';
-import '../widget/LoadingPage.dart';
-import '../widget/error_page.dart';
+import '../widget/page_loading_state.dart';
+import '../widget/page_error_state.dart';
 import '../widget/text_form_custom.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -22,9 +22,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-    @override
+  @override
   void dispose() {
-    conEmail.dispose();  
+    conEmail.dispose();
     super.dispose();
   }
 
@@ -37,17 +37,17 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       } else if (state is ForgetPasswordSuccess) {
         return _forgetPassordBuild(context);
       } else if (state is ForgetPasswordLoading) {
-        return const LoadingPage();
+        return const PageLoading();
       } else if (state is ForgetPasswordError) {
-        return ErrorPage(
+        return PageError(
           errorMessage: state.errorMessage,
-          onTap: ()  {
+          onTap: () {
             BlocProvider.of<ForgetPasswordCubit>(context).resetState();
             Navigator.pop(context);
           },
         );
       } else {
-        return ErrorPage(errorMessage: state.toString());
+        return PageError(errorMessage: state.toString());
       }
     });
   }

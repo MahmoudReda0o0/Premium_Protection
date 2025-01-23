@@ -3,6 +3,7 @@ import 'package:excp_training/model/hive/hive_constant.dart';
 import 'package:excp_training/utils/app_color.dart';
 import 'package:excp_training/utils/route/app_route.dart';
 import 'package:excp_training/view%20model/cubit/forget_password/forget_password_cubit.dart';
+
 import 'package:excp_training/view%20model/cubit/login_cubit/login_cubit.dart';
 import 'package:excp_training/view%20model/cubit/profile/profile_cubit.dart';
 import 'package:excp_training/view%20model/cubit/register/register_cubit.dart';
@@ -16,6 +17,7 @@ import 'model/hive/adapter/task_adapter.dart';
 import 'model/hive/adapter/task_list_adapter.dart';
 import 'model/hive/adapter/type_list_adapter.dart';
 import 'model/hive/adapter/user_info_adapter.dart';
+import 'view model/cubit/Internet_checker/internet_checker_cubit.dart';
 import 'view model/cubit/general_cubit/tasko_cubit.dart';
 import 'view/widget/themeData.dart';
 
@@ -66,8 +68,8 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp>with WidgetsBindingObserver {
-   @override
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
   void initState() {
     super.initState();
     // Add the observer to listen for app lifecycle events
@@ -87,13 +89,16 @@ class _MyAppState extends State<MyApp>with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       // Close the Hive box when the app is paused or closed
-      await Hive.box(HiveConstant.boxlocalData).close();
-      await Hive.box(HiveConstant.boxCheckLogin).close();
-      await Hive.box(HiveConstant.boxAndroidWidget).close();
+      await Future.wait([
+        Hive.box(HiveConstant.boxlocalData).close(),
+        Hive.box(HiveConstant.boxCheckLogin).close(),
+        Hive.box(HiveConstant.boxAndroidWidget).close()
+      ]);
+
       print('Hive box closed');
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -105,6 +110,7 @@ class _MyAppState extends State<MyApp>with WidgetsBindingObserver {
         BlocProvider(create: (context) => TaskTypeCubit()),
         BlocProvider(create: (context) => RegisterCubit()),
         BlocProvider(create: (context) => ForgetPasswordCubit()),
+        BlocProvider(create: (context) => InternetCheckerCubit()),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

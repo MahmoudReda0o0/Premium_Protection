@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 
-import '../../../model/local/local_task_data.dart';
+import '../../../model/x/local_task_data.dart';
 import '../task_item/task_item_cubit.dart';
 
 part 'task_type_state.dart';
@@ -61,7 +61,7 @@ class TaskTypeCubit extends Cubit<TaskTypeState> {
       if (response.success! == true) {
         addedTypeList = response.addedTypeList!;
         allTypeList = [...fixedTypeList, ...addedTypeList];
-       await HiveFun.putTypeInfo(addedTypeList);
+        await HiveFun.putTypeInfo(addedTypeList);
         emit(
           TaskTypeSuccess(
             fixedTaskTypeList: fixedTypeList,

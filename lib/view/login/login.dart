@@ -3,13 +3,13 @@ import 'package:excp_training/model/hive/hive_constant.dart';
 import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart';
 import 'package:excp_training/view%20model/cubit/login_cubit/login_cubit.dart';
 import 'package:excp_training/view/home_page/home_page.dart';
-import 'package:excp_training/view/widget/LoadingPage.dart';
+import 'package:excp_training/view/widget/page_loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../model/local_data/shared_preference.dart';
+import '../../model/x/local_data/shared_preference.dart';
 import '../../utils/app_color.dart';
 
 import '../../utils/route/app_route.dart';
@@ -18,7 +18,7 @@ import '../home_page/home_page.dart';
 import '../register/register.dart';
 import '../widget/SnackBarCustom.dart';
 import '../widget/container_image.dart';
-import '../widget/error_page.dart';
+import '../widget/page_error_state.dart';
 import '../widget/form_submit_button.dart';
 import '../widget/text_form_custom.dart';
 import '../widget/text_form_password_custom.dart';
@@ -93,16 +93,16 @@ class _LoginState extends State<Login> {
             backgroundColor: AppColor.buttonColor,
           );
         } else if (state is LoginLoading) {
-          return const LoadingPage();
+          return const PageLoading();
         } else if (state is LoginError) {
-          return ErrorPage(
+          return PageError(
             errorMessage: state.errorMessage,
             onTap: () {
               BlocProvider.of<LoginCubit>(context).resetLoginState();
             },
           );
         } else {
-          return ErrorPage(errorMessage: state.toString());
+          return PageError(errorMessage: state.toString());
         }
       },
     );
@@ -125,14 +125,8 @@ class _LoginState extends State<Login> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  child: const Text(
-                    'Vesrsion 0.0.9',
-                    style: TextStyle(
-                        color: AppColor.grayDark, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const Gap(5),
+                
+                const Gap(15),
                 Visibility(
                   visible: !activeKeyBoard,
                   child: ContainerImageCustom(

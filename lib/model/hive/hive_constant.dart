@@ -14,5 +14,6 @@ class HiveConstant {
   static String boxlocalData = 'hiveUserBox',
       keyUserInfo = 'userModelKey',
       keyTaskList = 'taskListKey',
+      keyOnlyTask = 'onlyOneTaskKey',
       keyTypeList = 'typeListKey  ';
 }

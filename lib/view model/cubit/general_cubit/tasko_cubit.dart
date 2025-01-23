@@ -9,7 +9,7 @@ import 'package:excp_training/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../../../model/hive/hive_constant.dart';
-import '../../../model/local/local_task_data.dart';
+import '../../../model/x/local_task_data.dart';
 import '../../../utils/android_home_page/android_widget_manager.dart';
 import '../../../view/widget/SnackBarCustom.dart';
 part 'tasko_state.dart';
@@ -57,7 +57,7 @@ class TaskoCubit extends Cubit<TaskoState> {
         print('Saving tasks and updating widget...');
         await AndroidWidgetManager.updateAndroidWidget(androidTasksList);
         print('Widget update completed.');
-        await HiveFun.setTaskModelList(allTasks);
+        await HiveFun.putTaskModelList(allTasks);
         emit(SuccessState(
           allTask: allTasks,
           newTask: newTasks,
@@ -99,7 +99,7 @@ class TaskoCubit extends Cubit<TaskoState> {
               message:
                   'Error with task id: ${e.task!.name} :: Task is not completed yet',
             );
-            await HiveFun.setTaskModelList(allTasks);
+            await HiveFun.putTaskModelList(allTasks);
             emit(SuccessState(
                 allTask: allTasks,
                 newTask: newTasks,
@@ -112,7 +112,7 @@ class TaskoCubit extends Cubit<TaskoState> {
         }
       }
       if (unMatchType) {
-        await HiveFun.setTaskModelList(allTasks);
+        await HiveFun.putTaskModelList(allTasks);
         emit(SuccessState(
           allTask: allTasks,
           newTask: newTasks,
@@ -121,7 +121,6 @@ class TaskoCubit extends Cubit<TaskoState> {
         ));
       }
       if (finishedTaskBool) {
-        
         bool errorOccurred = false;
         for (var e in finishedTaskId) {
           final response = await FB_FirestoreTaskData.deleteTask(taskId: e);
@@ -145,7 +144,7 @@ class TaskoCubit extends Cubit<TaskoState> {
             duration: 3,
             // messageColor: AppColor.red
           );
-          await HiveFun.setTaskModelList(allTasks);
+          await HiveFun.putTaskModelList(allTasks);
           emit(SuccessState(
               allTask: allTasks,
               newTask: newTasks,
@@ -153,7 +152,7 @@ class TaskoCubit extends Cubit<TaskoState> {
               deleteTaskWithType: true));
         }
       } else {
-        await HiveFun.setTaskModelList(allTasks);
+        await HiveFun.putTaskModelList(allTasks);
         emit(SuccessState(
             allTask: allTasks,
             newTask: newTasks,

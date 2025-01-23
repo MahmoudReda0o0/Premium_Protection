@@ -7,8 +7,8 @@ import 'package:excp_training/view%20model/cubit/general_cubit/tasko_cubit.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../../main.dart';
-import '../../../model/local_data/shared_preference.dart';
-import '../../../model/local/local_user.dart';
+import '../../../model/x/local_data/shared_preference.dart';
+import '../../../model/x/local_user.dart';
 import '../../../view/widget/SnackBarCustom.dart';
 
 part 'login_state.dart';

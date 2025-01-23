@@ -1,14 +1,16 @@
 import 'package:excp_training/model/hive/hive_constant.dart';
+import 'package:excp_training/view%20model/cubit/Internet_checker/internet_checker_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../../utils/app_color.dart';
 import '../../utils/route/app_route.dart';
 import '../../view model/cubit/general_cubit/tasko_cubit.dart';
 import '../../view model/cubit/login_cubit/login_cubit.dart';
-import '../widget/LoadingPage.dart';
+import '../widget/page_loading_state.dart';
 import '../widget/SnackBarCustom.dart';
-import '../widget/error_page.dart';
+import '../widget/page_error_state.dart';
 import 'widget/page_custom.dart';
 
 class IntroPageWiew extends StatefulWidget {
@@ -44,26 +46,38 @@ class _IntroPageWiewState extends State<IntroPageWiew>
   String? getSharedPasswordValue;
 
   sharedNavigate() async {
-    var hiveBox = Hive.box(HiveConstant.boxCheckLogin);
-    //SharedPreferences pref = await SharedPreferences.getInstance();
-    checkBoxValue = hiveBox.get(HiveConstant.keyCheckBox);
-    setState(() {});
-    if (checkBoxValue == true) {
-      getSharedEmailValue = hiveBox.get(HiveConstant.keyEmail);
-      getSharedPasswordValue = hiveBox.get(HiveConstant.keyPassword);
-      BlocProvider.of<LoginCubit>(context).setEmailAndPassword(
-          emailValue: getSharedEmailValue!,
-          passwordValue: getSharedPasswordValue!);
-      await BlocProvider.of<LoginCubit>(context).userLogin();
-      var cubitState = BlocProvider.of<LoginCubit>(context).state;
-      if (cubitState is LoginSuccess) {
-        BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
-        Navigator.pushNamed(context, AppRoute.homePage);
+    bool isConnected = await InternetConnectionChecker.instance.hasConnection;
+    BlocProvider.of<InternetCheckerCubit>(context)
+        .checkOnceInternetConnection(isConnected);
+    if (isConnected) {
+      var hiveBox = Hive.box(HiveConstant.boxCheckLogin);
+      //SharedPreferences pref = await SharedPreferences.getInstance();
+      checkBoxValue = hiveBox.get(HiveConstant.keyCheckBox);
+      setState(() {});
+      if (checkBoxValue == true) {
+        getSharedEmailValue = hiveBox.get(HiveConstant.keyEmail);
+        getSharedPasswordValue = hiveBox.get(HiveConstant.keyPassword);
+        BlocProvider.of<LoginCubit>(context).setEmailAndPassword(
+            emailValue: getSharedEmailValue!,
+            passwordValue: getSharedPasswordValue!);
+        await BlocProvider.of<LoginCubit>(context).userLogin();
+        var cubitState = BlocProvider.of<LoginCubit>(context).state;
+        if (cubitState is LoginSuccess) {
+          BlocProvider.of<TaskoCubit>(context).getFirestoreTasks();
+          Navigator.pushNamed(context, AppRoute.homePage);
+        } else {
+          SnackBarCustom.build(
+              message: 'state: $cubitState ', context: context);
+        }
       } else {
-        SnackBarCustom.build(message: 'state: $cubitState ', context: context);
+        print('shared navigate value is false');
       }
     } else {
-      print('shared navigate value is false');
+      SnackBarCustom.build(
+          message: 'No Internet Connection',
+          context: context,
+          duration: 3,
+          messageColor: AppColor.red);
     }
   }
 
@@ -84,16 +98,16 @@ class _IntroPageWiewState extends State<IntroPageWiew>
             backgroundColor: AppColor.buttonColor,
           );
         } else if (state is LoginLoading) {
-          return const LoadingPage();
+          return const PageLoading();
         } else if (state is LoginError) {
-          return ErrorPage(
+          return PageError(
             errorMessage: state.errorMessage,
             onTap: () {
               BlocProvider.of<LoginCubit>(context).resetLoginState();
             },
           );
         } else {
-          return ErrorPage(errorMessage: state.toString());
+          return PageError(errorMessage: state.toString());
         }
       },
     );
@@ -103,10 +117,16 @@ class _IntroPageWiewState extends State<IntroPageWiew>
 Scaffold _pageBuild(
     BuildContext context, PageController pageController, List<Widget> pages) {
   return Scaffold(
-    floatingActionButton: FloatingActionButton(onPressed: () {
+    floatingActionButton: FloatingActionButton(onPressed: () async {
       print('🥵 ${pageController.page}');
       if (pageController.page == 2.0) {
-        Navigator.pushReplacementNamed(context, AppRoute.login);
+        bool isConnected =
+            await InternetConnectionChecker.instance.hasConnection;
+        if (isConnected) {
+          Navigator.pushReplacementNamed(context, AppRoute.login);
+        } else {
+          Navigator.pushReplacementNamed(context, AppRoute.homePage);
+        }
       } else {
         pageController.nextPage(
             duration: const Duration(milliseconds: 500), curve: Curves.linear);

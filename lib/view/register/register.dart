@@ -12,9 +12,9 @@ import '../../utils/app_color.dart';
 import '../../view model/cubit/general_cubit/tasko_cubit.dart';
 import '../../view model/cubit/profile/profile_cubit.dart';
 import '../home_page/home_page.dart';
-import '../widget/LoadingPage.dart';
+import '../widget/page_loading_state.dart';
 import '../widget/SnackBarCustom.dart';
-import '../widget/error_page.dart';
+import '../widget/page_error_state.dart';
 import '../widget/form_submit_button.dart';
 import '../widget/rich_text_custom.dart';
 import '../widget/text_form_password_custom.dart';
@@ -69,16 +69,16 @@ class _RegisterState extends State<Register> {
           ),
         );
       } else if (state is RegisterLoading) {
-        return const LoadingPage();
+        return const PageLoading();
       } else if (state is RegisterError) {
-        return ErrorPage(
+        return PageError(
           errorMessage: state.errorMessage,
           onTap: () {
             BlocProvider.of<RegisterCubit>(context).resetRegisterState();
           },
         );
       }
-      return ErrorPage(errorMessage: state.toString());
+      return PageError(errorMessage: state.toString());
     });
   }
 
@@ -187,12 +187,12 @@ class _RegisterState extends State<Register> {
                           //   phoneNumber: conPhoneNumber.text,
                           //   country: conCountry.text,
                           // );
-        
+
                           var registerCubitState =
                               BlocProvider.of<RegisterCubit>(context).state;
                           // var profileCubitState =
                           //     BlocProvider.of<RegisterCubit>(context).state;
-        
+
                           if (registerCubitState is RegisterSuccess) {
                             Navigator.pushReplacementNamed(
                                 context, AppRoute.login);
